@@ -169,10 +169,10 @@ Function trEFMInit()
 	InterpVal = 1
 	
 	// FF-trEFM
-	DigitizerTime = 0.8192
+	DigitizerTime = 1.6 // 0.8192
 	DigitizerSampleRate = 10e6
-	DigitizerPercentPreTrig = 50
-	DigitizerAverages = 500
+	DigitizerPercentPreTrig = 60 // 50
+	DigitizerAverages = 50 // 500
 	DigitizerSamples = ceil(DigitizerSampleRate * DigitizerTime * 1e-3)
 	DigitizerPretrigger = ceil(DigitizerSamples * DigitizerPercentPreTrig / 100)
 

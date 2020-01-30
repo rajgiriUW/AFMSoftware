@@ -280,6 +280,19 @@ Function SetFeedbackLoopCypher(whichLoop,startWhen,maintainWhat,setpoint,pgain,i
 
 	Variable whichLoop,setpoint,pgain,igain,sgain,dgain
 	String startWhen,maintainWhat,changeWhat
+	
+	SetFeedbackLoop(whichLoop,startWhen,maintainWhat,setpoint,pgain,igain,sgain,changeWhat,dgain)
+	
+end
+
+Function SetFeedbackLoopCypher_old(whichLoop,startWhen,maintainWhat,setpoint,pgain,igain,sgain,changeWhat,dgain)
+//
+// Sets up a PIDS feedback loop. This function will set changeWhat to the setpoint by adjusting the value
+// of maintainWhat. The user also must select the gain settings to be used by the PID.
+//
+
+	Variable whichLoop,setpoint,pgain,igain,sgain,dgain
+	String startWhen,maintainWhat,changeWhat
 	string SavedDataFolder = GetDataFolder(1)
 	SetDataFolder root:Packages:trEFM
 
