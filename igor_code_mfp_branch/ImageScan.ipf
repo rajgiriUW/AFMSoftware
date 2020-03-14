@@ -451,6 +451,7 @@ Function ImageScantrEFM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 		if (UseLineNum == 0)	// single line scans
 			LineNum = i
 		endif
+		
 		// these are the actual 1D drive waves for the tip movement
 		Xdownwave[] = XYupdownwave[p][LineNum][0]
 		Xupwave[] = XYupdownwave[p][LineNum][1]
@@ -723,6 +724,7 @@ Function ImageScanFFtrEFM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines
 	Wave PIXELCONFIG = root:packages:trEFM:FFtrEFMConfig:PIXELCONFIG
 	Wave CSACQUISITIONCONFIG = root:packages:GageCS:CSACQUISITIONCONFIG
 	Wave CSTRIGGERCONFIG = root:packages:GageCS:CSTRIGGERCONFIG
+	NVAR OneOrTwoChannels = root:packages:trEFM:ImageScan:OneorTwoChannels
 	
 	SetDataFolder root:packages:trEFM:ImageScan
 	Nvar numavgsperpoint
@@ -1156,11 +1158,21 @@ Function ImageScanFFtrEFM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines
 		starttime2 =StopMSTimer(-2) //Start timing the raised scan line
 		print "line ", i+1
 
+		if (UseLineNum == 0)	// single line scans
+			LineNum = i
+		endif
+		
 		// these are the actual 1D drive waves for the tip movement
-		Xdownwave[] = XYupdownwave[p][i][0]
-		Xupwave[] = XYupdownwave[p][i][1]
-		Ydownwave[] = XYupdownwave[p][i][2]
-		Yupwave[] = XYupdownwave[p][i][3]
+		//Xdownwave[] = XYupdownwave[p][i][0]
+		//Xupwave[] = XYupdownwave[p][i][1]
+		//Ydownwave[] = XYupdownwave[p][i][2]
+		//Yupwave[] = XYupdownwave[p][i][3]
+		
+		Xdownwave[] = XYupdownwave[p][LineNum][0]
+		Xupwave[] = XYupdownwave[p][LineNum][1]
+		Ydownwave[] = XYupdownwave[p][LineNum][2]
+		Yupwave[] = XYupdownwave[p][LineNum][3]
+	
 	
 		//****************************************************************************
 		//*** SET TRACE VALUES HERE
@@ -1229,7 +1241,7 @@ Function ImageScanFFtrEFM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines
 		if (CutDrive == 0)	
 //			error += td_xsetoutwave(1,"Event.2,repeat", "Output.C", triggerwave, -1)
 		elseif (CutDrive == 1)
-//			error += td_xsetoutWave(1, "Event.2,repeat", LockinString + "Amp",drivewave, -1)
+			error += td_xsetoutWave(1, "Event.2,repeat", LockinString + "Amp",drivewave, -1)
 		endif
 
 		//stop amplitude FBLoop and start height FB for retrace
@@ -1275,7 +1287,12 @@ Function ImageScanFFtrEFM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines
 		td_writevalue("Output.B", 0)
 		td_writevalue("Output.C", 0)
 		
-		GageTransfer(data_wave)
+		GageTransfer(1, data_wave)
+		
+		if (OneOrTwoChannels == 1)
+			GageTransfer(2, ch2_wave)
+		endif
+		
 		AnalyzeLineOffline(PIXELCONFIG, scanpoints, shift_wave, tfp_wave, data_wave)
 
 		// ************  End of Retrace 		
@@ -1293,6 +1310,20 @@ Function ImageScanFFtrEFM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines
 			endif
 
 			Save/C/O/P = Path data_wave as name
+			
+			if (OneOrTwoChannels == 1)
+			
+				if (i < 10)		
+					name = "CH2_000" + num2str(i) + ".ibw"
+				elseif (i < 100)
+					name = "CH2_00" + num2str(i) + ".ibw"
+				else
+					name = "CH2_0" + num2str(i) + ".ibw"
+				endif
+
+				Save/C/O/P = Path ch2_wave as name
+				
+			endif
 		endif
 		//**********************************************************************************
 		//***  PROCESS DATA AND UPDATE GRAPHS

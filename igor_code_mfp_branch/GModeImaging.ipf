@@ -48,6 +48,8 @@ Function ImageScanGmode_old(xpos, ypos, liftheight, scansizeX,scansizeY, scanlin
 	NVAR YFastEFM = root:packages:trEFM:ImageScan:YFastEFM
 	NVAR UseLineNum = root:packages:trEFM:ImageScan:UseLineNum
 	NVAR LineNum = root:packages:trEFM:ImageScan:LineNum
+	
+	NVAR OneOrTwoChannels = root:packages:trEFM:ImageScan:OneorTwoChannels	
 
 	Variable XLVDTSens = GV("XLVDTSens")
 	Variable XLVDToffset = GV("XLVDToffset")
@@ -95,6 +97,7 @@ Function ImageScanGmode_old(xpos, ypos, liftheight, scansizeX,scansizeY, scanlin
 	CSTRIGGERCONFIG[%Source] = -1 //External Trigger
 	
 	Make/O/N = (digiSamples, 1) data_wave
+	Make/O/N = (digiSamples, 1) ch2_wave
 	
 	GageSet(-1)
 	
@@ -325,7 +328,12 @@ Function ImageScanGmode_old(xpos, ypos, liftheight, scansizeX,scansizeY, scanlin
 		Sleep/S .05
 		
 		
-		GageTransfer(data_wave)
+		GageTransfer(1, data_wave)
+		
+		if (OneOrTwoChannels == 1)
+			GageTransfer(2, ch2_wave)
+		endif
+		
 		Topography[][i] = ReadwaveZ[p] - mean(ReadwaveZ)
 		
 		DoUpdate
@@ -488,6 +496,8 @@ Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 	NVAR YFastEFM = root:packages:trEFM:ImageScan:YFastEFM
 	NVAR UseLineNum = root:packages:trEFM:ImageScan:UseLineNum
 	NVAR LineNum = root:packages:trEFM:ImageScan:LineNum
+
+	NVAR OneOrTwoChannels = root:packages:trEFM:ImageScan:OneorTwoChannels
 
 	Variable XLVDTSens = GV("XLVDTSens")
 	Variable XLVDToffset = GV("XLVDToffset")
@@ -723,6 +733,7 @@ Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 	
 	Make/O/N =(scanpoints) tfp_wave, shift_wave
 	Make/O/N = (DigitizerSamples, DigitizerAverages) data_wave
+	Make/O/N = (DigitizerSamples, DigitizerAverages) ch2_wave
 	Make/O/N = (scanpoints, scanlines) tfp_array, shift_array,rate_array
 
 	
@@ -1000,7 +1011,12 @@ Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 		td_writevalue("Output.B", 0)
 		td_writevalue("Output.C", 0)
 		
-		GageTransfer(data_wave)
+		GageTransfer(1, data_wave)
+		
+		if (OneOrTwoChannels == 1)
+			GageTransfer(2, ch2_wave)
+		endif
+		
 		AnalyzeLineOffline(PIXELCONFIG, scanpoints, shift_wave, tfp_wave, data_wave)
 
 		// ************  End of Retrace 		
@@ -1018,6 +1034,20 @@ Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 			endif
 
 			Save/C/O/P = Path data_wave as name
+			
+			if (OneOrTwoChannels == 1)
+			
+				if (i < 10)		
+					name = "CH2_000" + num2str(i) + ".ibw"
+				elseif (i < 100)
+					name = "CH2_00" + num2str(i) + ".ibw"
+				else
+					name = "CH2_0" + num2str(i) + ".ibw"
+				endif
+
+				Save/C/O/P = Path ch2_wave as name
+				
+			endif
 		endif
 		//**********************************************************************************
 		//***  PROCESS DATA AND UPDATE GRAPHS

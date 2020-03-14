@@ -204,6 +204,7 @@ Function PointScanFFtrEFM(xpos, ypos, liftheight,DigitizerAverages,DigitizerSamp
 	Wave PIXELCONFIG = root:packages:trEFM:FFtrEFMConfig:PIXELCONFIG
 	Wave CSACQUISITIONCONFIG = root:packages:GageCS:CSACQUISITIONCONFIG
 	Wave CSTRIGGERCONFIG = root:packages:GageCS:CSTRIGGERCONFIG
+	NVAR OneOrTwoChannels = root:packages:trEFM:ImageScan:OneorTwoChannels
 	
 	CSACQUISITIONCONFIG[%SegmentCount] = DigitizerAverages
 	CSACQUISITIONCONFIG[%SegmentSize] = DigitizerSamples
@@ -232,6 +233,7 @@ Function PointScanFFtrEFM(xpos, ypos, liftheight,DigitizerAverages,DigitizerSamp
 	SetDataFolder root:Packages:trEFM:PointScan:FFtrEFM
 
 	Make/O/N = (DigitizerSamples,DigitizerAverages) gagewave
+	Make/O/N = (DigitizerSamples,DigitizerAverages) ch2_wave
 	Make/O/N = (DigitizerSamples) shiftwave
 	Make/O/N = (400 * numcycles) phasewave
 	Make/O/N = 400 phasewaveavg
@@ -337,7 +339,11 @@ Function PointScanFFtrEFM(xpos, ypos, liftheight,DigitizerAverages,DigitizerSamp
 	td_WV("Output.B", 0)
 	td_WV("Output.C", 0)
 
-	GageTransfer(gagewave)
+	GageTransfer(1, gagewave)
+	
+	if (OneOrTwoChannels == 1)
+		GageTransfer(2, ch2_wave)
+	endif
 
 	AnalyzePointScan(PIXELCONFIG, gagewave,shiftwave)
 	

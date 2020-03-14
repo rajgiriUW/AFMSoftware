@@ -101,7 +101,15 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 	variable SlowScanDelta
 	variable FastscanDelta
 	variable i,j,k,l
-	
+	// Set up scan Frameworks
+	// 	ScanFramework[][0]: fastscan down (topo)
+	//	ScanFramework[][1]: slowscan down (topo, only changes after each line)
+	//	ScanFramework[][2]: fastscan up (efm)
+	//	ScanFramework[][3]: slowscan up (efm, only changes after each line)
+	// Note that images are confirmed correct on 6/20/2019 by Raj in both 0 deg and 90 deg, logic below is all valid
+	// ScanSizeY is just the "width" in the panel, not physically the Y-scale (so for 90 degrees it's actually the X-size)	
+
+	// 0 deg
 	if (XFastEFM == 1 && YFastEFM == 0) //x direction scan
 		ScanFramework[][0] = xpos - scansizeX / 2 //gPSscansizeX= fast width
 		ScanFramework[][2] = xpos + scansizeX / 2
@@ -119,7 +127,8 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 			endif
 			i += 1
 		while (i < scanlines)
-		
+
+	// 90 degree		
 	elseif  (XFastEFM == 0 && YFastEFM == 1) //y direction scan
 		ScanFramework[][0] = ypos + scansizeX / 2 //gPSscansizeX= fast width
 		ScanFramework[][2] = ypos - scansizeX / 2
@@ -326,11 +335,19 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 	//pre-loop initialization, done only once
 	//move to initial scan point
 	if (XFastEFM == 1 && YFastEFM == 0)	
-		MoveXY(ScanFramework[0][0], ScanFramework[0][1])
+		if (UseLineNum == 0)
+			MoveXY(ScanFramework[0][0], ScanFramework[0][1])
+		else
+			MoveXY(ScanFramework[0][0], (ypos - scansizeY / 2)  + SlowScanDelta*LineNum)
+		endif
 	elseif (XFastEFM == 0 && YFastEFM == 1)
-		MoveXY(ScanFramework[0][1], ScanFramework[0][0])
+		if (UseLineNum == 0)
+			MoveXY(ScanFramework[0][1], ScanFramework[0][0])
+		else
+			MoveXY((xpos - scansizeY / 2)  + SlowScanDelta*LineNum, ScanFramework[0][0])
+		endif
 	endif
-
+	
 	//************************************* XYupdownwave is the final, calculated, scaled values to drive the XY piezos ************************//	
 	if (XFastEFM == 1 && YFastEFM == 0)	//x  scan direction
 		XYupdownwave[][][0] = (ScanFrameWork[q][0] + FastScanDelta*p) / XLVDTsens / 10e5 + XLVDToffset

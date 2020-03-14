@@ -9,6 +9,7 @@ Function PointScanGMode(xpos, ypos, liftheight,DigitizerAverages,DigitizerSample
 	Wave PIXELCONFIG = root:packages:trEFM:FFtrEFMConfig:PIXELCONFIG
 	Wave CSACQUISITIONCONFIG = root:packages:GageCS:CSACQUISITIONCONFIG
 	Wave CSTRIGGERCONFIG = root:packages:GageCS:CSTRIGGERCONFIG
+	NVAR OneOrTwoChannels = root:packages:trEFM:ImageScan:OneorTwoChannels
 	
 	CSACQUISITIONCONFIG[%SegmentCount] = DigitizerAverages
 	CSACQUISITIONCONFIG[%SegmentSize] = DigitizerSamples
@@ -37,6 +38,7 @@ Function PointScanGMode(xpos, ypos, liftheight,DigitizerAverages,DigitizerSample
 	SetDataFolder root:Packages:trEFM:PointScan:FFtrEFM
 
 	Make/O/N = (DigitizerSamples,DigitizerAverages) gagewave
+	Make/O/N = (DigitizerSamples,DigitizerAverages) ch2_wave
 	Make/O/N = (DigitizerSamples) shiftwave
 	Make/O/N = (400 * numcycles) phasewave
 	Make/O/N = 400 phasewaveavg
@@ -66,7 +68,7 @@ Function PointScanGMode(xpos, ypos, liftheight,DigitizerAverages,DigitizerSample
 	td_WV(LockinString + "freq", calengagefreq)
 	
 	SetFeedbackLoop(3, "Always", LockinString + "R", setpoint, -pgain, -igain, -sgain, "Height", 0)
-
+	StopFeedbackLoop(2)
 	// Wait for the feedback loops and frequency to settle.
 	variable startTime = StopMSTimer(-2)
 	do 
@@ -147,8 +149,12 @@ Function PointScanGMode(xpos, ypos, liftheight,DigitizerAverages,DigitizerSample
 	td_WV("Output.B", 0)
 	td_WV("Output.C", 0)
 
-	GageTransfer(gagewave)
-
+	GageTransfer(1, gagewave)
+	
+	if (OneOrTwoChannels == 1)
+		GageTransfer(2, ch2_wave)
+	endif
+	
 	AnalyzePointScan(PIXELCONFIG, gagewave,shiftwave)
 	
 	// reset the dds settings.
