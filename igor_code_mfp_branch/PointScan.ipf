@@ -425,9 +425,6 @@ Function PointScanRingDown(xpos, ypos, liftheight)
 	
 	SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","OutB","DDS")
 	
-	td_Wv("Output.A", LightOn)
-	td_wv("Output.B", RingDownVoltage)
-
 ////////////////////////// SET EFM HARDWARE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 	NVAR xigain, zigain
 
@@ -453,6 +450,9 @@ Function PointScanRingDown(xpos, ypos, liftheight)
 //	td_xSetInWave(2, "Event.2" , LockinString + "freqOffset", shiftwave, "", 1)
 //	td_xSetOutWavePair(1, "Event.2,Always", "Output.A", genlightwave, "Output.C", gentriggerwave, 1)
 //	td_xSetOutWave(0, "Event.2,Always", "Output.B", gentipwave,1)
+
+
+
 	td_xsetOutWave(0, "Event.2,Always", LockinString + "Amp", gendrivewave, -1)
 	td_xsetinwave(2, "Event.2", LockinString + "R", shiftwave, "", 1)
 	
@@ -463,8 +463,9 @@ Function PointScanRingDown(xpos, ypos, liftheight)
 	shiftwave = NaN
 	
 	// Raise up to the specified lift height.
-	SetFeedbackLoop(3, "Always", "ZSensor", (currentz - liftheight * 1e-9) / GV("ZLVDTSens"), 0,  EFMFilters[%ZHeight][%IGain], 0, "Output.Z", 0)  
 	StopFeedbackLoop(2)
+	SetFeedbackLoop(3, "Always", "ZSensor", (currentz - liftheight * 1e-9) / GV("ZLVDTSens"), 0,  EFMFilters[%ZHeight][%IGain], 0, "Output.Z", 0)  
+
 	startTime = StopMSTimer(-2)
 	do 
 	while((StopMSTimer(-2) - StartTime) < 300*1e3) 
@@ -490,6 +491,9 @@ Function PointScanRingDown(xpos, ypos, liftheight)
 	endif	
 
 	Sleep/S 1/30
+
+	td_Wv("Output.A", LightOn)
+	td_wv("Output.B", RingDownVoltage)
 
 	// Fire data collection event.
 	td_WriteString("Event.2", "Once")

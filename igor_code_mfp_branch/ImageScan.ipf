@@ -524,7 +524,7 @@ Function ImageScantrEFM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 		NVAR Cutdrive = root:packages:trEFM:cutDrive
 
 		if (CutDrive == 0)	
-//			error += td_xsetoutwave(1,"Event.2,repeat", "Output.C", triggerwave, -1)
+			error += td_xsetoutwave(1,"Event.2,repeat", "Output.C", triggerwave, -1)
 		elseif (CutDrive == 1)
 			error += td_xsetoutWave(1, "Event.2,repeat", LockinString + "Amp",drivewave, -1)
 			if (error != 0)
@@ -1240,9 +1240,17 @@ Function ImageScanFFtrEFM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines
 		error+= td_xsetoutwavepair(0,"Event.2,repeat", "Output.A", lightwave,"Output.B", voltagewave,-1)
 		if (CutDrive == 0)	
 //			error += td_xsetoutwave(1,"Event.2,repeat", "Output.C", triggerwave, -1)
+			error+= td_xsetoutwavePair(1,"Event.2", "$outputXLoop.Setpoint", Xupwave,"$outputYLoop.Setpoint", Yupwave,-UpInterpolation)
 		elseif (CutDrive == 1)
 			error += td_xsetoutWave(1, "Event.2,repeat", LockinString + "Amp",drivewave, -1)
+			variable YIGainBack = td_rv("ARC.PIDSLoop.1.IGain")
+//			error += SetFeedbackLoop(1, "Event.2", "YSensor", Yupwave[0], 0, YIGainBack, 0, "Output.Y", 0)	
+			error += SetFeedbackLoop(1, "Always", "YSensor", Yupwave[0], 0, YIGainBack, 0, "Output.Y", 0)	
+			error+= td_xsetoutwavePair(2,"Event.2", "ARC.PIDSLoop.0.Setpoint", Xupwave,"ARC.PIDSLoop.3.Setpoint", ReadWaveZback,-UpInterpolation)	
+			print(error)
+	
 		endif
+
 
 		//stop amplitude FBLoop and start height FB for retrace
 		StopFeedbackLoop(2)		
@@ -1259,11 +1267,15 @@ Function ImageScanFFtrEFM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines
 //		variable YIGainBack = td_rv("ARC.PIDSLoop.1.IGain")
 //		SetFeedbackLoop(1, "Event.2", "Ysensor", Yupwave[0], 0, YIGainBack, 0, "Output.Y", 0)		//	hard-set Y position each line to free up an outwavebank
 		
-		error+= td_xsetoutwavePair(1,"Event.2", "$outputXLoop.Setpoint", Xupwave,"$outputYLoop.Setpoint", Yupwave,-UpInterpolation)
-		if (stringmatch("ARC.Lockin.0." , LockinString))
-			error+= td_xsetoutwave(2, "Event.2", "ARC.PIDSLoop.3.Setpoint", ReadWaveZback, -UpInterpolation)
-		else
-			error+= td_xsetoutwave(2, "Event.2", "Cypher.PIDSLoop.3.Setpoint", ReadWaveZback, -UpInterpolation)
+//		error+= td_xsetoutwavePair(1,"Event.2", "$outputXLoop.Setpoint", Xupwave,"$outputYLoop.Setpoint", Yupwave,-UpInterpolation)
+
+		// the cutdrive case is hard set above
+		if (CutDrive == 0)
+			if (stringmatch("ARC.Lockin.0." , LockinString))
+				error+= td_xsetoutwave(2, "Event.2", "ARC.PIDSLoop.3.Setpoint", ReadWaveZback, -UpInterpolation)
+			else
+				error+= td_xsetoutwave(2, "Event.2", "Cypher.PIDSLoop.3.Setpoint", ReadWaveZback, -UpInterpolation)
+			endif
 		endif
 //		error+= td_xsetoutwave(2, "Event.2", LockInString + "PIDSLoop.3.Setpoint", ReadWaveZback, -UpInterpolation)
 
@@ -1293,7 +1305,7 @@ Function ImageScanFFtrEFM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines
 			GageTransfer(2, ch2_wave)
 		endif
 		
-		AnalyzeLineOffline(PIXELCONFIG, scanpoints, shift_wave, tfp_wave, data_wave)
+//		AnalyzeLineOffline(PIXELCONFIG, scanpoints, shift_wave, tfp_wave, data_wave)
 
 		// ************  End of Retrace 		
 
@@ -1353,6 +1365,7 @@ Function ImageScanFFtrEFM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines
 			//stop height FBLoop, restart Amplitude FBLoop and move to starting point of next line
 			StopFeedbackLoop(3)	
 			StopFeedbackLoop(4)	
+			
 			
 			td_wv(LockinString + "Amp",CalHardD) 
 			td_wv(LockinString + "Freq",CalEngageFreq)
