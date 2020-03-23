@@ -1237,21 +1237,6 @@ Function ImageScanFFtrEFM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines
 	
 		NVAR Cutdrive = root:packages:trEFM:cutDrive
 
-		error+= td_xsetoutwavepair(0,"Event.2,repeat", "Output.A", lightwave,"Output.B", voltagewave,-1)
-		if (CutDrive == 0)	
-//			error += td_xsetoutwave(1,"Event.2,repeat", "Output.C", triggerwave, -1)
-			error+= td_xsetoutwavePair(1,"Event.2", "$outputXLoop.Setpoint", Xupwave,"$outputYLoop.Setpoint", Yupwave,-UpInterpolation)
-		elseif (CutDrive == 1)
-			error += td_xsetoutWave(1, "Event.2,repeat", LockinString + "Amp",drivewave, -1)
-			variable YIGainBack = td_rv("ARC.PIDSLoop.1.IGain")
-//			error += SetFeedbackLoop(1, "Event.2", "YSensor", Yupwave[0], 0, YIGainBack, 0, "Output.Y", 0)	
-			error += SetFeedbackLoop(1, "Always", "YSensor", Yupwave[0], 0, YIGainBack, 0, "Output.Y", 0)	
-			error+= td_xsetoutwavePair(2,"Event.2", "ARC.PIDSLoop.0.Setpoint", Xupwave,"ARC.PIDSLoop.3.Setpoint", ReadWaveZback,-UpInterpolation)	
-			print(error)
-	
-		endif
-
-
 		//stop amplitude FBLoop and start height FB for retrace
 		StopFeedbackLoop(2)		
 
@@ -1261,7 +1246,35 @@ Function ImageScanFFtrEFM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines
 		SetFeedbackLoop(3, "always",  "ZSensor", ReadWaveZ[scanpoints-1]-liftheight*1e-9/GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0) // note the integral gain of 10000
 		sleep/s 1
 
-		
+		error+= td_xsetoutwavepair(0,"Event.2,repeat", "Output.A", lightwave,"Output.B", voltagewave,-1)
+		if (CutDrive == 0)	
+//			error += td_xsetoutwave(1,"Event.2,repeat", "Output.C", triggerwave, -1)
+			error+= td_xsetoutwavePair(1,"Event.2", "$outputXLoop.Setpoint", Xupwave,"$outputYLoop.Setpoint", Yupwave,-UpInterpolation)
+			
+			if (stringmatch("ARC.Lockin.0." , LockinString))
+				error+= td_xsetoutwave(2, "Event.2", "ARC.PIDSLoop.3.Setpoint", ReadWaveZback, -UpInterpolation)
+			else
+				error+= td_xsetoutwave(2, "Event.2", "Cypher.PIDSLoop.3.Setpoint", ReadWaveZback, -UpInterpolation)
+			endif
+		elseif (CutDrive == 1)
+			error += td_xsetoutWave(1, "Event.2,repeat", LockinString + "Amp",drivewave, -1)
+			variable YIGainBack = td_rv("ARC.PIDSLoop.1.IGain")
+			variable XIGainBack = td_rv("ARC.PIDSLoop.0.IGain")
+//			error += SetFeedbackLoop(1, "Event.2", "YSensor", Yupwave[0], 0, YIGainBack, 0, "Output.Y", 0)	
+//			error += SetFeedbackLoop(1, "Always", "YSensor", Yupwave[0], 0, YIGainBack, 0, "Output.Y", 0)	
+			if (XFastEFM == 1 && YFastEFM == 0)
+				error += td_wv("PIDSLoop.1.Setpoint", Yupwave[0])
+				error+= td_xsetoutwavePair(2,"Event.2", "ARC.PIDSLoop.0.Setpoint", Xupwave,"ARC.PIDSLoop.3.Setpoint", ReadWaveZback,-UpInterpolation)	
+			else
+				error += td_wv("PIDSLoop.0.Setpoint", Yupwave[0])
+				error+= td_xsetoutwavePair(2,"Event.2", "ARC.PIDSLoop.1.Setpoint", Xupwave,"ARC.PIDSLoop.3.Setpoint", ReadWaveZback,-UpInterpolation)	
+			endif
+			if (error != 0)
+				print "error", error
+			endif
+	
+		endif
+
 		// If not using the new trigger box with invertable output, uncomment these lines and comment the subsequent 2 setoutwave(pair) lines
 //		error+= td_xsetoutwavePair(2,"Event.2", "ARC.PIDSLoop.0.Setpoint", Xupwave,"ARC.PIDSLoop.3.Setpoint", ReadWaveZback,-UpInterpolation)	
 //		variable YIGainBack = td_rv("ARC.PIDSLoop.1.IGain")
@@ -1269,14 +1282,6 @@ Function ImageScanFFtrEFM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines
 		
 //		error+= td_xsetoutwavePair(1,"Event.2", "$outputXLoop.Setpoint", Xupwave,"$outputYLoop.Setpoint", Yupwave,-UpInterpolation)
 
-		// the cutdrive case is hard set above
-		if (CutDrive == 0)
-			if (stringmatch("ARC.Lockin.0." , LockinString))
-				error+= td_xsetoutwave(2, "Event.2", "ARC.PIDSLoop.3.Setpoint", ReadWaveZback, -UpInterpolation)
-			else
-				error+= td_xsetoutwave(2, "Event.2", "Cypher.PIDSLoop.3.Setpoint", ReadWaveZback, -UpInterpolation)
-			endif
-		endif
 //		error+= td_xsetoutwave(2, "Event.2", LockInString + "PIDSLoop.3.Setpoint", ReadWaveZback, -UpInterpolation)
 
 		td_wv(LockinString + "Amp", CalSoftD) 
