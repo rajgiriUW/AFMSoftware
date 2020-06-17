@@ -1027,6 +1027,127 @@ Function GModePointScanButton(ctrlname) : ButtonControl
 
 	SetDataFolder savDF
 end
+Function GModeTransferFUncButton(ctrlname) : ButtonControl
+
+	String ctrlname
+	String savDF = GetDataFolder(1)
+	CommitDriveWaves()
+	
+	SetDataFolder root:packages:trEFM:ImageScan
+	Nvar DigitizerAverages, DigitizerSamples,DigitizerPretrigger
+	Nvar DigitizerTime, DigitizerSampleRate, DigitizerPercentPreTrig
+	
+	// For this, we will hard-code certain values
+	// Runs for 10 ms per signal, with 300 us pre-trigger and 9700 us post-trigger
+	DigitizerAverages = 5
+	DigitizerTime = 10
+	DigitizerPercentPreTrig = 97
+	
+	DigitizerSamples = ceil(DigitizerSampleRate * DigitizerTime * 1e-3)
+	DigitizerPretrigger = ceil(DigitizerSamples * DigitizerPercentPreTrig / 100)
+
+	SetDataFolder root:Packages:trEFM
+	
+	Nvar liftheight
+	Nvar gxpos, gypos
+	Nvar WavesCommitted
+	
+	if(WavesCommitted == 0)
+		Abort "Drive waves have not been committed."
+	endif
+	if( IsNan(gxpos) | IsNan(gypos))
+		Abort "X and Y are NaN. Make sure to get the current position before continuing."
+	endif
+	
+	SetDataFolder root:Packages:trEFM:PointScan:FFtrEFM
+	
+	Wave PIXELCONFIG = root:packages:trEFM:FFtrEFMConfig:PIXELCONFIG
+	Make/O/N=(DigitizerSamples) timekeeper
+	Linspace2(0,PIXELCONFIG[%Total_Time],DigitizerSamples, timekeeper)
+	SetScale d,0,(DigitizerSamples),"s",timekeeper
+	
+	PixelConfig[%Trigger] = (1 - DigitizerPercentPreTrig/100) * DigitizerTime * 1e-3
+	PixelConfig[%Total_Time] = DigitizerTime * 1e-3
+	
+	PointScanTF(gxpos, gypos, liftheight,DigitizerAverages,DigitizerSamples,DigitizerPretrigger)
+	GetCurrentPosition()
+	
+	
+	
+	Beep
+end
+
+// Needs debugging, loops through several chirps
+Function GModeTransferFUncButton2(ctrlname) : ButtonControl
+
+	String ctrlname
+	String savDF = GetDataFolder(1)
+	CommitDriveWaves()
+	
+	SetDataFolder root:packages:trEFM:ImageScan
+	Nvar DigitizerAverages, DigitizerSamples,DigitizerPretrigger
+	Nvar DigitizerTime, DigitizerSampleRate, DigitizerPercentPreTrig
+	
+	// For this, we will hard-code certain values
+	// Runs for 10 ms per signal, with 300 us pre-trigger and 9700 us post-trigger
+	DigitizerAverages = 5
+	DigitizerTime = 10
+	DigitizerPercentPreTrig = 97
+	
+	DigitizerSamples = ceil(DigitizerSampleRate * DigitizerTime * 1e-3)
+	DigitizerPretrigger = ceil(DigitizerSamples * DigitizerPercentPreTrig / 100)
+
+	SetDataFolder root:Packages:trEFM
+	
+	Nvar liftheight
+	Nvar gxpos, gypos
+	Nvar WavesCommitted
+	
+	if(WavesCommitted == 0)
+		Abort "Drive waves have not been committed."
+	endif
+	if( IsNan(gxpos) | IsNan(gypos))
+		Abort "X and Y are NaN. Make sure to get the current position before continuing."
+	endif
+	
+	SetDataFolder root:Packages:trEFM:PointScan:FFtrEFM
+	
+	Wave PIXELCONFIG = root:packages:trEFM:FFtrEFMConfig:PIXELCONFIG
+	Make/O/N=(DigitizerSamples) timekeeper
+	Linspace2(0,PIXELCONFIG[%Total_Time],DigitizerSamples, timekeeper)
+	SetScale d,0,(DigitizerSamples),"s",timekeeper
+	
+	PixelConfig[%Trigger] = (1 - DigitizerPercentPreTrig/100) * DigitizerTime * 1e-3
+	PixelConfig[%Total_Time] = DigitizerTime * 1e-3
+	
+	// Loop through 4 chirps
+	variable chirps = 0
+	make/O/T chirpfiles = {"chirp_w", "chirp_2w", "chirp_3w", "chirp_w2"}
+	//make/O/T chirpfiles = {"chirp_w"}
+	string gagename, tf_name
+	for (chirps = 0; chirps < numpnts(chirpfiles); chirps += 1)
+
+		KillWaves/Z root:packages:trEFM:PointScan:FFtrEFM:gagewave
+		KillWaves/Z root:packages:trEFM:PointScan:FFtrEFM:ch2_wave
+		
+		loadchirpwave(chirpfiles[chirps], offset=0.35) // 0.35 is empirical, but you should check on an oscilloscope
+		sleep/S 20
+		PointScanTF(gxpos, gypos, liftheight,DigitizerAverages,DigitizerSamples,DigitizerPretrigger)
+		GetCurrentPosition()
+		
+		Wave gagewave = root:packages:trEFM:PointScan:FFtrEFM:gagewave
+		Wave ch2_wave = root:packages:trEFM:PointScan:FFtrEFM:ch2_wave
+		
+		gagename = "gagewave_" + chirpfiles[chirps]
+		Duplicate/O gagewave, $gagename
+		
+		tf_name = "tip_" + chirpfiles[chirps]
+		Duplicate/O ch2_wave, $tf_name
+		
+	endfor
+	
+	Beep
+end
 
 Function CommitDriveWaves()
 
@@ -1234,6 +1355,7 @@ Function TabProc(ctrlName,tabNum) : TabControl
 	ModifyControl popup1 disable=  !(isGmode || isFFtrEFM)
 	MOdifyControl GMOdeAC disable = !isGmode
 
+
 	// Extra/Calibration
 	ModifyControl setvar0 disable= !isExtra
 	ModifyControl button2 disable= !isExtra
@@ -1243,6 +1365,7 @@ Function TabProc(ctrlName,tabNum) : TabControl
 	//ModifyControl forceparams1 disable = !isExtra
 	ModifyControl setphasevar disable = !isExtra
 	ModifyControl calcurve disable = !isExtra
+	ModifyControl transferfuncparams disable = !isExtra
 	
 	// Change LED Wave Button
 	if (isRingDown)
@@ -1257,9 +1380,10 @@ End
 // If this panel function does not contain a call to trEFMInit(), it has been saved over. Just insert it below and the 
 // code should work again
 Window trEFMImagingPanel() : Panel
-	trEFMInit()
+	trefminit()
 	PauseUpdate; Silent 1		// building window...
 	NewPanel /W=(1945,793,2509,1106)
+	ShowTools/A
 	SetDrawLayer UserBack
 	SetDrawEnv fillfgc= (56576,56576,56576)
 	DrawRect 11,6,238,91
@@ -1433,6 +1557,7 @@ Window trEFMImagingPanel() : Panel
 	Button forceparams2,pos={402,215},size={136,34},disable=1,proc=ElecCal_Noise_Button,title="Elec+Noise Calibration\r(SLOW!)"
 	CheckBox OneorTwoCHannelBox,pos={265,153},size={92,14},disable=1,proc=OneOrTwoChannelsCHeckBox,title="Two Channels?"
 	CheckBox OneorTwoCHannelBox,variable= root:packages:trEFM:ImageScan:OneorTwoChannels,side= 1
+	Button transferfuncparams,pos={402,255},size={136,34},proc=GModeTransferFUncButton,title="Transfer Func with AWG"
 	ToolsGrid snap=1,visible=1,grid=(0,28.35,5)
 EndMacro
 

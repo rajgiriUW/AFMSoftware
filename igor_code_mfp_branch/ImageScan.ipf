@@ -1310,7 +1310,7 @@ Function ImageScanFFtrEFM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines
 			GageTransfer(2, ch2_wave)
 		endif
 		
-//		AnalyzeLineOffline(PIXELCONFIG, scanpoints, shift_wave, tfp_wave, data_wave)
+		AnalyzeLineOffline(PIXELCONFIG, scanpoints, shift_wave, tfp_wave, data_wave)
 
 		// ************  End of Retrace 		
 
