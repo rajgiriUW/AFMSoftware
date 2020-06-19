@@ -1027,7 +1027,7 @@ Function GModePointScanButton(ctrlname) : ButtonControl
 
 	SetDataFolder savDF
 end
-Function GModeTransferFUncButton(ctrlname) : ButtonControl
+Function GModeTransferFuncButton(ctrlname) : ButtonControl
 
 	String ctrlname
 	String savDF = GetDataFolder(1)
@@ -1069,10 +1069,63 @@ Function GModeTransferFUncButton(ctrlname) : ButtonControl
 	PixelConfig[%Trigger] = (1 - DigitizerPercentPreTrig/100) * DigitizerTime * 1e-3
 	PixelConfig[%Total_Time] = DigitizerTime * 1e-3
 	
+	NVAR calengagefreq = root:packages:trEFM:VoltageScan:calengagefreq
+//	print "Generating Chirp with frequency", calengagefreq, " Hz and width", 
+	variable f_center = 500e3
+	variable f_width = 400e3
+
+	string cmd = "cmd.exe /K cd C:\\Data\\Raj && python generate_chirp.py " + num2str(f_center) + " " + num2str(f_width) + " && Exit"
+	ExecuteScriptText cmd
+
+	print "Generated chirp with frequency", num2str(f_center), " Hz and width", num2str(f_width), "Hz" 
+	
+	string copychirp
+	Prompt copychirp, "Insert a Flash Drive and press Continue"
+	DoPrompt ">>>",copychirp
+	if(V_flag==1)
+		Abort			//Aborts if you cancel the save option
+	endif
+	
+	ExecuteScriptText "cmd.exe /K copy chirp.dat E: && Exit"
+
+	Prompt copychirp, "Insert Flash Drive in Wave Generator"
+	DoPrompt ">>>",copychirp
+	if(V_flag==1)
+		Abort			//Aborts if you cancel the save option
+	endif
+	
+	KillWaves/Z root:packages:trEFM:PointScan:FFtrEFM:gagewave
+	KillWaves/Z root:packages:trEFM:PointScan:FFtrEFM:ch2_wave
+		
+	loadchirpwave("chirp", offset=0.0) // verified on oscilloscope should be offset=0 on 6/19/2020
+	sleep/S 20
+
 	PointScanTF(gxpos, gypos, liftheight,DigitizerAverages,DigitizerSamples,DigitizerPretrigger)
-	GetCurrentPosition()
+	GetCurrentPosition()	
 	
+	Wave gagewave = root:packages:trEFM:PointScan:FFtrEFM:gagewave
+	Wave ch2_wave = root:packages:trEFM:PointScan:FFtrEFM:ch2_wave
 	
+	string gagename = "gagewave_chirp" 
+	Duplicate/O gagewave, $gagename
+		
+	string tf_name = "tip_chirp"
+	Duplicate/O ch2_wave, $tf_name	
+	
+	// Display the results
+	Duplicate/O/R=[][0] gagewave_chirp, transfer_func
+	Redimension/N=-1 TransferFunc
+	SetScale/I x, 0, PixelConfig[%Total_Time], "s", transfer_func
+	
+	DUplicate/O/R=[][0] ch2_wave, excitation
+	SetScale/I x, 0, PixelConfig[%Total_Time], "s", excitation
+	Redimension/N=-1 Excitation	
+	
+	FFT/OUT=3/DEST=transfer_func_FFT transfer_func
+	FFT/OUT=3/DEST=excitation_FFT excitation
+	
+	display transfer_func_FFT
+	appendtograph/R excitation_FFT
 	
 	Beep
 end

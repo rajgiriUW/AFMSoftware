@@ -257,8 +257,8 @@ Function PointScanTF(xpos, ypos, liftheight,DigitizerAverages,DigitizerSamples,D
 	td_WV(LockinString + "Amp", calhardd)
 	td_WV(LockinString + "freq", calengagefreq)
 	
-	SetFeedbackLoop(3, "Always", LockinString + "R", setpoint, -pgain, -igain, -sgain, "Height", 0)
-	StopFeedbackLoop(2)
+	SetFeedbackLoop(2, "Always", LockinString + "R", setpoint, -pgain, -igain, -sgain, "Height", 0)
+	
 	// Wait for the feedback loops and frequency to settle.
 	variable startTime = StopMSTimer(-2)
 	do 
@@ -295,6 +295,7 @@ Function PointScanTF(xpos, ypos, liftheight,DigitizerAverages,DigitizerSamples,D
 	Variable currentz = td_RV("ZSensor") * GV("ZLVDTSens")
 
 	// Raise up to the specified lift height.
+	StopFeedbackLoop(2)
 	SetFeedbackLoop(3, "Always", "ZSensor", (currentz - liftheight * 1e-9) / GV("ZLVDTSens"), 0, EFMFilters[%ZHeight][%IGain], 0, "Output.Z", 0)  
 	Sleep/S 1/30 // To avoid sparking.
 
