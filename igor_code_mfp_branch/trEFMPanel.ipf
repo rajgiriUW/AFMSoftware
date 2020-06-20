@@ -881,6 +881,16 @@ Function FFtrEFMPointScanButton(ctrlname) : ButtonControl
 	PixelConfig[%Trigger] = (1 - DigitizerPercentPreTrig/100) * DigitizerTime * 1e-3
 	PixelConfig[%Total_Time] = DigitizerTime * 1e-3
 	
+	// Check is settings exceed 75 MB. Needed to avoid saturating the Gage Card
+	if (DigitizerSampleRate * DigitizerTime * 1e-3 * DigitizerAverages  > 70e6)
+		variable fileSpaceOption = 0 
+		Prompt fileSpaceOption, "These settings near/over 75 MB limit! Continue?"
+			DoPrompt ">>>",fileSpaceOption
+				If(V_flag==1)
+					abort			//Aborts if you cancel the save option
+				endif
+	endif
+	
 	PointScanFFtrEFM(gxpos, gypos, liftheight,DigitizerAverages,DigitizerSamples,DigitizerPretrigger)
 	GetCurrentPosition()
 
@@ -1039,9 +1049,9 @@ Function GModeTransferFuncButton(ctrlname) : ButtonControl
 	
 	// For this, we will hard-code certain values
 	// Runs for 10 ms per signal, with 300 us pre-trigger and 9700 us post-trigger
-	DigitizerAverages = 5
-	DigitizerTime = 10
-	DigitizerPercentPreTrig = 97
+//	DigitizerAverages = 5
+//	DigitizerTime = 10
+//	DigitizerPercentPreTrig = 97
 	
 	DigitizerSamples = ceil(DigitizerSampleRate * DigitizerTime * 1e-3)
 	DigitizerPretrigger = ceil(DigitizerSamples * DigitizerPercentPreTrig / 100)
@@ -1066,6 +1076,16 @@ Function GModeTransferFuncButton(ctrlname) : ButtonControl
 	Linspace2(0,PIXELCONFIG[%Total_Time],DigitizerSamples, timekeeper)
 	SetScale d,0,(DigitizerSamples),"s",timekeeper
 	
+	// Check is settings exceed 75 MB. Needed to avoid saturating the Gage Card
+	if (DigitizerSampleRate * DigitizerTime * 1e-3 * DigitizerAverages  > 70e6)
+		variable fileSpaceOption = 0 
+		Prompt fileSpaceOption, "These settings near/over 75 MB limit! Continue?"
+			DoPrompt ">>>",fileSpaceOption
+				If(V_flag==1)
+					abort			//Aborts if you cancel the save option
+				endif
+	endif
+	
 	PixelConfig[%Trigger] = (1 - DigitizerPercentPreTrig/100) * DigitizerTime * 1e-3
 	PixelConfig[%Total_Time] = DigitizerTime * 1e-3
 	
@@ -1073,11 +1093,12 @@ Function GModeTransferFuncButton(ctrlname) : ButtonControl
 //	print "Generating Chirp with frequency", calengagefreq, " Hz and width", 
 	variable f_center = 500e3
 	variable f_width = 400e3
+	variable length = PIXELCONFIG[%Total_Time]
 
-	string cmd = "cmd.exe /K cd C:\\Data\\Raj && python generate_chirp.py " + num2str(f_center) + " " + num2str(f_width) + " && Exit"
+	string cmd = "cmd.exe /K cd C:\\Data\\Raj && python generate_chirp.py " + num2str(f_center) + " " + num2str(f_width) + " " + num2str(length) + " && Exit"
 	ExecuteScriptText cmd
 
-	print "Generated chirp with frequency", num2str(f_center), " Hz and width", num2str(f_width), "Hz" 
+	print "Generated chirp with frequency", num2str(f_center), " Hz and width", num2str(f_width), "Hz, ", num2str(length), " seconds long." 
 	
 	string copychirp
 	Prompt copychirp, "Insert a Flash Drive and press Continue"
@@ -1086,7 +1107,7 @@ Function GModeTransferFuncButton(ctrlname) : ButtonControl
 		Abort			//Aborts if you cancel the save option
 	endif
 	
-	ExecuteScriptText "cmd.exe /K copy chirp.dat E: && Exit"
+	ExecuteScriptText "cmd.exe /K cd C:\\Data\\Raj && copy chirp.dat E: && Exit"
 
 	Prompt copychirp, "Insert Flash Drive in Wave Generator"
 	DoPrompt ">>>",copychirp
@@ -1108,19 +1129,19 @@ Function GModeTransferFuncButton(ctrlname) : ButtonControl
 	
 	string gagename = "gagewave_chirp" 
 	Duplicate/O gagewave, $gagename
-		
+	wave gagewave_chirp
+	
 	string tf_name = "tip_chirp"
 	Duplicate/O ch2_wave, $tf_name	
+	wave tip_chirp
 	
 	// Display the results
-	Duplicate/O/R=[][0] gagewave_chirp, transfer_func
-	Redimension/N=-1 TransferFunc
+	MatrixOp/O transfer_func = sumrows(gagewave_chirp)/numcols(gagewave_chirp)
 	SetScale/I x, 0, PixelConfig[%Total_Time], "s", transfer_func
-	
-	DUplicate/O/R=[][0] ch2_wave, excitation
+		
+	MatrixOp/O excitation = sumrows(tip_chirp)/numcols(tip_chirp)
 	SetScale/I x, 0, PixelConfig[%Total_Time], "s", excitation
-	Redimension/N=-1 Excitation	
-	
+
 	FFT/OUT=3/DEST=transfer_func_FFT transfer_func
 	FFT/OUT=3/DEST=excitation_FFT excitation
 	

@@ -48,6 +48,7 @@ Function LoadChirpWave(filename, [offset, amplitude])
 	
 	VISAWrite instr, "*RST\n"
 	VISAWrite instr, "FUNC:ARB:SRATE 100E6\n"
+//	VISAWrite instr, "FUNC:ARB:SRATE 10E6\n"
 	VISAWrite instr, "FUNC:ARB:PTP "+num2str(amplitude)+"\n"
 	
 	VISAWrite instr, "MMEM:LOAD:DATA \"USB:\\"+filename +".dat\"\n"
