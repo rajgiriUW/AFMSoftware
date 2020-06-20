@@ -105,6 +105,19 @@ function TurnOffAWG()
 	
 end
 
+function clearAWGError()
+
+	Variable defaultRM, instr
+	String resourceName = "USB0::0x0957::0x2907::MY52500433::0::INSTR"
+	
+	viOpenDefaultRM(defaultRM)
+	viOpen(defaultRM, resourceName, 0, 0, instr)
+	VISAWrite instr, "SYSTem:ERRor?"
+	viClose(instr)
+	viClose(defaultRM)
+
+end
+
 Function LoadTauBWave(num)
 	Variable num
 	
