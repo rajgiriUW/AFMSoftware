@@ -243,7 +243,12 @@ Function LoadChirp()
 	
 
 	// Run experiment	
-	loadchirpwave("chirp", offset=0.0) // verified on oscilloscope should be offset=0 on 6/19/2020
-	sleep/S 20
+	if (sampling_rate == 10e6)
+		loadchirpwave("chirp", offset=0.0, sampling_rate="10E6") // verified on oscilloscope should be offset=0 on 6/19/2020
+	elseif (sampling_rate == 100e6)
+		loadchirpwave("chirp", offset=0.0, sampling_rate="100E6") // verified on oscilloscope should be offset=0 on 6/19/2020
+	endif
+
+	sleep/S 12
 
 end

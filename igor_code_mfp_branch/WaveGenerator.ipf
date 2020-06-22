@@ -1,6 +1,8 @@
 
 #pragma rtGlobals=3		// Use modern global access method and strict wave access.
 
+/// Note, look at the testawg() below for how to write directly from the computer (faster than USB, more prone to errors)
+
 Function LoadTauWave(num)
 	Variable num
 	Variable defaultRM, instr
@@ -75,6 +77,26 @@ Function LoadChirpWave(filename, [offset, amplitude, sampling_rate])
 
 end
 
+function testawg() // scratchspace for quick testing
+
+	Variable defaultRM, instr
+	String resourceName = "USB0::0x0957::0x2907::MY52500433::0::INSTR"
+	
+	viOpenDefaultRM(defaultRM)
+	viOpen(defaultRM, resourceName, 0, 0, instr)
+	
+//	string strdata = "0, 0.2,0.3,0.4,0.3,0.2,0.1,0, 0.2,0.3,0.4,0.3,0.2,0.1,0, 0.2,0.3,0.4,0.3,0.2,0.1,0, 0.2,0.3,0.4,0.3,0.2,0.1,0, 0.2,0.3,0.4,0.3,0.2,0.1,0, 0.2,0.3,0.4,0.3,0.2,0.1,0, 0.2,0.3,0.4,0.3,0.2,0.1,0, 0.2,0.3,0.4,0.3,0.2,0.1,0, 0.2,0.3,0.4,0.3,0.2,0.1,0, 0.2,0.3,0.4,0.3,0.2,0.1,0, 0.2,0.3,0.4,0.3,0.2,0.1,0, 0.2,0.3,0.4,0.3,0.2,0.1,0, 0.2,0.3,0.4,0.3,0.2,0.1,0, 0.2,0.3,0.4,0.3,0.2,0.1"
+	svar outw
+	string strdata = outw[0, 200]
+	VISAWrite instr, "DATA:VOLatile:CLEar"
+	VISAWrite instr, "SOURce1:DATA:ARBitrary TestArb2," + strdata
+	VISAWrite instr, "SOURce1:FUNCtion ARB"
+	VISAWRite instr, "SOURce1:FUNCtion:ARBitrary TestArb2"
+	VISAWrite instr, "FUNC:ARB:SRATE 1E5\n"
+	viClose(instr)
+	viClose(defaultRM)
+	
+end
 
 Function LoadArbWave(freq, amp)
 	Variable freq, amp
