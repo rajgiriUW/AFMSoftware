@@ -1314,7 +1314,7 @@ Function TabProc(ctrlName,tabNum) : TabControl
 	ModifyControl digipre disable=  !(isGmode || isFFtrEFM)
 	ModifyControl aconfig disable= !(isGmode || isFFtrEFM)
 	ModifyControl popup1 disable=  !(isGmode || isFFtrEFM)
-	MOdifyControl GMOdeAC disable = !isGmode
+//	MOdifyControl GMOdeAC disable = !isGmode
 
 
 	// Extra/Calibration
@@ -1427,17 +1427,17 @@ Window trEFMImagingPanel() : Panel
 	SetVariable scanwidthT,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scansizex
 	Button pntscanbuttonT2,pos={262,34},size={100,25},disable=1,proc=FFtrEFMPointScanButton,title="Point Scan"
 	Button imgscanbuttonT2,pos={382,34},size={100,25},disable=1,proc=FFtrEFMImageScanButton,title="Image Scan"
-	SetVariable scanheightT2,pos={441,82},size={100,16},disable=1,title="Height (µm)       "
+	SetVariable scanheightT2,pos={396,82},size={100,16},disable=1,title="Height (µm)       "
 	SetVariable scanheightT2,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scansizey
-	SetVariable scanpointsT2,pos={441,102},size={100,16},disable=1,title="Scan Points    "
+	SetVariable scanpointsT2,pos={396,102},size={100,16},disable=1,title="Scan Points    "
 	SetVariable scanpointsT2,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scanpoints
-	SetVariable scanlinesT2,pos={441,122},size={100,16},disable=1,title="Scan Lines     "
+	SetVariable scanlinesT2,pos={396,122},size={100,16},disable=1,title="Scan Lines     "
 	SetVariable scanlinesT2,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scanlines
-	SetVariable scanspeedT2,pos={420,160},size={121,16},disable=1,title="Scan Speed(um/s)"
+	SetVariable scanspeedT2,pos={375,160},size={121,16},disable=1,title="Scan Speed(um/s)"
 	SetVariable scanspeedT2,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scanspeed
 	Button savebuttonT2,pos={434,188},size={99,33},disable=1,proc=SaveImageButton,title="Save"
 	Button clearbuttonT2,pos={454,229},size={40,20},disable=1,proc=ClearImagesButton,title="Clear"
-	SetVariable scanwidthT2,pos={441,62},size={100,16},disable=1,title="Width (µm)        "
+	SetVariable scanwidthT2,pos={396,62},size={100,16},disable=1,title="Width (µm)        "
 	SetVariable scanwidthT2,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scansizex
 	SetVariable cyclesT3,pos={529,50},size={85,16},disable=1,title="# of Cycles"
 	SetVariable cyclesT3,limits={-inf,inf,0},value= root:packages:trEFM:WaveGenerator:numcycles
@@ -1466,7 +1466,7 @@ Window trEFMImagingPanel() : Panel
 	SetVariable digisamples,pos={259,82},size={97,16},disable=1,title="Time (ms)"
 	SetVariable digisamples,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:DigitizerTime
 	Button aconfig,pos={277,175},size={80,20},disable=1,proc=AnalysisSettingsButton,title="Analysis Config"
-	SetVariable averagesT2,pos={441,142},size={100,16},disable=1,title="# Averages       "
+	SetVariable averagesT2,pos={396,142},size={100,16},disable=1,title="# Averages       "
 	SetVariable averagesT2,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:numavgsperpoint
 	SetVariable digiaverages,pos={276,62},size={80,16},disable=1,title="Averages"
 	SetVariable digiaverages,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:DigitizerAverages
@@ -1510,15 +1510,13 @@ Window trEFMImagingPanel() : Panel
 	SetVariable ElecAmp,limits={0,10,0},value= root:packages:trEFM:elecAmp
 	CheckBox ElecDrive,pos={267,280},size={73,14},disable=1,title="Elec Drive?"
 	CheckBox ElecDrive,variable= root:packages:trEFM:elecDrive,side= 1
-	SetVariable GmodeAC,pos={363,102},size={61,16},disable=1,title="AC (V)"
-	SetVariable GmodeAC,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:GM_AC
-	Button pntscanbuttonT4,pos={273,37},size={100,25},disable=1,proc=GModePointScanButton,title="Point Scan"
-	Button imgscanbuttonT4,pos={393,37},size={100,25},disable=1,proc=GmodeImageScanButton,title="Image Scan"
+	Button pntscanbuttonT4,pos={265,33},size={100,25},disable=1,proc=GModePointScanButton,title="Point Scan"
+	Button imgscanbuttonT4,pos={385,33},size={100,25},disable=1,proc=GmodeImageScanButton,title="Image Scan"
 	Button forceparams1,pos={402,165},size={137,28},disable=1,proc=ElecCalButton,title="Electrical Calibration"
 	Button forceparams2,pos={402,215},size={136,34},disable=1,proc=ElecCal_Noise_Button,title="Elec+Noise Calibration\r(SLOW!)"
 	CheckBox OneorTwoCHannelBox,pos={265,153},size={92,14},disable=1,proc=OneOrTwoChannelsCHeckBox,title="Two Channels?"
 	CheckBox OneorTwoCHannelBox,variable= root:packages:trEFM:ImageScan:OneorTwoChannels,side= 1
-	Button transferfuncparams,pos={402,255},size={136,34},proc=GModeTransferFUncButton,title="Transfer Func with AWG"
+	Button transferfuncparams,pos={402,255},size={136,34},disable=1,proc=GModeTransferFUncButton,title="Transfer Func with AWG"
 	ToolsGrid snap=1,visible=1,grid=(0,28.35,5)
 EndMacro
 
@@ -1971,7 +1969,7 @@ Function trEFMXFast(ba): ButtonControl
 End
 
 Function About()
-	print "Written by many members of the Ginger Lab from 2003 - 2019." 
-	print "Primary points of contact are Rajiv Giridharagopal (rgiri@uw.edu) and David Ginger (dginger@uw.edu)."
-	print "All rights reserved, whatever that means."
+	print "Written by many members of the Ginger Lab from 2003 - 2020 but mostly Rajiv Giridharagopal." 
+	print "Primary maintainer and developer is Rajiv Giridharagopal (rgiri@uw.edu)"
+	print "All rights reserved."
 end

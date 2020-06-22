@@ -1,24 +1,17 @@
 #pragma rtGlobals=3		// Use modern global access method and strict wave access.
 
 Window TransferFuncPanel() : Panel
-	
-	NewDataFolder/O/S root:Packages:trEFM:TF
-	Variable/G TFDigitizerAverages = 50
-	Variable/G TFDigitizerSamples 
-	Variable/G TFDigitizerPretrigger
-	Variable/G TFDigitizerTime = 1.6
-	Variable/G TFDigitizerSampleRate = 10e6
-	Variable/G TFDigitzerPercentPreTrig = 60
+	TFPanelInit()
 	
 	PauseUpdate; Silent 1		// building window...
-	NewPanel /W=(1388,438,1731,669)
+	NewPanel /W=(1952,496,2224,712)
 	ShowTools/A
 	SetDrawLayer UserBack
 	SetDrawEnv fsize= 14,fstyle= 5
 	DrawText 43,21,"Transfer Function"
 	Button transferfuncparams,pos={14,163},size={136,34},proc=GModeTransferFUncButton,title="Transfer Func with AWG"
 	SetVariable digipre,pos={26,81},size={90,16},title="Pre-Trigger %"
-	SetVariable digipre,limits={-inf,inf,0},value= root:packages:trEFM:TF:DigitzerPercentPreTrig
+	SetVariable digipre,limits={-inf,inf,0},value= root:packages:trEFM:TF:TFDigitizerPercentPreTrig
 	SetVariable digisamples,pos={20,59},size={97,16},title="Time (ms)"
 	SetVariable digisamples,limits={-inf,inf,0},value= root:packages:trEFM:TF:TFDigitizerTime
 	SetVariable digiaverages,pos={36,37},size={80,16},title="Averages"
@@ -28,6 +21,21 @@ Window TransferFuncPanel() : Panel
 	Button PixelParams,pos={156,38},size={96,24},proc=PixelParams,title="Pixel-wise Settings"
 	Button LineParams,pos={157,70},size={96,24},title="Line-Wise Settings"
 EndMacro
+
+Function TFPanelInit()
+	
+	NewDataFolder/O/S root:packages:trEFM:TF
+	
+	Variable/G TFDigitizerAverages = 50
+	Variable/G TFDigitizerTime = 1.6
+	Variable/G TFDigitizerSampleRate = 10e6
+	Variable/G TFDigitizerPercentPreTrig = 60
+	Variable/G ChirpCenter = 500e3
+	Variable/G ChirpWidth = 450e3
+
+	Variable/G secondmode
+	
+end
 
 Function PopMenuProcTF(ctrlName,popNum,popStr) : PopupMenuControl
 	String ctrlName
@@ -165,6 +173,10 @@ Function GModeTransferFuncButton(ctrlname) : ButtonControl
 	NVAR calengagefreq = root:packages:trEFM:VoltageScan:calengagefreq
 //	print "Generating Chirp with frequency", calengagefreq, " Hz and width", 
 
+	LoadChirp()
+	
+	KillWaves/Z root:packages:trEFM:PointScan:FFtrEFM:gagewave
+	KillWaves/Z root:packages:trEFM:PointScan:FFtrEFM:ch2_wave
 
 	PointScanTF(gxpos, gypos, liftheight, TFDigitizerAverages, TFDigitizerSamples, TFDigitizerPretrigger)
 	GetCurrentPosition()	
@@ -203,13 +215,16 @@ end
 Function LoadChirp()
 	variable f_center = 500e3
 	variable f_width = 400e3
-	Wave TFDigitizerTime = root:packages:trEFM:TF:TFDigitizerTime
+	NVAR TFDigitizerTime = root:packages:trEFM:TF:TFDigitizerTime
 	variable length = TFDigitizerTime * 1e-3
-
-	string cmd = "cmd.exe /K cd C:\\Data\\Raj && python generate_chirp.py " + num2str(f_center) + " " + num2str(f_width) + " " + num2str(length) + " && Exit"
+	NVAR sampling_rate = root:packages:trEFM:TF:TFDigitizerSampleRate
+	NVAR ChirpCenter = root:packages:trEFM:TF:ChirpCenter
+	NVAR ChirpWidth = root:packages:trEFM:TF:ChirpWidth
+	
+	string cmd = "cmd.exe /K cd C:\\Data\\Raj && python generate_chirp.py " + num2str(ChirpCenter) + " " + num2str(ChirpWidth) + " " + num2str(length) + " -s " + num2str(sampling_rate) + " && Exit"
 	ExecuteScriptText cmd
 
-	print "Generated chirp with frequency", num2str(f_center), " Hz and width", num2str(f_width), "Hz, ", num2str(length), " seconds long." 
+	print "Generated chirp with frequency", num2str(ChirpCenter), "Hz and width", num2str(ChirpWidth), "Hz,", num2str(length), "seconds long and sampled at",num2str(sampling_rate), "Hz"  
 	
 	string copychirp
 	Prompt copychirp, "Insert a Flash Drive and press Continue"
@@ -226,9 +241,7 @@ Function LoadChirp()
 		Abort			//Aborts if you cancel the save option
 	endif
 	
-	KillWaves/Z root:packages:trEFM:PointScan:FFtrEFM:gagewave
-	KillWaves/Z root:packages:trEFM:PointScan:FFtrEFM:ch2_wave
-	
+
 	// Run experiment	
 	loadchirpwave("chirp", offset=0.0) // verified on oscilloscope should be offset=0 on 6/19/2020
 	sleep/S 20

@@ -113,6 +113,8 @@ Function GrabTune(softamplitude)
 	
 	SetDataFolder savDF
 
+	Variable/G secondmode = 6.25  * calresfreq
+
 End
 
 Function VoltageScan(xpos, ypos, liftheight, [vmin, vmax, npoints])
