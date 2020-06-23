@@ -1044,7 +1044,10 @@ Function GModePointScanButton(ctrlname) : ButtonControl
 	Duplicate/O gagewave, avgwave
 	matrixop/o avgwave = sumrows(gagewave)/numcols(gagewave)
 	Redimension/N=-1 avgwave
+	setscale/i x, 0, PIXELCONFIG[%Total_Time], avgwave
+	FFT/OUT=1/DEST=avgwave_FFT avgwave
 
+	FFT/OUT=3/DEST=avgwave_FFT_mag avgwave
 	SetDataFolder savDF
 end
 

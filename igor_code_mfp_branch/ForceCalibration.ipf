@@ -385,7 +385,7 @@ function getForce(calAmp, calDef, DEFINVOLS, k)
 
 	wavestats/Q calAmp
 
-	variable F = -1*(k*deftestsm(V_maxLoc)*DEFINVOLS) * 1e9	//1e9 because DEFINVOLS in m/V 	
+	variable F = -1*(k*deftestsm(V_maxLoc)*DEFINVOLS) 	//1e9 because DEFINVOLS in m/V 	
 	killWaves/Z defTestSM
 	
 	return F
@@ -417,12 +417,6 @@ Function LiftTo(liftHeight,tipVoltage,[lighton])
 	Sleep/s 1
 	readposition()
 	
-	td_wv("Output.B", tipVoltage)
-	if (!ParamIsDefault(lighton) )
-		td_wv("Output.A", 5)
-	endif
-
-
 	// Lift the tip to the desired lift height.
 	Variable z1= td_readvalue("ZSensor") * GV("ZLVDTSens")	
 	StopFeedbackLoop(2)
@@ -430,6 +424,12 @@ Function LiftTo(liftHeight,tipVoltage,[lighton])
 
 	Sleep/s 1
 	readposition()
+
+	td_wv("Output.B", tipVoltage)
+	if (!ParamIsDefault(lighton) )
+		td_wv("Output.A", 5)
+	endif
+
 	
 End
 

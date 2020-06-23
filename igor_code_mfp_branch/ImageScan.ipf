@@ -1288,7 +1288,8 @@ Function ImageScanFFtrEFM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines
 		td_wv(LockinString + "Freq", CalResFreq) //set the frequency to the resonant frequency	
 		td_wv(LockinString + "FreqOffset", 0)
 		
-		SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","OutB","DDS")
+//		SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","OutB","DDS")
+		SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","DDS","OutA","OutB","Ground","OutB","DDS")
 		SetPassFilter(1, q = EFMFilters[%trEFM][%q], i = EFMFilters[%trEFM][%i])
 
 		GageAcquire()

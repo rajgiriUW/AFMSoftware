@@ -113,7 +113,8 @@ Function GrabTune(softamplitude)
 	
 	SetDataFolder savDF
 
-	Variable/G secondmode = 6.25  * calresfreq
+	NVAR secondmode = root:packages:trEFM:TF:secondmode
+	secondmode = 6.25  * calresfreq
 
 End
 
