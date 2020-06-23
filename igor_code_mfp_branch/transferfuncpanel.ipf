@@ -238,13 +238,24 @@ Function GModeTransferFuncButton(ctrlname) : ButtonControl
 	MatrixOp/O excitation = sumrows(tip_chirp)/numcols(tip_chirp)
 	SetScale/I x, 0, PixelConfig[%Total_Time], "s", excitation
 
-	FFT/OUT=3/DEST=transfer_func_FFT transfer_func
-	FFT/OUT=3/DEST=excitation_FFT excitation
-	
-	display transfer_func_FFT
-	appendtograph/R excitation_FFT
+	FFT/OUT=1/DEST=transfer_func_FFT transfer_func
+	FFT/OUT=1/DEST=excitation_FFT excitation
 
+	FFT/OUT=1/DEST=transfer_func_FFT_mag transfer_func
+	FFT/OUT=1/DEST=excitation_FFT_mag excitation
+	
+	display transfer_func_FFT_mag
+	appendtograph/R excitation_FFT_mag
+
+	// Q-normalized; assumes thermal tune
+	Wave TVW = root:packages:MFP3D:Main:Variables:ThermalVariablesWave
+	Variable ThermalQ = TVW[%ThermalQ][%value]
 	wavestats/Q/R=(5000, TFDigitizerSampleRate/2) transfer_func_FFT
+	variable mn = v_min
+	variable mx = v_max
+	duplicate/O transfer_func_FFT, transfer_func_norm_FFT
+	transfer_func_norm_FFT = ThermalQ * (transfer_func_norm_FFT - mn) / (mx - mn)
+	IFFT/DEST=transfer_func_norm transfer_func_norm_FFT
 	
 	// Find the levels where the TF crosses
 //	FindLevels/N=2/R=(5000, TFDigitizerSampleRate/2) excitation_FFT, excitation_FFT(V_maxLoc)/2
