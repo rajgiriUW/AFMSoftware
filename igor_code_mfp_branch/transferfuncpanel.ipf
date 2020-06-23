@@ -2,24 +2,41 @@
 
 Window TransferFuncPanel() : Panel
 	TFPanelInit()
-	
 	PauseUpdate; Silent 1		// building window...
-	NewPanel /W=(1952,496,2224,712)
+	NewPanel /W=(1952,496,2247,752)
 	ShowTools/A
 	SetDrawLayer UserBack
 	SetDrawEnv fsize= 14,fstyle= 5
 	DrawText 43,21,"Transfer Function"
-	Button transferfuncparams,pos={14,163},size={136,34},proc=GModeTransferFUncButton,title="Transfer Func with AWG"
-	SetVariable digipre,pos={26,81},size={90,16},title="Pre-Trigger %"
-	SetVariable digipre,limits={-inf,inf,0},value= root:packages:trEFM:TF:TFDigitizerPercentPreTrig
-	SetVariable digisamples,pos={20,59},size={97,16},title="Time (ms)"
+	SetDrawEnv fsize= 10,fstyle= 2
+	DrawText 17,246,"Chirp Script in \"C:Data:Raj:generate_chirp.py\""
+	Button transferfuncparams,pos={20,187},size={131,34},proc=GModeTransferFUncButton,title="Transfer Func with AWG"
+	SetVariable digipre,pos={42,67},size={90,16},title="Pre-Trigger %"
+	SetVariable digipre,limits={1,98,0},value= root:packages:trEFM:TF:TFDigitizerPercentPreTrig
+	SetVariable digisamples,pos={35,47},size={97,16},title="Time (ms)"
 	SetVariable digisamples,limits={-inf,inf,0},value= root:packages:trEFM:TF:TFDigitizerTime
-	SetVariable digiaverages,pos={36,37},size={80,16},title="Averages"
+	SetVariable digiaverages,pos={52,27},size={80,16},title="Averages"
 	SetVariable digiaverages,limits={-inf,inf,0},value= root:packages:trEFM:TF:TFDigitizerAverages
-	PopupMenu popup1,pos={31,108},size={86,22},bodyWidth=60,proc=PopMenuProcTF,title="Rate"
+	PopupMenu popup1,pos={47,108},size={86,22},bodyWidth=60,proc=PopMenuProcTF,title="Rate"
 	PopupMenu popup1,mode=1,popvalue="10 MS",value= #"\"10 MS;50 MS;100MS;5MS;1MS;0.5MS\""
-	Button PixelParams,pos={156,38},size={96,24},proc=PixelParams,title="Pixel-wise Settings"
-	Button LineParams,pos={157,70},size={96,24},title="Line-Wise Settings"
+	Button PixelParams,pos={171,38},size={96,24},proc=PixelParams,title="Pixel-wise Settings"
+	Button LineParams,pos={171,70},size={96,24},proc=LineParams,title="Line-Wise Settings"
+	SetVariable chirpcenter,pos={4,136},size={139,16},title="Chirp Center (Hz)"
+	SetVariable chirpcenter,limits={-inf,inf,0},value= root:packages:trEFM:TF:ChirpCenter
+	SetVariable ChirpWidth,pos={10,156},size={132,16},title="Chirp Width (Hz)"
+	SetVariable ChirpWidth,limits={-inf,inf,0},value= root:packages:trEFM:TF:ChirpWidth
+	SetVariable tfrate,pos={25,87},size={107,16},title="Sample Rate"
+	SetVariable tfrate,valueBackColor=(60928,60928,60928)
+	SetVariable tfrate,limits={-inf,inf,0},value= root:packages:trEFM:TF:TFDigitizerSampleRate,noedit= 1
+	SetVariable tfrate1,pos={182,111},size={107,16},title="Resonance"
+	SetVariable tfrate1,valueBackColor=(60928,60928,60928)
+	SetVariable tfrate1,limits={-inf,inf,0},value= root:packages:trEFM:VoltageScan:calresfreq,noedit= 1
+	SetVariable tfrate3,pos={150,131},size={139,16},title="Second Mode"
+	SetVariable tfrate3,valueBackColor=(60928,60928,60928)
+	SetVariable tfrate3,limits={-inf,inf,0},value= root:packages:trEFM:TF:secondmode,noedit= 1
+	CheckBox OneorTwoCHannelBox,pos={167,159},size={107,14},proc=NewCHirp,title="Create New Chirp?"
+	CheckBox OneorTwoCHannelBox,variable= root:packages:trEFM:TF:CreateNewChirp,side= 1
+	Button saveTF,pos={201,183},size={62,25},proc=SaveTFButton,title="Save TF"
 EndMacro
 
 Function TFPanelInit()
@@ -29,10 +46,11 @@ Function TFPanelInit()
 	Variable/G TFDigitizerAverages = 50
 	Variable/G TFDigitizerTime = 1.6
 	Variable/G TFDigitizerSampleRate = 10e6
-	Variable/G TFDigitizerPercentPreTrig = 60
+	Variable/G TFDigitizerPercentPreTrig = 97
 	Variable/G ChirpCenter = 500e3
 	Variable/G ChirpWidth = 450e3
 
+	Variable/G CreateNewChirp = 1
 	Variable/G secondmode
 	
 end
@@ -78,6 +96,7 @@ Function PixelParams(ctrlname) : ButtonControl
 	setDataFolder root:packages:trEFM:TF
 
 	NVAR TFDigitizerAverages, TFDigitizerTime, TFDigitizerSampleRate, TFDigitizerPercentPreTrig
+	NVAR createNewChirp
 	
 	setDataFolder root:packages:trEFM:ImageScan
 	NVAR DigitizerAverages, DigitizerTime, DigitizerSampleRate, DigitizerPercentPreTrig
@@ -113,6 +132,22 @@ Function PixelParams(ctrlname) : ButtonControl
 
 end
 
+Function LineParams(ctrlname):ButtonControl
+
+	string ctrlname
+	PixelParams("")
+	
+	string savDF = getDataFolder(1)
+	
+	setDataFolder root:packages:trEFM:TF
+	
+	NVAR scanpoints = root:packages:treFM:imagescan:scanpoints
+	NVAR TFDigitizerAverages
+	TFDigitizerAverages = scanpoints
+
+	SetDataFolder savDF
+end
+
 Function GModeTransferFuncButton(ctrlname) : ButtonControl
 
 	String ctrlname
@@ -126,7 +161,7 @@ Function GModeTransferFuncButton(ctrlname) : ButtonControl
 	SetDataFolder root:packages:trEFM:TF
 	Nvar TFDigitizerAverages, TFDigitizerSamples, TFDigitizerPretrigger
 	Nvar TFDigitizerTime, TFDigitizerSampleRate, TFDigitizerPercentPreTrig
-
+	NVAR CreateNewChirp
 	
 	// For this, we will hard-code certain values
 	// Runs for 10 ms per signal, with 300 us pre-trigger and 9700 us post-trigger
@@ -173,7 +208,9 @@ Function GModeTransferFuncButton(ctrlname) : ButtonControl
 	NVAR calengagefreq = root:packages:trEFM:VoltageScan:calengagefreq
 //	print "Generating Chirp with frequency", calengagefreq, " Hz and width", 
 
-	LoadChirp()
+	if (CreateNewChirp == 1)
+		LoadChirp()
+	endif
 	
 	KillWaves/Z root:packages:trEFM:PointScan:FFtrEFM:gagewave
 	KillWaves/Z root:packages:trEFM:PointScan:FFtrEFM:ch2_wave
@@ -206,10 +243,24 @@ Function GModeTransferFuncButton(ctrlname) : ButtonControl
 	
 	display transfer_func_FFT
 	appendtograph/R excitation_FFT
+
+	wavestats/Q/R=(5000, TFDigitizerSampleRate/2) transfer_func_FFT
+	
+	// Find the levels where the TF crosses
+//	FindLevels/N=2/R=(5000, TFDigitizerSampleRate/2) excitation_FFT, excitation_FFT(V_maxLoc)/2
+//	Wave W_FindLevels
+//	transfer_func_FFT[0, x2pnt(Excitation_FFT, W_FindLevels[0])]= 0
+//	transfer_func_FFT[x2pnt(Excitation_FFT, W_FIndLevels[1]), x2pnt(Excitation_FFT, TFDigitizerSampleRate/2)] = 0
+	
+//	transfer_func_fft /= (excitation_FFT + 1e-10)
 	
 	SetDataFolder savDF
 	
 	Beep
+end
+
+Function ProcessTF()
+// Divides the response by the excitation pulse
 end
 
 Function LoadChirp()
@@ -252,3 +303,39 @@ Function LoadChirp()
 	sleep/S 12
 
 end
+
+Function NewChirp(cba) : CheckBoxControl
+	STRUCT WMCheckboxAction &cba
+	NVAR CreateNewChirp = root:packages:trEFM:TF:CreateNewChirp
+	switch( cba.eventCode )
+		case 2: // mouse up
+			Variable checked = cba.checked
+			CreateNewChirp = checked
+			break
+		case -1: // control being killed
+			break
+	endswitch
+
+	return 0
+End
+
+
+Function SaveTFButton(ctrlname) : ButtonControl
+
+	String ctrlname
+	String saveDF = GetDataFolder(1)
+	SetDataFolder root:packages:trEFM:FFtrEFMConfig
+	
+	NewPath Path
+	Wave pixelconfig
+	CreateParametersFile(pixelconfig)
+	Wave/T SaveWave
+	SaveWave[5] = "n_pixels = " + num2str(1) // set n_pixels to 1
+	SaveWave[7] = "lines_per_image = " + num2str(0)
+	Save/G/I/P=Path/M="\r\n" SaveWave as "TFparameters.cfg"
+	
+	SetDataFolder root:packages:trEFM:TF
+	Save/C/I/P=Path root:packages:trEFM:PointScan:FFtrEFM:gagewave_chirp as "TF_Response.ibw"
+	Save/C/I/P=Path root:packages:trEFM:PointScan:FFtrEFM:tip_chirp as "TF_Excitation.ibw"
+		
+End

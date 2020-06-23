@@ -951,12 +951,12 @@ Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 	
 		NVAR Cutdrive = root:packages:trEFM:cutDrive
 
-//		error+= td_xsetoutwavepair(0,"Event.2,repeat", "Output.A", lightwave,"Output.B", voltagewave,-1)
-		error+= td_xsetoutwavepair(0,"Event.2,repeat", "Output.A", lightwave,"Output.C", triggerwave,-1)
+		error+= td_xsetoutwavepair(0,"Event.2,repeat", "Output.A", lightwave,"Output.B", voltagewave,-1)
+//		error+= td_xsetoutwavepair(0,"Event.2,repeat", "Output.A", lightwave,"Output.C", triggerwave,-1)
 		if (CutDrive == 0)	
 //			error += td_xsetoutwave(1,"Event.2,repeat", "Output.C", triggerwave, -1)
 		elseif (CutDrive == 1)
-			error += td_xsetoutWave(1, "Event.2,repeat", LockinString + "Amp",drivewave, -1)
+//			error += td_xsetoutWave(1, "Event.2,repeat", LockinString + "Amp",drivewave, -1)
 		endif
 
 		//stop amplitude FBLoop and start height FB for retrace

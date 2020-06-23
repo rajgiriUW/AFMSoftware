@@ -924,6 +924,11 @@ Function FFtrEFMPointScanButton(ctrlname) : ButtonControl
 	
 	print "tFP value (s): ", tfp_value
 
+	wave GageWave
+	Duplicate/O gagewave, avgwave
+	matrixop/o avgwave = sumrows(gagewave)/numcols(gagewave)
+	Redimension/N=-1 avgwave
+
 	SetDataFolder savDF
 	
 End
@@ -1034,6 +1039,11 @@ Function GModePointScanButton(ctrlname) : ButtonControl
 	endif
 	
 	print "tFP value (s): ", tfp_value
+
+	wave GageWave
+	Duplicate/O gagewave, avgwave
+	matrixop/o avgwave = sumrows(gagewave)/numcols(gagewave)
+	Redimension/N=-1 avgwave
 
 	SetDataFolder savDF
 end

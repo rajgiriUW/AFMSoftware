@@ -93,8 +93,9 @@ Function PointScanGMode(xpos, ypos, liftheight,DigitizerAverages,DigitizerSample
 
 	NVAR Cutdrive = root:packages:trEFM:cutDrive
 	if (cutDrive == 0)
-		td_xSetOutWavePair(1, "Event.2,Always", "Output.A", genlightwave, "Output.C", gentriggerwave, interpval)
-		td_xSetOutWave(0, "Event.2,Always", "Output.B", gentipwave,interpval)
+//		td_xSetOutWavePair(1, "Event.2,Always", "Output.A", genlightwave, "Output.C", gentriggerwave, interpval)
+		td_xSetOutWavePair(1, "Event.2,Always", "Output.A", genlightwave, "Output.B", gentipwave, interpval)
+//		td_xSetOutWave(0, "Event.2,Always", "Output.B", gentipwave,interpval)
 	elseif (cutDrive == 1)
 		td_xSetOutWavePair(0, "Event.2,Always", "Output.A", genlightwave, "Output.B", gentipwave, interpval)
 		td_xSetOutWave(1, "Event.2,Always", LockinString + "Amp", gendrivewave, interpval)
@@ -283,13 +284,14 @@ Function PointScanTF(xpos, ypos, liftheight,DigitizerAverages,DigitizerSamples,D
 
 	NVAR Cutdrive = root:packages:trEFM:cutDrive
 	if (cutDrive == 0)
-		td_xSetOutWavePair(1, "Event.2,Always", "Output.A", genlightwave, "Output.C", gentriggerwave, interpval)
-		td_xSetOutWave(0, "Event.2,Always", "Output.B", gentipwave,interpval)
+//		td_xSetOutWavePair(1, "Event.2,Always", "Output.A", genlightwave, "Output.C", gentriggerwave, interpval)
+		td_xSetOutWavePair(1, "Event.2,Always", "Output.A", genlightwave, "Output.B", gentipwave, interpval)
+//		td_xSetOutWave(0, "Event.2,Always", "Output.B", gentipwave,interpval)
 	elseif (cutDrive == 1)
 		td_xSetOutWavePair(0, "Event.2,Always", "Output.A", genlightwave, "Output.B", gentipwave, interpval)
-		td_xSetOutWave(1, "Event.2,Always", LockinString + "Amp", gendrivewave, interpval)
+	//	td_xSetOutWave(1, "Event.2,Always", LockinString + "Amp", gendrivewave, interpval)
 	endif
-		
+
 	SetPassFilter(1, a = EFMFilters[%EFM][%A], b = EFMFilters[%EFM][%B], fast = EFMFilters[%EFM][%Fast], i = EFMFilters[%EFM][%i], q = EFMFilters[%EFM][%q])
 
 	Variable currentz = td_RV("ZSensor") * GV("ZLVDTSens")
@@ -312,7 +314,7 @@ Function PointScanTF(xpos, ypos, liftheight,DigitizerAverages,DigitizerSamples,D
 //	SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","DDS","Ground")
 	
 	// Tip is grounded and sample is connected to the WaveGenerator
-	SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","OutC","Ground")
+	SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","OutB","Ground")
 	td_WV(LockinString + "Amp", 0)
 //	variable EAmp = GV("NapDriveAmplitude")
 //	variable EFreq = GV("NapDriveFrequency")
