@@ -1924,7 +1924,8 @@ Function ImageScanRingDownEFM(xpos, ypos, liftheight, scansizeX,scansizeY, scanl
 		MoveXY(ScanFramework[0][1], ScanFramework[0][0])
 	endif
 	
-	SetCrosspoint ("FilterOut","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Defl","OutC","OutA","OutB","Ground","OutB","DDS")
+//	SetCrosspoint ("FilterOut","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Defl","OutC","OutA","OutB","Ground","OutB","DDS")
+	SetCrosspoint ("FilterOut","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Defl","OutC","OutA","Ground","Ground","OutB","DDS")
 	variable currentX = td_ReadValue("XSensor")
 	variable currentY = td_ReadValue("YSensor")
 

@@ -254,7 +254,8 @@ Function PointScanFFtrEFM(xpos, ypos, liftheight,DigitizerAverages,DigitizerSamp
 	
 	MoveXY(xpos, ypos) // Move to xy, keeping the tip raised away from the surface
 	
-	SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","OutB","DDS")
+//	SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","OutB","DDS")
+	SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","Ground","Ground","OutB","DDS")
 
 ////////////////////////// SET EFM HARDWARE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 	NVAR xigain, zigain

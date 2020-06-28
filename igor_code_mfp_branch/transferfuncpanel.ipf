@@ -159,10 +159,10 @@ Function GModeTransferFuncButton(ctrlname) : ButtonControl
 //	Nvar DigitizerTime, DigitizerSampleRate, DigitizerPercentPreTrig
 
 	SetDataFolder root:packages:trEFM:TF
-	Nvar TFDigitizerAverages, TFDigitizerSamples, TFDigitizerPretrigger
+	Nvar TFDigitizerAverages
 	Nvar TFDigitizerTime, TFDigitizerSampleRate, TFDigitizerPercentPreTrig
 	NVAR CreateNewChirp
-	
+	variable TFDigitizerSamples, TFDigitizerPretrigger
 	// For this, we will hard-code certain values
 	// Runs for 10 ms per signal, with 300 us pre-trigger and 9700 us post-trigger
 //	DigitizerAverages = 5
