@@ -9,6 +9,7 @@ Function PointScanGMode(xpos, ypos, liftheight,DigitizerAverages,DigitizerSample
 	Wave PIXELCONFIG = root:packages:trEFM:FFtrEFMConfig:PIXELCONFIG
 	Wave CSACQUISITIONCONFIG = root:packages:GageCS:CSACQUISITIONCONFIG
 	Wave CSTRIGGERCONFIG = root:packages:GageCS:CSTRIGGERCONFIG
+	NVAR OneOrTwoChannels = root:packages:trEFM:ImageScan:OneorTwoChannels
 	
 	CSACQUISITIONCONFIG[%SegmentCount] = DigitizerAverages
 	CSACQUISITIONCONFIG[%SegmentSize] = DigitizerSamples
@@ -37,6 +38,7 @@ Function PointScanGMode(xpos, ypos, liftheight,DigitizerAverages,DigitizerSample
 	SetDataFolder root:Packages:trEFM:PointScan:FFtrEFM
 
 	Make/O/N = (DigitizerSamples,DigitizerAverages) gagewave
+	Make/O/N = (DigitizerSamples,DigitizerAverages) ch2_wave
 	Make/O/N = (DigitizerSamples) shiftwave
 	Make/O/N = (400 * numcycles) phasewave
 	Make/O/N = 400 phasewaveavg
@@ -66,7 +68,7 @@ Function PointScanGMode(xpos, ypos, liftheight,DigitizerAverages,DigitizerSample
 	td_WV(LockinString + "freq", calengagefreq)
 	
 	SetFeedbackLoop(3, "Always", LockinString + "R", setpoint, -pgain, -igain, -sgain, "Height", 0)
-
+	StopFeedbackLoop(2)
 	// Wait for the feedback loops and frequency to settle.
 	variable startTime = StopMSTimer(-2)
 	do 
@@ -91,8 +93,9 @@ Function PointScanGMode(xpos, ypos, liftheight,DigitizerAverages,DigitizerSample
 
 	NVAR Cutdrive = root:packages:trEFM:cutDrive
 	if (cutDrive == 0)
-		td_xSetOutWavePair(1, "Event.2,Always", "Output.A", genlightwave, "Output.C", gentriggerwave, interpval)
-		td_xSetOutWave(0, "Event.2,Always", "Output.B", gentipwave,interpval)
+//		td_xSetOutWavePair(1, "Event.2,Always", "Output.A", genlightwave, "Output.C", gentriggerwave, interpval)
+		td_xSetOutWavePair(1, "Event.2,Always", "Output.A", genlightwave, "Output.B", gentipwave, interpval)
+//		td_xSetOutWave(0, "Event.2,Always", "Output.B", gentipwave,interpval)
 	elseif (cutDrive == 1)
 		td_xSetOutWavePair(0, "Event.2,Always", "Output.A", genlightwave, "Output.B", gentipwave, interpval)
 		td_xSetOutWave(1, "Event.2,Always", LockinString + "Amp", gendrivewave, interpval)
@@ -116,7 +119,7 @@ Function PointScanGMode(xpos, ypos, liftheight,DigitizerAverages,DigitizerSample
 //		td_WV(LockinString + "Amp", 2)
 
 	// Write Chip DDS
-	SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","DDS","Ground")
+	SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","DDS","OutA","OutB","Ground","DDS","Ground")
 
 	variable EAmp = GV("NapDriveAmplitude")
 	variable EFreq = GV("NapDriveFrequency")
@@ -147,8 +150,12 @@ Function PointScanGMode(xpos, ypos, liftheight,DigitizerAverages,DigitizerSample
 	td_WV("Output.B", 0)
 	td_WV("Output.C", 0)
 
-	GageTransfer(gagewave)
-
+	GageTransfer(1, gagewave)
+	
+	if (OneOrTwoChannels == 1)
+//		GageTransfer(2, ch2_wave)
+	endif
+	
 	//AnalyzePointScan(PIXELCONFIG, gagewave,shiftwave)
 	
 	// reset the dds settings.
@@ -180,3 +187,6 @@ Function PointScanGMode(xpos, ypos, liftheight,DigitizerAverages,DigitizerSample
 	
 	SetDataFolder savDF
 End
+
+#pragma rtGlobals=3		// Use modern global access method and strict wave access.
+

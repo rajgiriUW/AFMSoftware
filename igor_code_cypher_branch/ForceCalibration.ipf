@@ -251,7 +251,7 @@ Function GetFreeCantileverParms()
 	
 	AMPINVOLS = MVW[%AmpInVols][%value]
 	DEFINVOLS = MVW[%InVols][%value]
-	ThermalK = MVW[%DisplaySpringConstant][%value]
+	ThermalK = MVW[%DisplaySpringConstant][%value] * 1e9 // 1e9 due to Asylum software passing as nN/m instead of nN/nm
 	resF = TVW[%ThermalFrequency][%value]
 	ThermalDC = TVW[%ThermalDC][%value]
 	ThermalQ = TVW[%ThermalQ][%value]
@@ -385,7 +385,7 @@ function getForce(calAmp, calDef, DEFINVOLS, k)
 
 	wavestats/Q calAmp
 
-	variable F = -1*(k*deftestsm(V_maxLoc)*DEFINVOLS) * 1e9	//1e9 because DEFINVOLS in m/V 	
+	variable F = -1*(k*deftestsm(V_maxLoc)*DEFINVOLS) 	//1e9 because DEFINVOLS in m/V 	
 	killWaves/Z defTestSM
 	
 	return F
@@ -417,20 +417,19 @@ Function LiftTo(liftHeight,tipVoltage,[lighton])
 	Sleep/s 1
 	readposition()
 	
+	// Lift the tip to the desired lift height.
+	Variable z1= td_readvalue("ZSensor") * GV("ZLVDTSens")	
+	StopFeedbackLoop(2)
+	SetFeedbackLoop(3, "always",  "ZSensor", (z1 - liftHeight * 1e-9) / GV("ZLVDTSens"), 0,  EFMFilters[%ZHeight][%IGain], 0, "Output.Z", 0)
+
+	Sleep/s 1
+	readposition()
+
 	td_wv("Output.B", tipVoltage)
 	if (!ParamIsDefault(lighton) )
 		td_wv("Output.A", 5)
 	endif
 
-	// Stop amplitude feedback		
-	StopFeedbackLoop(2)
-	
-	// Lift the tip to the desired lift height.
-	Variable z1= td_readvalue("ZSensor") * GV("ZLVDTSens")	
-	SetFeedbackLoop(3, "always",  "ZSensor", (z1 - liftHeight * 1e-9) / GV("ZLVDTSens"), 0,  EFMFilters[%ZHeight][%IGain], 0, "Output.Z", 0)
-
-	Sleep/s 1
-	readposition()
 	
 End
 

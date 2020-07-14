@@ -6,6 +6,7 @@ Menu "trEFM"
 	"SKPM Panel", SKPMPanel()
 	"PL Panel", LBICPanel()
 	"NLPC Panel", NLPC_Panel()
+	"TF Panel", TransferFuncPanel()
 	"Reset All" , ResetAll()
 	SubMenu "Gains"
 		"SKPM", SKPMGainsPanelCPD()
@@ -155,6 +156,7 @@ Function trEFMInit()
 	Variable/G DigitizerAverages, DigitizerSamples, DigitizerPretrigger
 	Variable/G DigitizerTime, DigitizerSampleRate, DigitizerPercentPreTrig
 	Variable/G GM_AC
+	Variable/G OneorTwoChannels
 	
 	// Imaging/trEFM
 	scansizex = 5
@@ -169,12 +171,13 @@ Function trEFMInit()
 	InterpVal = 1
 	
 	// FF-trEFM
-	DigitizerTime = 1.6 // 0.8192
+	DigitizerTime = 1.6
 	DigitizerSampleRate = 10e6
-	DigitizerPercentPreTrig = 60 // 50
-	DigitizerAverages = 50 // 500
+	DigitizerPercentPreTrig = 60
+	DigitizerAverages = 50
 	DigitizerSamples = ceil(DigitizerSampleRate * DigitizerTime * 1e-3)
 	DigitizerPretrigger = ceil(DigitizerSamples * DigitizerPercentPreTrig / 100)
+	OneorTwoChannels = 0 // 0 = 1 channel only (unchecked)
 
 	SetDataFolder root:Packages:trEFM:FFtrEFMConfig
 	MakePixelConfig()

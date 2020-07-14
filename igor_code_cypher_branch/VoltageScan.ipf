@@ -84,8 +84,7 @@ Function GrabTune(softamplitude)
 	td_wv(LockinString +"Freq", calresfreq)	
 	td_wv(LockinString +"Amp", 0)
 
-	Make/O/N = (1280) Awave = 0
-	Make/O/N=(1280) Dwave = 0
+	Make/O/N = (1280) Awave, Dwave
 	Dwave = calhardd * p / 1280
 	
 	// Sets up a wave of amplitudes from 0 to driveamplitude and fires it into the DDSAmplitude0
@@ -106,9 +105,6 @@ Function GrabTune(softamplitude)
 	
 	td_wv(LockinString +"Freq", calengagefreq)
 	td_wv(LockinString +"Amp", calhardd)
-	
-	td_stopinwavebank(-1)
-	td_stopoutwavebank(-1)
 
 	SetFeedbackLoop(2, "Always", lockinString+"R", setpoint, -pgain, -igain, -sgain, "Output.Z", 0)	
 	DoScanFunc("StopEngage")
@@ -116,6 +112,9 @@ Function GrabTune(softamplitude)
 	tunecomplete = 1
 	
 	SetDataFolder savDF
+
+	NVAR secondmode = root:packages:trEFM:TF:secondmode
+	secondmode = 6.25  * calresfreq
 
 End
 
@@ -187,9 +186,6 @@ Function VoltageScan(xpos, ypos, liftheight, [vmin, vmax, npoints])
 
 	SetCrosspoint("FilterOut", "Ground", "ACDefl", "Ground", "Ground", "Ground", "Off", "Off", "Off", "Defl", "Ground", "OutC", "OutB", "Ground", "OutB", "DDS")
 
-	td_stopinwavebank(-1)
-	td_stopoutwavebank(-1)
-
 	// Set the outputs to 0.
 	td_wv("Output.A",0) 
 	td_wv("Output.B",0) 
@@ -237,9 +233,8 @@ Function VoltageScan(xpos, ypos, liftheight, [vmin, vmax, npoints])
 	td_WV(LockinString + "PhaseOffset", calphaseoffset)
 	
 	// Lower the tip to tap the surface.
-//	SetFeedbackLoop(2, "Always", LockinString +"R", setpoint, -pgain, -igain, -sgain, "Output.Z", 0)
 	SetFeedbackLoop(2, "Always", LockinString +"R", setpoint, -pgain, -igain, -sgain, "Output.Z", 0)
-	//PIDSloopButtonFunc("StartPIDSLoop2")
+
 	Sleep/S 1.5
 
 	// Connect the input and output waves.
@@ -251,7 +246,7 @@ Function VoltageScan(xpos, ypos, liftheight, [vmin, vmax, npoints])
 	// Lift the tip to the desired lift height.
 	Variable z1= td_readvalue("ZSensor") * GV("ZLVDTSens")
 	StopFeedbackLoop(2)
-	SetFeedbackLoop(3, "Always",  "ZSensor", (z1 - liftheight * 1e-9) / GV("ZLVDTSens"), 0, EFMFilters[%ZHeight][%IGain], 0, "Output.Z", 0)	
+	SetFeedbackLoop(3, "always",  "ZSensor", (z1 - liftheight * 1e-9) / GV("ZLVDTSens"), 0, EFMFilters[%ZHeight][%IGain], 0, "Output.Z", 0)	
 	
 	// Set the drive frequency to resonance.
 	td_WV(LockinString +"freq", calresfreq)
@@ -266,8 +261,6 @@ Function VoltageScan(xpos, ypos, liftheight, [vmin, vmax, npoints])
 
 //	td_WV(LockinString +"freq", calresfreq)
 //	td_WV(LockinString +"freqoffset", 0)
-	
-	print td_rv(LockinString+"theta")
 	
 	if (stringmatch("ARC.Lockin.0." , LockinString))
 		SetFeedbackLoop(4, "always", LockinString +"theta", NaN, EFMFilters[%EFM][%PGain], EFMFilters[%EFM][%IGain], 0, LockinString+"FreqOffset",  EFMFilters[%EFM][%DGain])
@@ -321,7 +314,6 @@ Function VoltageScan(xpos, ypos, liftheight, [vmin, vmax, npoints])
 	
 	ResetAll()
 
-	DoScanFunc("StopEngage")
 
 End
 	

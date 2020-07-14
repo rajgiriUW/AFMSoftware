@@ -88,33 +88,31 @@ Function AnalysisSettingsButton(ctrlname) : ButtonControl
 	
 End
 
-Function SavePointScanButton(ctrlname) : ButtonControl
+Function OneOrTwoChannelsCHeckBox(cba) : CheckBoxControl
+	STRUCT WMCheckboxAction &cba
+	NVAR OneOrTwoChannels = root:packages:trEFM:ImageScan:OneorTwoChannels
+	switch( cba.eventCode )
+		case 2: // mouse up
+			Variable checked = cba.checked
+			OneOrTwoChannels = checked
+			break
+		case -1: // control being killed
+			break
+	endswitch
 
-	String ctrlname
-	String saveDF = GetDataFolder(1)
-	SetDataFolder root:packages:trEFM:FFtrEFMConfig
-	
-	NewPath Path
-	Wave pixelconfig
-	CreateParametersFile(pixelconfig)
-	Wave/T SaveWave
-	SaveWave[5] = "n_pixels = " + num2str(1) // set n_pixels to 1
-	SaveWave[7] = "lines_per_image = " + num2str(0)
-	Save/G/I/P=Path/M="\r\n" SaveWave as "parameters.cfg"
-	
-	SetDataFolder root:packages:trEFM:PointScan
-	Save/C/I/P=Path root:packages:trEFM:PointScan:FFtrEFM:gagewave as "pointscan.ibw"
-	
+	return 0
 End
+
+
+Function UpdateConf()
+	
+end
 
 
 Function LightOffButton(ctrlname) : ButtonControl
 
 	String ctrlname
 	LightOnOff(0)
-	
-	
-	
 	
 End
 
@@ -736,7 +734,6 @@ Function CreateParametersFile(PIXELCONFIG)
 	Wave PIXELCONFIG
 	NVAR numavgsperpoint = root:Packages:trEFM:ImageScan:numavgsperpoint
 	NVAR scanpoints = root:packages:trEFM:ImageScan:scanpoints
-	NVAR scanlines = root:packages:trEFM:ImageScan:scanlines
 	string formatf
 	NVAR scansizex = root:packages:trEFM:ImageScan:scansizex
 	NVAR scansizey = root:packages:trEFM:ImageScan:scansizey
@@ -756,22 +753,21 @@ Function CreateParametersFile(PIXELCONFIG)
 	
 	SaveWave[5] = "n_pixels = " + num2str(scanpoints)
 	SaveWave[6] = "pts_per_pixel = " + num2str(numavgsperpint)	
-	SaveWave[7] = "lines_per_image = " + num2str(scanlines)
 	
-	SaveWave[8] = ""
-	SaveWave[9] = "[Processing]" 
-	SaveWave[10] = "roi = " + num2str(PixelConfig[%region_of_interest])
-	SaveWave[11] = "window = blackman"
-	SaveWave[12] = "bandpass_filter = 1"
-	SaveWave[13] = "filter_bandwidth = " + num2str(PixelConfig[%bandwidth])
-	SaveWave[14] = "n_taps = "+ num2str(PixelConfig[%filter_taps])
-	SaveWave[15] = "recombination = "+ num2str(PixelConfig[%recombination])  
-	SaveWave[16] = "wavelet_analysis = "+ num2str(PixelConfig[%wavelet_analysis]) 
-	SaveWave[17] = "wavelet_parameter = "+ num2str(PixelConfig[%wavelet_parameter])  
-	SaveWave[18] = "phase_fitting = 0" 
-	SaveWave[19] = "FastScanSize = " + num2str(scansizex*1e-6)
-	SaveWave[20] = "SlowScanSize = " + num2str(scansizey*1e-6)
-	SaveWave[21] = "lift_height = " + num2str(liftheight)
+	SaveWave[7] = ""
+	SaveWave[8] = "[Processing]" 
+	SaveWave[9] = "roi = " + num2str(PixelConfig[%region_of_interest])
+	SaveWave[10] = "window = blackman"
+	SaveWave[11] = "bandpass_filter = 1"
+	SaveWave[12] = "filter_bandwidth = " + num2str(PixelConfig[%bandwidth])
+	SaveWave[13] = "n_taps = "+ num2str(PixelConfig[%filter_taps])
+	SaveWave[14] = "recombination = "+ num2str(PixelConfig[%recombination])  
+	SaveWave[15] = "wavelet_analysis = "+ num2str(PixelConfig[%wavelet_analysis]) 
+	SaveWave[16] = "wavelet_parameter = "+ num2str(PixelConfig[%wavelet_parameter])  
+	SaveWave[17] = "phase_fitting = 0" 
+	SaveWave[18] = "FastScanSize = " + num2str(scansizex*1e-6)
+	SaveWave[19] = "SlowScanSize = " + num2str(scansizey*1e-6)
+	SaveWave[20] = "lift_height = " + num2str(liftheight)
 	
 end
 
@@ -885,6 +881,16 @@ Function FFtrEFMPointScanButton(ctrlname) : ButtonControl
 	PixelConfig[%Trigger] = (1 - DigitizerPercentPreTrig/100) * DigitizerTime * 1e-3
 	PixelConfig[%Total_Time] = DigitizerTime * 1e-3
 	
+	// Check is settings exceed 75 MB. Needed to avoid saturating the Gage Card
+	if (DigitizerSampleRate * DigitizerTime * 1e-3 * DigitizerAverages  > 70e6)
+		variable fileSpaceOption = 0 
+		Prompt fileSpaceOption, "These settings near/over 75 MB limit! Continue?"
+			DoPrompt ">>>",fileSpaceOption
+				If(V_flag==1)
+					abort			//Aborts if you cancel the save option
+				endif
+	endif
+	
 	PointScanFFtrEFM(gxpos, gypos, liftheight,DigitizerAverages,DigitizerSamples,DigitizerPretrigger)
 	GetCurrentPosition()
 
@@ -917,6 +923,11 @@ Function FFtrEFMPointScanButton(ctrlname) : ButtonControl
 	endif
 	
 	print "tFP value (s): ", tfp_value
+
+	wave GageWave
+	Duplicate/O gagewave, avgwave
+	matrixop/o avgwave = sumrows(gagewave)/numcols(gagewave)
+	Redimension/N=-1 avgwave
 
 	SetDataFolder savDF
 	
@@ -1029,7 +1040,87 @@ Function GModePointScanButton(ctrlname) : ButtonControl
 	
 	print "tFP value (s): ", tfp_value
 
+	wave GageWave
+	Duplicate/O gagewave, avgwave
+	matrixop/o avgwave = sumrows(gagewave)/numcols(gagewave)
+	Redimension/N=-1 avgwave
+	setscale/i x, 0, PIXELCONFIG[%Total_Time], avgwave
+	FFT/OUT=1/DEST=avgwave_FFT avgwave
+
+	FFT/OUT=3/DEST=avgwave_FFT_mag avgwave
 	SetDataFolder savDF
+end
+
+// Needs debugging, loops through several chirps
+Function GModeTransferFUncButton2(ctrlname) : ButtonControl
+
+	String ctrlname
+	String savDF = GetDataFolder(1)
+	CommitDriveWaves()
+	
+	SetDataFolder root:packages:trEFM:ImageScan
+	Nvar DigitizerAverages, DigitizerSamples,DigitizerPretrigger
+	Nvar DigitizerTime, DigitizerSampleRate, DigitizerPercentPreTrig
+	
+	// For this, we will hard-code certain values
+	// Runs for 10 ms per signal, with 300 us pre-trigger and 9700 us post-trigger
+	DigitizerAverages = 5
+	DigitizerTime = 10
+	DigitizerPercentPreTrig = 97
+	
+	DigitizerSamples = ceil(DigitizerSampleRate * DigitizerTime * 1e-3)
+	DigitizerPretrigger = ceil(DigitizerSamples * DigitizerPercentPreTrig / 100)
+
+	SetDataFolder root:Packages:trEFM
+	
+	Nvar liftheight
+	Nvar gxpos, gypos
+	Nvar WavesCommitted
+	
+	if(WavesCommitted == 0)
+		Abort "Drive waves have not been committed."
+	endif
+	if( IsNan(gxpos) | IsNan(gypos))
+		Abort "X and Y are NaN. Make sure to get the current position before continuing."
+	endif
+	
+	SetDataFolder root:Packages:trEFM:PointScan:FFtrEFM
+	
+	Wave PIXELCONFIG = root:packages:trEFM:FFtrEFMConfig:PIXELCONFIG
+	Make/O/N=(DigitizerSamples) timekeeper
+	Linspace2(0,PIXELCONFIG[%Total_Time],DigitizerSamples, timekeeper)
+	SetScale d,0,(DigitizerSamples),"s",timekeeper
+	
+	PixelConfig[%Trigger] = (1 - DigitizerPercentPreTrig/100) * DigitizerTime * 1e-3
+	PixelConfig[%Total_Time] = DigitizerTime * 1e-3
+	
+	// Loop through 4 chirps
+	variable chirps = 0
+	make/O/T chirpfiles = {"chirp_w", "chirp_2w", "chirp_3w", "chirp_w2"}
+	//make/O/T chirpfiles = {"chirp_w"}
+	string gagename, tf_name
+	for (chirps = 0; chirps < numpnts(chirpfiles); chirps += 1)
+
+		KillWaves/Z root:packages:trEFM:PointScan:FFtrEFM:gagewave
+		KillWaves/Z root:packages:trEFM:PointScan:FFtrEFM:ch2_wave
+		
+		loadchirpwave(chirpfiles[chirps], offset=0.35) // 0.35 is empirical, but you should check on an oscilloscope
+		sleep/S 20
+		PointScanTF(gxpos, gypos, liftheight,DigitizerAverages,DigitizerSamples,DigitizerPretrigger)
+		GetCurrentPosition()
+		
+		Wave gagewave = root:packages:trEFM:PointScan:FFtrEFM:gagewave
+		Wave ch2_wave = root:packages:trEFM:PointScan:FFtrEFM:ch2_wave
+		
+		gagename = "gagewave_" + chirpfiles[chirps]
+		Duplicate/O gagewave, $gagename
+		
+		tf_name = "tip_" + chirpfiles[chirps]
+		Duplicate/O ch2_wave, $tf_name
+		
+	endfor
+	
+	Beep
 end
 
 Function CommitDriveWaves()
@@ -1198,7 +1289,7 @@ Function TabProc(ctrlName,tabNum) : TabControl
 	ModifyControl DriveTimestop disable = (!isFFtrEFM)
 	ModifyControl ElecDrive disable = (!isGMode && !isFFtrEFM)
 	ModifyControl ElecAmp disable = (!isGMode && !isFFtrEFM)
-	ModifyControl savePSbutton disable = (!isGMode && !isFFtrEFM)
+	ModifyControl OneorTwoChannelBox disable = (!isGmode && !isFFtrEFM)
 
 	// Ring Down
 
@@ -1236,7 +1327,8 @@ Function TabProc(ctrlName,tabNum) : TabControl
 	ModifyControl digipre disable=  !(isGmode || isFFtrEFM)
 	ModifyControl aconfig disable= !(isGmode || isFFtrEFM)
 	ModifyControl popup1 disable=  !(isGmode || isFFtrEFM)
-	MOdifyControl GMOdeAC disable = !isGmode
+//	MOdifyControl GMOdeAC disable = !isGmode
+
 
 	// Extra/Calibration
 	ModifyControl setvar0 disable= !isExtra
@@ -1247,6 +1339,7 @@ Function TabProc(ctrlName,tabNum) : TabControl
 	//ModifyControl forceparams1 disable = !isExtra
 	ModifyControl setphasevar disable = !isExtra
 	ModifyControl calcurve disable = !isExtra
+	ModifyControl transferfuncparams disable = !isExtra
 	
 	// Change LED Wave Button
 	if (isRingDown)
@@ -1261,9 +1354,9 @@ End
 // If this panel function does not contain a call to trEFMInit(), it has been saved over. Just insert it below and the 
 // code should work again
 Window trEFMImagingPanel() : Panel
-	trEFMInit()
+	trefminit()
 	PauseUpdate; Silent 1		// building window...
-	NewPanel /W=(2534,374,3098,687)
+	NewPanel /W=(1945,793,2509,1106)
 	ShowTools/A
 	SetDrawLayer UserBack
 	SetDrawEnv fillfgc= (56576,56576,56576)
@@ -1347,17 +1440,17 @@ Window trEFMImagingPanel() : Panel
 	SetVariable scanwidthT,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scansizex
 	Button pntscanbuttonT2,pos={262,34},size={100,25},disable=1,proc=FFtrEFMPointScanButton,title="Point Scan"
 	Button imgscanbuttonT2,pos={382,34},size={100,25},disable=1,proc=FFtrEFMImageScanButton,title="Image Scan"
-	SetVariable scanheightT2,pos={441,82},size={100,16},disable=1,title="Height (µm)       "
+	SetVariable scanheightT2,pos={396,82},size={100,16},disable=1,title="Height (µm)       "
 	SetVariable scanheightT2,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scansizey
-	SetVariable scanpointsT2,pos={441,102},size={100,16},disable=1,title="Scan Points    "
+	SetVariable scanpointsT2,pos={396,102},size={100,16},disable=1,title="Scan Points    "
 	SetVariable scanpointsT2,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scanpoints
-	SetVariable scanlinesT2,pos={441,122},size={100,16},disable=1,title="Scan Lines     "
+	SetVariable scanlinesT2,pos={396,122},size={100,16},disable=1,title="Scan Lines     "
 	SetVariable scanlinesT2,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scanlines
-	SetVariable scanspeedT2,pos={420,160},size={121,16},disable=1,title="Scan Speed(um/s)"
+	SetVariable scanspeedT2,pos={375,160},size={121,16},disable=1,title="Scan Speed(um/s)"
 	SetVariable scanspeedT2,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scanspeed
 	Button savebuttonT2,pos={434,188},size={99,33},disable=1,proc=SaveImageButton,title="Save"
-	Button clearbuttonT2,pos={488,269},size={40,20},disable=1,proc=ClearImagesButton,title="Clear"
-	SetVariable scanwidthT2,pos={441,62},size={100,16},disable=1,title="Width (µm)        "
+	Button clearbuttonT2,pos={454,229},size={40,20},disable=1,proc=ClearImagesButton,title="Clear"
+	SetVariable scanwidthT2,pos={396,62},size={100,16},disable=1,title="Width (µm)        "
 	SetVariable scanwidthT2,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scansizex
 	SetVariable cyclesT3,pos={529,50},size={85,16},disable=1,title="# of Cycles"
 	SetVariable cyclesT3,limits={-inf,inf,0},value= root:packages:trEFM:WaveGenerator:numcycles
@@ -1385,8 +1478,8 @@ Window trEFMImagingPanel() : Panel
 	SetVariable digipre,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:DigitizerPercentPreTrig
 	SetVariable digisamples,pos={259,82},size={97,16},disable=1,title="Time (ms)"
 	SetVariable digisamples,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:DigitizerTime
-	Button aconfig,pos={277,156},size={80,20},disable=1,proc=AnalysisSettingsButton,title="Analysis Config"
-	SetVariable averagesT2,pos={441,142},size={100,16},disable=1,title="# Averages       "
+	Button aconfig,pos={277,175},size={80,20},disable=1,proc=AnalysisSettingsButton,title="Analysis Config"
+	SetVariable averagesT2,pos={396,142},size={100,16},disable=1,title="# Averages       "
 	SetVariable averagesT2,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:numavgsperpoint
 	SetVariable digiaverages,pos={276,62},size={80,16},disable=1,title="Averages"
 	SetVariable digiaverages,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:DigitizerAverages
@@ -1430,13 +1523,13 @@ Window trEFMImagingPanel() : Panel
 	SetVariable ElecAmp,limits={0,10,0},value= root:packages:trEFM:elecAmp
 	CheckBox ElecDrive,pos={267,280},size={73,14},disable=1,title="Elec Drive?"
 	CheckBox ElecDrive,variable= root:packages:trEFM:elecDrive,side= 1
-	SetVariable GmodeAC,pos={363,102},size={61,16},disable=1,title="AC (V)"
-	SetVariable GmodeAC,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:GM_AC
-	Button pntscanbuttonT4,pos={273,37},size={100,25},disable=1,proc=GModePointScanButton,title="Point Scan"
-	Button imgscanbuttonT4,pos={393,37},size={100,25},disable=1,proc=GmodeImageScanButton,title="Image Scan"
+	Button pntscanbuttonT4,pos={265,33},size={100,25},disable=1,proc=GModePointScanButton,title="Point Scan"
+	Button imgscanbuttonT4,pos={385,33},size={100,25},disable=1,proc=GmodeImageScanButton,title="Image Scan"
 	Button forceparams1,pos={402,165},size={137,28},disable=1,proc=ElecCalButton,title="Electrical Calibration"
 	Button forceparams2,pos={402,215},size={136,34},disable=1,proc=ElecCal_Noise_Button,title="Elec+Noise Calibration\r(SLOW!)"
-	Button savePSbutton,pos={273,187},size={96,34},disable=1,proc=SavePointScanButton,title="Save Point Scan"
+	CheckBox OneorTwoCHannelBox,pos={265,153},size={92,14},disable=1,proc=OneOrTwoChannelsCHeckBox,title="Two Channels?"
+	CheckBox OneorTwoCHannelBox,variable= root:packages:trEFM:ImageScan:OneorTwoChannels,side= 1
+	Button transferfuncparams,pos={402,255},size={136,34},disable=1,proc=GModeTransferFUncButton,title="Transfer Func with AWG"
 	ToolsGrid snap=1,visible=1,grid=(0,28.35,5)
 EndMacro
 
@@ -1889,7 +1982,7 @@ Function trEFMXFast(ba): ButtonControl
 End
 
 Function About()
-	print "Written by many members of the Ginger Lab from 2003 - 2019." 
-	print "Primary points of contact are Rajiv Giridharagopal (rgiri@uw.edu) and David Ginger (dginger@uw.edu)."
-	print "All rights reserved, whatever that means."
+	print "Written by many members of the Ginger Lab from 2003 - 2020 but mostly Rajiv Giridharagopal." 
+	print "Primary maintainer and developer is Rajiv Giridharagopal (rgiri@uw.edu)"
+	print "All rights reserved."
 end
