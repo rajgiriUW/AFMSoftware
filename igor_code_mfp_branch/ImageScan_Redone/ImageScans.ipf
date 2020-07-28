@@ -27,7 +27,7 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 
 	Variable xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanpoints, scanspeed, numavgsperpoint,xoryscan, fitstarttime, fitstoptime
 	Variable DigitizerAverages, DigitizerSamples, DigitizerPretrigger
-	SVAR Imagefunc = root:packages:trEFM:ImageFunc
+	SVAR Imagefunc = root:packages:trEFM:ImageFunctionString
 	
 //	if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc, "trefm") || stringmatch(imagefunc, "downefm"))
 //		#pragma rtGlobals=1
@@ -40,10 +40,10 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 	
  		Prompt saveOption, "Do you want to save the raw frequency data for later use?"
  		DoPrompt ">>>",saveOption
- 			If(V_flag==1)
+ 			if(V_flag==1)
  				GetCurrentPosition()
 				abort			//Abort
-
+			endif
 		if(saveoption == 1)	
 	 		NewPath Path
 	 	endif
@@ -291,7 +291,7 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 	//			ScanFramework[i][3] = (xpos - scansizeY / 2)  + SlowScanDelta*LineNum
 	//		endif
 	
-		endif //x or y direction scanning
+	endif //x or y direction scanning
 
 	// INITIALIZE in and out waves
 	//downinterpolation, scanspeeds will need to be adjusted to account for multiple cycles per point on the retrace
@@ -495,6 +495,7 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 			Display/K=1/n=RingDownRateImage;Appendimage ChargingRate
 		elseif (stringmatch(imagefunc, "skpm") || stringmatch(imagefunc, "skpmspv"))
 			Display/K=1/n=CPD;Appendimage CPDImage
+		endif
 
 		SetAxis/A bottom
 		SetAxis/A left
@@ -628,6 +629,7 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 		ModifyGraph/W=FrequencyOffsetImage height = {Aspect, scansizeY/scansizeX}
 	elseif (stringmatch(imagefunc, "trefm") || stringmatch(imagefunc , "downefm"))
 		ModifyGraph/W=FrequencyShiftImage height = {Aspect, scansizeY/scansizeX}
+	endif
 
 	if (scansizeY/scansizeX < .2)
 		ModifyGraph/W=TopographyImage height = {Aspect, 1}
@@ -658,6 +660,7 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 
 	//Set inwaves with proper length and instantiate to Nan so that inwave timing works
 	Make/O/N = (PSlength) ReadwaveFreq, ReadWaveFreqLast
+	Make/O/N = (pointsPerLine) CPDWave, CPDWaveLast
 	ReadwaveFreq = NaN
 
 	//******************  EEEEEEEEEEEEEEEEEEE *******************************//	
@@ -715,7 +718,7 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 
 	if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc, "gmode") || stringmatch(imagefunc, "skpmspv"))
 		td_wv("Output.C",0)
-		endif
+	endif
 	//******************  EEEEEEEEEEEEEEEEEEE *******************************//	
 	
 	//******************  FFFFFFFFFFFFFFFFFFFFFF *******************************//
@@ -819,6 +822,7 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 
 		if (!stringmatch(imagefunc, "skpmspv") || (stringmatch(imagefunc, "skpmspv") && j == 0))
 			print "line ", i+1
+		endif
 		if (stringmatch(imagefunc, "skpmspv") && j == 0)
 			print "Light off"
 			td_wv("Output.C", 0)
@@ -1279,7 +1283,7 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 			// Optional Save Raw Data
 			if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc, "trefm") || stringmatch(imagefunc, "downefm"))
 				if(saveOption == 1)
-					string name
+//					string name
 					if (i < 10)		
 						name = "trEFM_000" + num2str(i) + ".ibw"
 					elseif (i < 100)
@@ -1360,8 +1364,8 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 						if(j==0)
 							CPDImage[scanpoints-h-1][i] = mean(CPDWaveTemp)
 						elseif(j==1)
-							CPDImage2[scanpoints-h-1][i] = mean(CPDWaveTemp)
-							CPDdiff[scanpoints-h-1][i]=CPDTrace2[p][i]-CPDTrace[p][i]
+//							CPDImage2[scanpoints-h-1][i] = mean(CPDWaveTemp)
+//							CPDdiff[scanpoints-h-1][i]=CPDTrace2[p][i]-CPDTrace[p][i]
 						endif
 						
 						h += 1
@@ -1385,8 +1389,8 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 			
 				if(j==0)
 					CPDTrace = CPDImage[p][i]
-				elseif(j==1)
-					CPDTrace2 = CPDImage2[p][i]
+//				elseif(j==1)
+//					CPDTrace2 = CPDImage2[p][i]
 				endif
 			endif
 
@@ -1438,8 +1442,9 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 		elseif (stringmatch(imagefunc, "skpm"))
 			scantimes[i] = (StopMSTimer(-2) -starttime2)*1e-6
 			print "Time for last scan line (seconds) = ", scantimes[i], " ; Time remaining (in minutes): ", scantimes[i]*(scanlines-i-1) / 60
-
+		endif
 		i += 1
+
 		
 		//Reset the primary inwaves to Nan so that gl_checkinwavetiming function works properly
 		if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc, "trefm") || stringmatch(imagefunc, "downefm") || stringmatch(imagefunc, "gmode"))
@@ -1450,15 +1455,17 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 			CPDWaveLast[] = CPDWave[p]
 			ReadWaveZ[] = NaN
 			CPDWave[] = NaN
+		endif
 				
 			//ACVoltage = root:Packages:trEFM:PointScan:SKPM:ACVoltage
 			//ACVoltage+=0.05
 			//print "Vac= ", ACVoltage, " V"
-	if (stringmatch(imagefunc, "skpmspv"))
-		j+=1
-		while (j < 2 )	
-		i += 1
-	endif
+//	if (stringmatch(imagefunc, "skpmspv"))
+//		j+=1
+//		while (j < 2 )	
+//		i += 1
+//		
+//		endif
 		
 	while (i < scanlines )	
 	// end imaging loop 
@@ -1495,5 +1502,4 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 	endif
 
 	setdatafolder savDF	
-
 End

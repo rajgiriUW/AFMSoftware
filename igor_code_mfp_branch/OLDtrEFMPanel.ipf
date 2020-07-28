@@ -674,7 +674,7 @@ Function trEFMImageScanButton(ctrlname) : ButtonControl
 	Nvar scansizex, scansizey, scanlines, scanpoints, scanspeed, numavgsperpoint, xoryscan, fitstarttime, fitstoptime
 	SetDataFolder root:Packages:trEFM
 	Nvar liftheight
-	Nvar gxpos, gypos	
+	Nvar gxpos, gypos
 	Nvar WavesCommitted
 	if(WavesCommitted == 0)
 		Abort "Drive waves have not been committed."
@@ -683,9 +683,7 @@ Function trEFMImageScanButton(ctrlname) : ButtonControl
 		Abort "X and Y are NaN. Make sure to get the current position before continuing."
 	endif
 	
-	Svar imageFunctionString = root:packages:trEFM:ImageFunctionString
-	imageFunctionString = "trefm"
-	ImageScan(gxpos, gypos, liftheight, scansizeX,scansizeY, scanlines, scanpoints, scanspeed, numavgsperpoint=numavgsperpoint, xoryscan=xoryscan,fitstarttime=fitstarttime,fitstoptime=fitstoptime)
+	ImageScantrEFM(gxpos, gypos, liftheight, scansizeX,scansizeY, scanlines, scanpoints, scanspeed, numavgsperpoint, xoryscan,fitstarttime,fitstoptime)
 	//ImageScanNItrEFM(gxpos, gypos, liftheight, scansizeX,scansizeY, scanlines, scanpoints, scanspeed, numavgsperpoint, xoryscan,fitstarttime,fitstoptime)
 	GetCurrentPosition()
 	SetDataFolder savDF
@@ -724,13 +722,8 @@ Function FFtrEFMImageScanButton(ctrlname) : ButtonControl
 					abort			//Aborts if you cancel the save option
 				endif
 	endif
-	
-	Svar imageFunctionString = root:packages:trEFM:ImageFunctionString
-	imageFunctionString = "fftrefm"
-	
-	ImageScan(gxpos, gypos, liftheight, scansizeX,scansizeY, scanlines, scanpoints, scanspeed, xoryscan=xoryscan, fitstarttime=fitstarttime, fitstoptime=fitstoptime, DigitizerAverages=DigitizerAverages,DigitizerSamples=DigitizerSamples,DigitizerPretrigger=DigitizerPretrigger)
 
-//	ImageScanFFtrEFM(gxpos, gypos, liftheight, scansizeX,scansizeY, scanlines, scanpoints, scanspeed, xoryscan,fitstarttime,fitstoptime,DigitizerAverages,DigitizerSamples,DigitizerPretrigger)
+	ImageScanFFtrEFM(gxpos, gypos, liftheight, scansizeX,scansizeY, scanlines, scanpoints, scanspeed, xoryscan,fitstarttime,fitstoptime,DigitizerAverages,DigitizerSamples,DigitizerPretrigger)
 	GetCurrentPosition()
 	SetDataFolder savDF
 	
@@ -799,12 +792,8 @@ Function SKPMImageScanButton(ctrlname) : ButtonControl
 	if( IsNan(gxpos) | IsNan(gypos))
 		Abort "X and Y are NaN. Make sure to get the current position before continuing."
 	endif
-	
-	Svar imageFunctionString = root:packages:trEFM:ImageFunctionString
-	imageFunctionString = "skpm"
 
-
-	ImageScan(gxpos, gypos, liftheight, scansizeX, scansizeY, scanlines, scanpoints, scanspeed)
+	ImageScanSKPM(gxpos, gypos, liftheight, scansizeX, scansizeY, scanlines, scanpoints, scanspeed)
 	GetCurrentPosition()
 	SetDataFolder savDF
 	
@@ -975,12 +964,8 @@ Function GmodeImageScanButton(ctrlname) : ButtonControl
 					abort			//Aborts if you cancel the save option
 				endif
 	endif
-	
-	Svar imageFunctionString = root:packages:trEFM:ImageFunctionString
-	imageFunctionString = "gmode"
-	
-	ImageScan(gxpos, gypos, liftheight, scansizeX,scansizeY, scanlines, scanpoints, scanspeed, xoryscan=xoryscan, fitstarttime=fitstarttime, fitstoptime=fitstoptime, DigitizerAverages=DigitizerAverages, DigitizerSamples=DigitizerSamples,DigitizerPretrigger=DigitizerPretrigger)
-//	ImageScanGmode(gxpos, gypos, liftheight, scansizeX,scansizeY, scanlines, scanpoints, scanspeed, xoryscan,fitstarttime,fitstoptime,DigitizerAverages,DigitizerSamples,DigitizerPretrigger)
+
+	ImageScanGmode(gxpos, gypos, liftheight, scansizeX,scansizeY, scanlines, scanpoints, scanspeed, xoryscan,fitstarttime,fitstoptime,DigitizerAverages,DigitizerSamples,DigitizerPretrigger)
 	GetCurrentPosition()
 	SetDataFolder savDF
 	
@@ -1961,12 +1946,7 @@ Function RingDownImageScanButton(ctrlname) : ButtonControl
 		Abort "X and Y are NaN. Make sure to get the current position before continuing."
 	endif
 	
-	Svar imageFunctionString = root:packages:trEFM:ImageFunctionString
-	imageFunctionString = "downefm"
-	
-	ImageScan(gxpos, gypos, liftheight, scansizeX,scansizeY, scanlines, scanpoints, scanspeed, numavgsperpoint=numavgsperpoint, xoryscan=xoryscan, fitstarttime=fitstarttime,fitstoptime=fitstoptime)
-	
-//	ImageScanRingDownEFM(gxpos, gypos, liftheight, scansizeX,scansizeY, scanlines, scanpoints, scanspeed, numavgsperpoint, xoryscan,fitstarttime,fitstoptime)
+	ImageScanRingDownEFM(gxpos, gypos, liftheight, scansizeX,scansizeY, scanlines, scanpoints, scanspeed, numavgsperpoint, xoryscan,fitstarttime,fitstoptime)
 	GetCurrentPosition()
 	SetDataFolder savDF
 	
