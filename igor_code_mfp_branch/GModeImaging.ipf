@@ -496,7 +496,7 @@ Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 	NVAR YFastEFM = root:packages:trEFM:ImageScan:YFastEFM
 	NVAR UseLineNum = root:packages:trEFM:ImageScan:UseLineNum
 	NVAR LineNum = root:packages:trEFM:ImageScan:LineNum
-
+	NVAR AvgWaves = root:packages:trEFM:AvgWaves
 	NVAR OneOrTwoChannels = root:packages:trEFM:ImageScan:OneorTwoChannels
 
 	Variable XLVDTSens = GV("XLVDTSens")
@@ -1035,8 +1035,15 @@ Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 				name = "FFtrEFM_0" + num2str(i) + ".ibw"
 			endif
 
-			Save/C/O/P = Path data_wave as name
-			
+			if (AvgWaves == 1)
+				Duplicate/O data_wave, avg_wave
+				matrixop/o avg_wave = sumrows(data_wave)/numcols(data_wave)
+				Redimension/N=-1 avg_wave
+				Save/C/O/P = Path avg_wave as name
+			else
+				Save/C/O/P = Path data_wave as name
+			endif
+						
 			if (OneOrTwoChannels == 1)
 			
 				if (i < 10)		
@@ -1047,7 +1054,15 @@ Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 					name = "CH2_0" + num2str(i) + ".ibw"
 				endif
 
-				Save/C/O/P = Path ch2_wave as name
+				if (AvgWaves == 1)	
+					wave ch2_wave
+					Duplicate/O ch2_wave, avg2_wave
+					matrixop/o avg2_wave = sumrows(ch2_wave)/numcols(ch2_wave)
+					Redimension/N=-1 avg2_wave
+					Save/C/O/P = Path avg2_wave as name
+				else
+					Save/C/O/P = Path ch2_wave as name
+				endif
 				
 			endif
 		endif

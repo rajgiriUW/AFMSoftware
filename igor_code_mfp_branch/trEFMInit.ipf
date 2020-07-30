@@ -82,6 +82,8 @@ Function trEFMInit()
 	Variable/G ElecDrive = 0
 	Variable/G ElecAmp = 0
 	
+	Variable/G AvgWaves = 0
+	
 	// Panel global variables
 	SetDataFolder  root:Packages:trEFM:ImageScan
 	Variable/G UseLineNum = 0
