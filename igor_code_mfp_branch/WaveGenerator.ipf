@@ -77,6 +77,32 @@ Function LoadChirpWave(filename, [offset, amplitude, sampling_rate])
 
 end
 
+Function LoadPulseWave(freq, amp, pulsewidth, offset)
+	Variable freq, amp, pulsewidth, offset
+	Variable defaultRM, instr
+	String resourceName = "USB0::0x0957::0x2907::MY52500433::0::INSTR"
+	
+	viOpenDefaultRM(defaultRM)
+	viOpen(defaultRM, resourceName, 0, 0, instr)
+	
+	VISAWrite instr, "*RST\n"
+	VISAWrite instr, "FUNC PULS"
+	VISAWrite instr, "FREQ "+ num2str(freq)
+	VISAWrite instr, "VOLT " + num2str(amp)
+	VISAWrite instr, "VOLT:OFFS  " + num2str(offset)
+	VISAWrite instr, "FUNC:PULS:WIDT " + num2str(pulsewidth)
+	
+	VISAWrite instr, "BURS:MODE TRIG\n"
+	VISAWrite instr, "TRIG:SOUR EXT\n"
+	VISAWrite instr, "BURS:STAT ON\n"
+	
+	VISAWrite instr, "OUTP ON\n"
+
+	viClose(instr)
+	viClose(defaultRM)
+
+end
+
 function testawg() // scratchspace for quick testing
 
 	Variable defaultRM, instr
