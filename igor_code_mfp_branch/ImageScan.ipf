@@ -1327,37 +1327,34 @@ Function ImageScanFFtrEFM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines
 			else
 				name = "FFtrEFM_0" + num2str(i) + ".ibw"
 			endif
-	
+
 			if (AvgWaves == 1)
-				Duplicate/O data_wave, avg_wave
-				matrixop/o avg_wave = sumrows(data_wave)/numcols(data_wave)
-				Redimension/N=-1 avg_wave
+				wave avg_wave
+				concatwaves(data_wave, scanpoints)
+				
 				Save/C/O/P = Path avg_wave as name
 			else
 				Save/C/O/P = Path data_wave as name
 			endif
 			
 			if (OneOrTwoChannels == 1)
-			
-				if (i < 10)		
-					name = "CH2_000" + num2str(i) + ".ibw"
-				elseif (i < 100)
-					name = "CH2_00" + num2str(i) + ".ibw"
-				else
-					name = "CH2_0" + num2str(i) + ".ibw"
+				wave ch2_wave = root:packages:trEFM:ImageScan:FFtrEFM:ch2_wave
+				
+				if (i == 0)  // only need first excitation
+					name = "CH2_000" + num2str(i) + ".ibw"	
+					if (AvgWaves == 1)
+						wave avg_wave
+						concatwaves(ch2_wave, scanpoints)
+				
+						Save/C/O/P = Path avg_wave as name
+					else
+						Save/C/O/P = Path ch2_wave  as name
+					endif
+				
 				endif
-
-				if (AvgWaves == 1)	
-					wave ch2_wave
-					Duplicate/O ch2_wave, avg2_wave
-					matrixop/o avg2_wave = sumrows(ch2_wave)/numcols(ch2_wave)
-					Redimension/N=-1 avg2_wave
-					Save/C/O/P = Path avg2_wave as name
-				else
-					Save/C/O/P = Path ch2_wave as name
-				endif
-			
+				
 			endif
+			
 		endif
 		//**********************************************************************************
 		//***  PROCESS DATA AND UPDATE GRAPHS
