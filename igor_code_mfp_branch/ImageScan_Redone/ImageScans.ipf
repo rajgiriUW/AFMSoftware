@@ -1,13 +1,3 @@
-Function ConfigSaveFolder()
-
- 	SetDataFolder root:packages:trEFM
- 	Svar LockinString
-
-
- 	String savDF = GetDataFolder(1) // locate the current data folder
- 	SetDataFolder root:Packages:trEFM:WaveGenerator
- 	Wave gentipwaveTemp, gentriggerwaveTemp, genlightwaveTemp, genDriveWaveTemp
- End
 
 
 
@@ -41,7 +31,7 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 	
 //	if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc, "trefm") || stringmatch(imagefunc, "downefm"))
 //		#pragma rtGlobals=1
-//	elseif (imagefunc == "skpm")
+//	elseif (stringmatch(imagefunc, "skpm"))
 //		#pragma rtGlobals=3
 
 
@@ -58,7 +48,14 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 	 		NewPath Path
 	 	endif
 	endif
-	saveOption = ConfigSaveFolder()
+	SetDataFolder root:packages:trEFM
+ 	Svar LockinString
+
+
+ 	String savDF = GetDataFolder(1) // locate the current data folder
+ 	SetDataFolder root:Packages:trEFM:WaveGenerator
+ 	Wave gentipwaveTemp, gentriggerwaveTemp, genlightwaveTemp, genDriveWaveTemp
+ 	
 	if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc, "gmode"))
 
 		Wave PIXELCONFIG = root:packages:trEFM:FFtrEFMConfig:PIXELCONFIG
@@ -130,6 +127,8 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 	NVAR YFastEFM = root:packages:trEFM:ImageScan:YFastEFM
 	NVAR UseLineNum = root:packages:trEFM:ImageScan:UseLineNum
 	NVAR LineNum = root:packages:trEFM:ImageScan:LineNum
+
+	NVAR OneOrTwoChannels = root:packages:trEFM:ImageScan:OneorTwoChannels
 
 	if (stringmatch(imagefunc, "skpm"))
 		// SKPM Variables.
@@ -228,7 +227,7 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 	
 	Make/O/N = (scanlines, 4) ScanFramework
 
-	if (stringmatch( imagefunc, "skpm"))
+	if (stringmatch(imagefunc, "skpm"))
 		Make/O/N=(scanlines) ScanTimes = Nan
 	endif
 
@@ -342,7 +341,7 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 	// from jump to jump, cycle to cycle, or between the trace and retrace
 	// vars that do change are initialized below
 	//***********************************************************************
-	if (!stringmatch(imagefunc, "skpfm"))
+	if (!stringmatch(imagefunc, "skpm"))
 								
 		if (numavgsperpoint == 0)	// accidental 0 avg case
 			numavgsperpoint = 1
@@ -415,7 +414,7 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 		
 		SetLockinTimeC(LockinTimeConstant/1000) //the user specifies the Lockin time constant, and this call sets it, making sure 
 		
-		if (imagefunc == "skpm")
+		if (stringmatch(imagefunc, "skpm"))
 			setLPslope(2) // 0 is 6dB, 1 is 12dB, 2 is 18dB, and 3 is 24 dB
 			
 			setSync(0) // 0 is off and 1 is on
@@ -425,7 +424,7 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 			setNotch(0) //0 is neither, 1 is 60hz, 2 is 120hz, and 3 is both
 			
 			setReserve(0) //0 is high, 1 is normal, 2 is low
-		elseif (imagefunc == "skpmspv")
+		elseif (stringmatch(imagefunc, "skpmspv"))
 			setLPslope(3) // 0 is 6dB, 1 is 12dB, 2 is 18dB, and 3 is 24 dB
 			setSync(1) // 0 is off and 1 is on
 			setFloat0orGround1(0) //0 is float and 1 is ground
@@ -440,16 +439,16 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 		setLockinSensitivity(LockinSensitivity) // 17 sets the sensitivity of the lockin to 1mv/na //20 is a good value
 		sendLockinString("FMOD0") //sets source to external 
 
-		if (gWGDeviceAddress != 0 || imagefunc == "skpmspv")
+		if (gWGDeviceAddress != 0 || stringmatch(imagefunc, "skpmspv"))
 			Setvf(0, ACFrequency,"WG")
 		else
 			TurnOffAWG()
 		
 		endif
 		
-		if (imagefunc == "skpm")
+		if (stringmatch(imagefunc, "skpm"))
 			Make/O/N=(scanpoints) CPDTrace, CPDTraceBefore
-		elseif (imagefunc == "skpmspv")
+		elseif (stringmatch(imagefunc, "skpmspv"))
 			Make/O/N=(scanpoints) CPDTrace, CPDTraceBefore, CPDTrace2
 		endif
 
@@ -481,7 +480,7 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 	
 			// trefm charge creation/delay/ff-trEFM
 
-	if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc,  "trefm") || stringmatch(imagefunc,   "gmode"))
+	if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc,  "trefm") || stringmatch(imagefunc, "gmode"))
 		dowindow/f ChargingRateImage
 	elseif (stringmatch(imagefunc, "downefm"))
 		dowindow/f RingDownRateImage
@@ -490,11 +489,11 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 	endif
 
 	if (V_flag==0)
-		if (imagefunc == "fftrefm" || imagefunc == "trefm" || imagefunc == "gmode")
+		if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc, "trefm") || stringmatch(imagefunc, "gmode"))
 			Display/K=1/n=ChargingRateImage;Appendimage ChargingRate
-		elseif (imagefunc == "downefm")
+		elseif (stringmatch(imagefunc, "downefm"))
 			Display/K=1/n=RingDownRateImage;Appendimage ChargingRate
-		elseif (imagefunc == "skpm" || imagefunc == "skpmspv")
+		elseif (stringmatch(imagefunc, "skpm") || stringmatch(imagefunc, "skpmspv"))
 			Display/K=1/n=CPD;Appendimage CPDImage
 
 		SetAxis/A bottom
@@ -502,33 +501,33 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 		Label bottom "Fast Scan (um)"
 		Label left "Slow Scan (um)"
 		ModifyGraph wbRGB=(62000,65000,48600),expand=.7
-		if (imagefunc == "fftrefm" || imagefunc = "gmode")
+		if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc, "gmode"))
 			ModifyImage ChargingRate ctab= {0,20000,VioletOrangeYellow,0}
 		endif
-		if (imagefunc == "fftrefm" || imagefunc == "trefm" || imagefunc == "downefm" || imagefunc == "gmode")
+		if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc, "trefm") || stringmatch(imagefunc, "downefm") || stringmatch(imagefunc, "gmode"))
 			ColorScale/C/N=text0/E/F=0/A=MC image=ChargingRate
 			ColorScale/C/N=text0/A=RC/X=5.00/Y=5.00/E=2 "hz/V^2"
 			ColorScale/C/N=text0/X=5.00/Y=5.00/E image=ChargingRate
-		elseif (imagefunc == "skpm" || imagefunc == "skpmspv")
+		elseif (stringmatch(imagefunc, "skpm") || stringmatch(imagefunc, "skpmspv"))
 			ColorScale/C/N=text0/E/F=0/A=MC image=CPDImage
 			ColorScale/C/N=text0/A=RC/X=5.00/Y=5.00/E=2 "V"
 			ColorScale/C/N=text0/X=5.00/Y=5.00/E image=CPDImage
 		endif
 
-		if (imagefunc == "skpmspv")
+		if (stringmatch(imagefunc, "skpmspv"))
 			ModifyImage CPDImage ctab= {*,*,Mocha,0}
 		endif
 	endif
 	
-	if (imagefunc == "fftrefm" || imagefunc == "trefm" || imagefunc == "gmode")
+	if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc, "trefm") || stringmatch(imagefunc, "gmode"))
 		ModifyGraph/W=ChargingRateImage height = {Aspect, scansizeY/scansizeX}
-	elseif (imagefunc == "downefm")
+	elseif (stringmatch(imagefunc, "downefm"))
 		ModifyGraph/W=RingDownRateImage height = {Aspect, scansizeY/scansizeX}
-	elseif (imagefunc == "skpm" || imagefunc == "skpmspv")
+	elseif (stringmatch(imagefunc, "skpm") || stringmatch(imagefunc, "skpmspv"))
 		ModifyGraph/W=CPD height = {Aspect, scansizeY/scansizeX}
 	endif
 
-	if (imagefunc == "skpmspv")
+	if (stringmatch(imagefunc, "skpmspv"))
 		dowindow/f CPD2
 		if (V_flag==0)
 			Display/K=1/n=CPD2;Appendimage CPDImage2
@@ -574,15 +573,15 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 		ColorScale/C/N=text0/X=5.00/Y=5.00/E image=Topography
 	endif	
 	
-	if (imagefunc == "fftrefm" || imagefunc == "gmode")
+	if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc, "gmode"))
 		dowindow/f FrequencyOffsetImage
-	elseif (imagefunc == "trefm" || imagefunc == "downefm")
+	elseif (stringmatch(imagefunc, "trefm") || stringmatch(imagefunc , "downefm"))
 		dowindow/f FrequencyShiftImage
-	elseif (imagefunc == "skpm" || imagefunc == "skpmspv")
+	elseif (stringmatch(imagefunc, "skpm") || stringmatch(imagefunc, "skpmspv"))
 		ModifyGraph/W=TopgraphyImage height = {Aspect, scansizeY/scansizeX}
 		ModifyGraph/W=CPD height = {Aspect, scansizeY/scansizeX}
 		dowindow/f CPDTraceWindow
-		if (imagefunc == "skpmspv")
+		if (stringmatch(imagefunc, "skpmspv"))
 			ModifyGraph/W=CPD2 height = {Aspect, scansizeY/scansizeX}
 			ModifyGraph/W=CPDdifference height = {Aspect, scansizeY/scansizeX}
 			dowindow/f CPDTraceWindow
@@ -590,16 +589,16 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 	endif
 
 	if (V_flag==0)
-		if (imagefunc == "fftrefm" || imagefunc == "gmode")
+		if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc, "gmode"))
 			Display/K=1/n=FrequencyOffsetImage;Appendimage FrequencyOffset
-		elseif (imagefunc == "trefm" || imagefunc == "downefm")
+		elseif (stringmatch(imagefunc, "trefm") || stringmatch(imagefunc, "downefm"))
 			Display/K=1/n=FrequencyShiftImage;Appendimage FrequencyOffset
-		elseif (imagefunc == "skpm" || imagefunc == "skpmspv")
+		elseif (stringmatch(imagefunc, "skpm") || stringmatch(imagefunc, "skpmspv"))
 			Display/K=1/n=CPDTraceWindow CPDTrace appendtograph CPDTraceBefore
 			ModifyGraph rgb(CPDTraceBefore)=(0,0,0)
 		endif
 
-		if (imagefunc == "skpmspv")
+		if (stringmatch(imagefunc, "skpmspv"))
 			dowindow/f CPDTraceWindow12
 			if (V_flag==0)
 				Display/K=1/n=CPDTraceWindow12 CPDTrace
@@ -608,13 +607,13 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 			endif
 		endif
 
-		if (imagefunc == "fftrefm" || imagefunc == "trefm" || imagefunc == "skpm" || imagefunc == "gmode")
+		if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc, "trefm") || stringmatch(imagefunc, "skpm") || stringmatch(imagefunc, "gmode") || stringmatch(imagefunc, "downefm"))
 			SetAxis/A bottom
 			SetAxis/A left
 			Label bottom "Fast Scan (um)"
 			Label left "Slow Scan (um)"
 			ModifyGraph wbRGB=(65000,65000,48600),expand=.7
-			if (imagefunc == "fftrefm" || imagefunc == "gmode")
+			if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc, "gmode"))
 				ModifyImage FrequencyOffset ctab= {-100,0,YellowHot, 0}
 			endif
 			ColorScale/C/N=text0/E/F=0/A=MC image=FrequencyOffset
@@ -625,29 +624,29 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 	
 	ModifyGraph/W=TopographyImage height = {Aspect, scansizeY/scansizeX}
 
-	if (imagefunc == "fftrefm" || imagefunc == "gmode")
+	if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc, "gmode"))
 		ModifyGraph/W=FrequencyOffsetImage height = {Aspect, scansizeY/scansizeX}
-	elseif (imagefunc == "trefm" || imagefunc == "downefm")
+	elseif (stringmatch(imagefunc, "trefm") || stringmatch(imagefunc , "downefm"))
 		ModifyGraph/W=FrequencyShiftImage height = {Aspect, scansizeY/scansizeX}
 
 	if (scansizeY/scansizeX < .2)
 		ModifyGraph/W=TopographyImage height = {Aspect, 1}
 
-		if (imagefunc == "fftrefm" || imagefunc == "trefm" || imagefunc == "gemode")
+		if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc, "trefm") || stringmatch(imagefunc, "gmode"))
 			ModifyGraph/W=ChargingRateImage height = {Aspect, 1}
-		elseif (imagefunc == "downefm")
+		elseif (stringmatch(imagefunc, "downefm"))
 			ModifyGraph/W=RingDownRateImage height = {Aspect, 1}
 		endif
 
-		if (imagefunc == "fftrefm" || imagefunc == "gmode")
+		if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc, "gmode"))
 			ModifyGraph/W=FrequencyOffsetImage height = {Aspect, 1}
-		elseif (imagefunc == "trefm" || imagefunc == "downefm")
+		elseif (stringmatch(imagefunc, "trefm") || stringmatch(imagefunc, "downefm"))
 			ModifyGraph/W=FrequencyShiftImage height = {Aspect, 1}
 		endif
 
-		if (imagefunc == "skpm" || imagefunc == "skpmspv")
+		if (stringmatch(imagefunc, "skpm") || stringmatch(imagefunc , "skpmspv"))
 			ModifyGraph/W=CPDImage height = {Aspect, 1}
-			if (imagefunc == "skpmspv")
+			if (stringmatch(imagefunc, "skpmspv"))
 				ModifyGraph/W=CPDImage2 height = {Aspect, 1}
 			endif	
 
@@ -668,11 +667,11 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 	// crosspoint needs to be updated to send the trigger to the gage card	
 	// Set up the crosspoint, note that KP crosspoint settings change between the trace and retrace and are reset below
 
-	if (imagefunc == "fftrefm" || imagefunc == "gmode")
+	if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc, "gmode"))
 		SetCrosspoint ("FilterOut","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","OutB","DDS")
-	elseif (imagefunc == "trefm" || imagefunc == "downefm")
+	elseif (stringmatch(imagefunc, "trefm") || stringmatch(imagefunc, "downefm"))
 		SetCrosspoint ("FilterOut","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Defl","OutC","OutA","OutB","Ground","OutB","DDS")
-	elseif (imagefunc == "skpm" || imagefunc == "skpmspv")
+	elseif (stringmatch(imagefunc, "skpm") || stringmatch(imagefunc, "skpmspv"))
 		SetCrosspoint ("Ground","In1","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutA","OutC","OutB","Ground","In0","DDS")
 	endif
 	
@@ -686,9 +685,9 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 		
 	// HStrEFM needs no FBL on the LIA phase angle	
 
-	if (imagefunc == "fftrefm" || imagefunc == "trefm" || imagefunc == "downefm" || imagefunc == "gmode")
+	if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc, "trefm") || stringmatch(imagefunc, "downefm") || stringmatch(imagefunc, "gmode"))
 		SetPassFilter(1,q=EFMFilters[%EFM][%q],i=EFMFilters[%EFM][%i],a=EFMFilters[%EFM][%A],b=EFMFilters[%EFM][%B])
-	elseif (imagefunc == "skpm" || imagefunc == "skpmspv")
+	elseif (stringmatch(imagefunc, "skpm") || stringmatch(imagefunc, "skpmspv"))
 		SetPassFilter(1,q=EFMFilters[%KP][%q],i=EFMFilters[%KP][%i],a=EFMFilters[%KP][%A],b=EFMFilters[%KP][%B])
 		SetFeedbackLoop(5, "Always", LockinString+"theta", td_rv(LockinString+"theta"), freq_PGain, freq_IGain, freq_DGain, "Output.A", 0)
 		SetFeedbackLoop(4, "Always", "Input.B", 0, EFMFilters[%KP][%PGain], EFMFilters[%KP][%IGain], 0, "Output.B", 0)	
@@ -700,7 +699,7 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 		StopFeedbackLoop(5)
 	endif
 
-	if (imagefunc == "trefm" || imagefunc == "downefm")
+	if (stringmatch(imagefunc, "trefm") || stringmatch(imagefunc, "downefm"))
 		if (stringmatch("ARC.Lockin.0." , LockinString))
 			SetFeedbackLoop(4, "always", LockinString +"theta", NaN, EFMFilters[%trEFM][%PGain], EFMFilters[%trEFM][%IGain], 0, LockinString+"FreqOffset",  EFMFilters[%trEFM][%DGain])
 		else
@@ -714,20 +713,20 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 	td_wv("Output.A", 0)
 	td_wv("Output.B",0)	
 
-	if (imagefunc == "fftrefm" || imagefunc == "gmode" || imagefunc == "skpmspv")
+	if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc, "gmode") || stringmatch(imagefunc, "skpmspv"))
 		td_wv("Output.C",0)
 		endif
 	//******************  EEEEEEEEEEEEEEEEEEE *******************************//	
 	
 	//******************  FFFFFFFFFFFFFFFFFFFFFF *******************************//
 	//pre-loop initialization, done only once
-	if (imagefunc == "trefm")
+	if (stringmatch(imagefunc, "trefm"))
 		NVAR gxpos= root:packages:trEFM:gxpos
 		NVAR gypos = root:packages:trEFM:gypos
 	endif
 
 	//move to initial scan point
-	if (imagefunc == "fftrefm" || imagefunc == "trefm" || imagefunc == "skpm" || imagefunc == "gmode")
+	if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc, "trefm") || stringmatch(imagefunc, "skpm") || stringmatch(imagefunc, "gmode"))
 		if (XFastEFM == 1 && YFastEFM == 0)	
 			if (UseLineNum == 0)
 				MoveXY(ScanFramework[0][0], ScanFramework[0][1])
@@ -741,13 +740,13 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 				MoveXY((xpos - scansizeY / 2)  + SlowScanDelta*LineNum, ScanFramework[0][0])
 			endif
 		endif
-	elseif (imagefunc == "downefm")
+	elseif (stringmatch(imagefunc, "downefm"))
 		if (xoryscan == 0)	
 			MoveXY(ScanFramework[0][0], ScanFramework[0][1])
 		elseif (XorYscan == 1)
 			MoveXY(ScanFramework[0][1], ScanFramework[0][0])
 		endif
-	elseif (imagefunc == "skpmspv")
+	elseif (stringmatch(imagefunc, "skpmspv"))
 		MoveXY(ScanFramework[0][0], ScanFramework[0][1])
 
 	endif
@@ -755,31 +754,31 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 
 
 	
-	if (imagefunc == "fftrefm" || imagefunc == "gmode")
+	if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc, "gmode"))
 		SetCrosspoint ("FilterOut","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","OutB","DDS")
-	elseif (imagefunc == "trefm" || imagefunc == "downefm")
+	elseif (stringmatch(imagefunc, "trefm") || stringmatch(imagefunc, "downefm"))
 		SetCrosspoint ("FilterOut","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Defl","OutC","OutA","OutB","Ground","OutB","DDS")
 	endif
 	
-	if (imagefunc == "fftrefm" || imagefunc == "trefm" || imagefunc == "downefm" || imagefunc == "gmode")
+	if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc, "trefm") || stringmatch(imagefunc, "downefm") || stringmatch(imagefunc, "gmode"))
 		variable currentX = td_ReadValue("XSensor")
 		variable currentY = td_ReadValue("YSensor")
 	endif
 
 	//************************************* XYupdownwave is the final, calculated, scaled values to drive the XY piezos ************************//	
-	if ( (imagefunc == "skpmspv") || (imagefunc == "downefm" && xoryscan == 0) || (XFastEFM == 1 && YFastEFM == 0) )	//x  scan direction
+	if ( (stringmatch(imagefunc, "skpmspv")) || (stringmatch(imagefunc, "downefm") && xoryscan == 0) || (XFastEFM == 1 && YFastEFM == 0) )	//x  scan direction
 		XYupdownwave[][][0] = (ScanFrameWork[q][0] + FastScanDelta*p) / XLVDTsens / 10e5 + XLVDToffset
 		XYupdownwave[][][1] = (ScanFrameWork[q][2] - FastScanDelta*p) / XLVDTsens / 10e5 + XLVDToffset
 		XYupdownwave[][][2] = (ScanFrameWork[q][1]) / YLVDTsens / 10e5 + YLVDToffset
 		XYupdownwave[][][3] = (ScanFrameWork[q][3]) / YLVDTsens / 10e5 + YLVDToffset
-	elseif ( (imagefunc == "downefm" && xoryscan == 1) || (XFastEFM == 0 && YFastEFM == 1) )
+	elseif ( (stringmatch(imagefunc, "downefm") && xoryscan == 1) || (XFastEFM == 0 && YFastEFM == 1) )
 		XYupdownwave[][][2] = (ScanFrameWork[q][0] - FastScanDelta*p) / YLVDTsens / 10e5 + YLVDToffset
 		XYupdownwave[][][3] = (ScanFrameWork[q][2] + FastScanDelta*p) / YLVDTsens / 10e5 + YLVDToffset
 		XYupdownwave[][][0] = (ScanFrameWork[q][1]) / XLVDTsens / 10e5 + XLVDToffset
 		XYupdownwave[][][1] = (ScanFrameWork[q][3]) / XLVDTsens / 10e5 + XLVDToffset
 	endif
 
-	if (imagefunc == "trefm")
+	if (stringmatch(imagefunc, "trefm"))
 		print (XYupdownwave[0][LineNum][0] - XLVDTOffset) * 10e5 * XLVDTSens
 	endif
 	
@@ -787,13 +786,13 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 	td_wv(LockinString + "Amp",CalHardD) 
 	td_wv(LockinString + "Freq",CalEngageFreq) //set the frequency to the resonant frequency
 
-	if (imagefunc == "fftrefm" || imagefunc == "trefm" || imagefunc == "gmode")
+	if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc, "trefm") || stringmatch(imagefunc, "gmode"))
 		td_wv(LockinString + "FreqOffset",0)
 	endif
 	
-	if (imagefunc == "fftrefm" || imagefunc == "skpm" || imagefunc == "gmode" || imagefunc == "skpmspv")
+	if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc, "skpm") || stringmatch(imagefunc, "gmode") || stringmatch(imagefunc, "skpmspv"))
 		SetFeedbackLoop(2,"Always","Amplitude", Setpoint,-PGain,-IGain,-SGain,"Height",0)
-	elseif (imagefunc == "trefm" || imagefunc == "downefm")
+	elseif (stringmatch(imagefunc, "trefm") || stringmatch(imagefunc, "downefm"))
 		SetFeedbackLoop(2,"Always","Amplitude", Setpoint,-PGain,-IGain,-SGain,"Output.Z",0)
 	endif
 	
@@ -807,35 +806,35 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 	///Starting imaging loop here
 	i=0
 
-	if (imagefunc == "skpm" || imagefunc == "skpmspv")
+	if (stringmatch(imagefunc, "skpm") || stringmatch(imagefunc, "skpmspv"))
 		variable heightbefore, heightafter
 	endif
 	
-	if (imagefunc == "skpmspv")
+	if (stringmatch(imagefunc, "skpmspv"))
 		j = 0
 	endif
 
 	do
 		starttime2 =StopMSTimer(-2) //Start timing the raised scan line
 
-		if (imagefunc != "skpmspv" || (imagefunc == "skpmspv" && j == 0))
+		if (!stringmatch(imagefunc, "skpmspv") || (stringmatch(imagefunc, "skpmspv") && j == 0))
 			print "line ", i+1
-		if (imagefunc == "skpmspv" && j == 0)
+		if (stringmatch(imagefunc, "skpmspv") && j == 0)
 			print "Light off"
 			td_wv("Output.C", 0)
-		elseif (imagefunc == "skpmspv" && j==1)
+		elseif (stringmatch(imagefunc, "skpmspv") && j==1)
 			print "Light on"
 			td_wv("Output.C", 5)
 			Sleep/S .25
 		endif
 
-		if (imagefunc == "fftrefm" || imagefunc == "trefm" || imagefunc == "skpm")
+		if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc, "trefm") || stringmatch(imagefunc, "skpm"))
 			if (UseLineNum == 0)	// single line scans
 				LineNum = i
 			endif
 		endif
 		
-		if (imagefunc == "skpm")
+		if (stringmatch(imagefunc, "skpm"))
 			if (UseLineNumForVoltage != 0)
 				if (i == LineNumforVoltage)
 					PsSetting(VoltageatLine, current=0.7)
@@ -848,12 +847,12 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 		endif
 
 		// these are the actual 1D drive waves for the tip movement
-		if (imagefunc == "fftrefm" || imagefunc == "trefm" || imagefunc == "skpm")
+		if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc, "trefm") || stringmatch(imagefunc, "skpm"))
 			Xdownwave[] = XYupdownwave[p][LineNum][0]
 			Xupwave[] = XYupdownwave[p][LineNum][1]
 			Ydownwave[] = XYupdownwave[p][LineNum][2]
 			Yupwave[] = XYupdownwave[p][LineNum][3]
-		elseif (imagefunc == "downefm" || imagefunc == "gmode" || imagefunc == "skpmspv")
+		elseif (stringmatch(imagefunc, "downefm") || stringmatch(imagefunc, "gmode") || stringmatch(imagefunc, "skpmspv"))
 			Xdownwave[] = XYupdownwave[p][i][0]
 			Xupwave[] = XYupdownwave[p][i][1]
 			Ydownwave[] = XYupdownwave[p][i][2]
@@ -866,16 +865,16 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 		td_StopInWaveBank(-1)
 		td_StopOutWaveBank(-1)
 		
-		if (imagefunc == "fftrefm" || imagefunc == "trefm" || imagefunc == "downefm")
+		if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc, "trefm") || stringmatch(imagefunc, "downefm"))
 			error+= td_xSetInWave(0,"Event.0", "ZSensor", ReadWaveZ,"", Downinterpolation)// used during Trace to record height data		
 				if (error != 0)
 					print i, "error1", error
 				endif
 
 
-			if (imagefunc == "fftrefm" || imagefunc == "gmode")
+			if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc, "gmode"))
 				error+= td_xSetOutWavePair(0,"Event.0", "PIDSLoop.0.Setpoint", Xdownwave,"PIDSLoop.1.Setpoint",Ydownwave ,-DownInterpolation)
-			elseif (imagefunc == "trefm" || imagefunc == "downefm")
+			elseif (stringmatch(imagefunc, "trefm") || stringmatch(imagefunc, "downefm"))
 				error+= td_xSetOutWavePair(0,"Event.0", "$outputXLoop.Setpoint", Xdownwave,"$outputYLoop.Setpoint",Ydownwave ,-DownInterpolation)
 			endif
 			if (error != 0)
@@ -883,7 +882,7 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 			endif
 		endif
 
-		if (imagefunc == "skpm" || imagefunc == "skpmspv")
+		if (stringmatch(imagefunc, "skpm") || stringmatch(imagefunc, "skpmspv"))
 			td_xSetInWave(0,"Event.0", "ZSensor", ReadWaveZ,"", Downinterpolation)	
 			
 			td_xSetOutWavePair(0, "Event.0", "PIDSLoop.0.Setpoint", Xdownwave, "PIDSLoop.1.Setpoint", Ydownwave , -DownInterpolation)
@@ -899,21 +898,21 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 		td_wv(LockinString + "Freq",CalEngageFreq) //set the frequency to the resonant frequency
 		td_wv(LockinString + "FreqOffset",0)
 
-		if (imagefunc == "fftrefm" || imagefunc == "trefm" || imagefunc == "skpm" || imagefunc == "gmode" || imagefunc == "skpmspv")
+		if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc, "trefm") || stringmatch(imagefunc, "skpm") || stringmatch(imagefunc, "gmode") || stringmatch(imagefunc, "skpmspv"))
 			td_wv("Output.A",0)
 			td_wv("Output.B",0)
-			if (imagefunc == "fftrefm" || imagefunc == "gmode")
+			if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc, "gmode"))
 				td_wv("Output.C",0)
 			endif
 		endif
 
-		if (imagefunc == "skpm")
+		if (stringmatch(imagefunc, "skpm"))
 			if (gWGDeviceAddress != 0)
 				setvf(0, ACFrequency,"WG")
 			else
 				TurnOffAWG()
 			endif
-		elseif (imagefunc == "skpmspv")
+		elseif (stringmatch(imagefunc, "skpmspv"))
 			setvf(0, ACFrequency,"WG")
 		endif
 
@@ -941,7 +940,7 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 		td_stopInWaveBank(-1)
 		td_stopOutWaveBank(-1)
 
-		if (imagefunc == "fftrefm" || imagefunc == "gmode")
+		if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc, "gmode"))
 
 			// START TOPOGRAPHY SCAN
 			// Outputs three signals from the ARC. If CutDrive is active, then "trigger" is replaced by the drive signal to the shake pieze
@@ -964,7 +963,7 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 			SetFeedbackLoop(3, "always",  "ZSensor", ReadWaveZ[scanpoints-1]-liftheight*1e-9/GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0) // note the integral gain of 10000
 			sleep/s 1
 
-			if (imagefunc == "gmode")
+			if (stringmatch(imagefunc, "gmode"))
 				//		SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","DDS","Ground")	
 				SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","DDS","OutA","OutB","Ground","DDS","Ground")	
 
@@ -982,12 +981,12 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 
 			error+= td_xsetoutwavepair(0,"Event.2,repeat", "Output.A", lightwave,"Output.B", voltagewave,-1)
 
-			if (imagefunc != "gmode" || CutDrive == 0)
+			if (stringmatch(imagefunc, "gmode") || CutDrive == 0)
 	//			error += td_xsetoutwave(1,"Event.2,repeat", "Output.C", triggerwave, -1)
 				error+= td_xsetoutwavePair(1,"Event.2", "$outputXLoop.Setpoint", Xupwave,"$outputYLoop.Setpoint", Yupwave,-UpInterpolation)
 				
 				error = ErrorHandle(error)
-			elseif (imagefunc != "gmode" || CutDrive == 1)
+			elseif (!stringmatch(imagefunc, "gmode") || CutDrive == 1)
 				error += td_xsetoutWave(1, "Event.2,repeat", LockinString + "Amp",drivewave, -1)
 				variable YIGainBack = td_rv("ARC.PIDSLoop.1.IGain")
 				variable XIGainBack = td_rv("ARC.PIDSLoop.0.IGain")
@@ -1011,7 +1010,7 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 	//		variable YIGainBack = td_rv("ARC.PIDSLoop.1.IGain")
 	//		SetFeedbackLoop(1, "Event.2", "Ysensor", Yupwave[0], 0, YIGainBack, 0, "Output.Y", 0)		//	hard-set Y position each line to free up an outwavebank
 			
-			if (imagefunc == "gmode")
+			if (stringmatch(imagefunc, "gmode"))
 				error+= td_xsetoutwavePair(1,"Event.2", "$outputXLoop.Setpoint", Xupwave,"$outputYLoop.Setpoint", Yupwave,-UpInterpolation)
 				error = ErrorHandle(error)
 			endif
@@ -1019,7 +1018,7 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 	//		error+= td_xsetoutwave(2, "Event.2", LockInString + "PIDSLoop.3.Setpoint", ReadWaveZback, -UpInterpolation)
 
 
-			if (imagefunc != "gmode")
+			if (!stringmatch(imagefunc, "gmode"))
 				td_wv(LockinString + "Amp", CalSoftD) 
 				td_wv(LockinString + "Freq", CalResFreq) //set the frequency to the resonant frequency	
 				td_wv(LockinString + "FreqOffset", 0)
@@ -1101,8 +1100,8 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 			//*******************************************************************************		
 
 
-		elseif (imagefunc == "trefm" || imagefunc == "downefm" || imagefunc == "skpm")
-			if (imagefunc == "trefm")
+		elseif (stringmatch(imagefunc, "trefm") || stringmatch(imagefunc, "downefm") || stringmatch(imagefunc, "skpm"))
+			if (stringmatch(imagefunc, "trefm"))
 				error+= td_xSetInWave(1,"Event.2", LockinString + "FreqOffset", ReadwaveFreq,"",interpval) // getting read frequency offset	
 
 				error+= td_xsetoutwavepair(0,"Event.2,repeat", "Output.B", voltagewave,"Output.A", lightwave,-1*interpval)
@@ -1121,7 +1120,7 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 				//stop amplitude FBLoop and start height FB for retrace
 				StopFeedbackLoop(2)	
 
-			elseif (imagefunc == "downefm")
+			elseif (stringmatch(imagefunc, "downefm"))
 				error += td_xSetInWave(1, "Event.2", LockinString + "R", readwavefreq, "", 1)
 				// writes amplitude to ReadWaveFreq, should rename this!
 				error += td_xSetOutWave(0, "Event.2,Repeat", LockinString + "Amp", drivewave, -1)
@@ -1132,7 +1131,7 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 				// print height
 				heightbefore = td_rv("Zsensor")*td_rv("ZLVDTSens")
 
-			elseif (imagefunc == "skpm" || imagefunc == "skpmspv")
+			elseif (stringmatch(imagefunc, "skpm") || stringmatch(imagefunc, "skpmspv"))
 				td_xSetInWave(1, "Event.2", "Output.B", CPDWave,"", -1) 
 				heightbefore = td_rv("Zsensor")*td_rv("ZLVDTSens")
 		 
@@ -1147,27 +1146,29 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 
 			// to keep tip from being stuck
 			SetFeedbackLoop(3, "always",  "ZSensor", ReadWaveZ[scanpoints-1]-500*1e-9/GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0) // note the integral gain of 10000
-			if (imagefunc == "trefm" || imagefunc == "downefm")
+			if (stringmatch(imagefunc, "trefm") || stringmatch(imagefunc, "downefm"))
 				sleep/S 1
-			elseif (imagefunc == "skpm" || imagefunc == "skpmspv")
+			elseif (stringmatch(imagefunc, "skpm") || stringmatch(imagefunc, "skpmspv"))
 				sleep/s .5
+			endif
 			SetFeedbackLoop(3, "always",  "ZSensor", ReadWaveZ[scanpoints-1]-liftheight*1e-9/GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0) // note the integral gain of 10000
-			if (imagefunc == "trefm" || imagefunc == "downefm")
+			if (stringmatch(imagefunc, "trefm") || stringmatch(imagefunc, "downefm"))
 				sleep/S 1
-			elseif (imagefunc == "skpm" || imagefunc == "skpmspv")
+			elseif (stringmatch(imagefunc, "skpm") || stringmatch(imagefunc, "skpmspv"))
 				sleep/s .5
+			endif
 
-			if (imagefunc == "downefm" || imagefunc == "skpm" || imagefunc == "skpmspv")
+			if (stringmatch(imagefunc, "downefm") || stringmatch(imagefunc, "skpm") || stringmatch(imagefunc, "skpmspv"))
 				heightafter = td_rv("Zsensor")*td_rv("ZLVDTSens")
 				print (heightafter - heightbefore)*1e9, " nanometerz"
 			endif
 
-			if (imagefunc == "trefm")
+			if (stringmatch(imagefunc, "trefm"))
 				Make/O/N=(numpnts(ReadWaveFreq)) ZTemp = NaN
 				error += td_xSetInWave(0,"Event.2", "ZSensor", ZTemp,"", interpval) // getting read z-sensor for debugging offset
 			endif
 			
-			if (imagefunc != "skpmspv")
+			if (!stringmatch(imagefunc, "skpmspv"))
 				error+= td_xsetoutwavePair(1,"Event.2", "$outputXLoop.Setpoint", Xupwave,"$outputYLoop.Setpoint", Yupwave,-UpInterpolation)	
 				if (error != 0)
 					print i, "errorONB7", error
@@ -1182,7 +1183,7 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 
 			td_wv(LockinString + "Amp", CalSoftD) 
 			td_wv(LockinString+"Freq", CalResFreq) //set the frequency to the resonant frequency
-			if (imagefunc == "downefm")	
+			if (stringmatch(imagefunc, "downefm"))	
 				td_wv(LockinString+"Freq", CalResFreq - FreqOffsetNorm)
 				td_wv(LockinString+"FreqOffset", FreqOffsetNorm)
 
@@ -1193,9 +1194,9 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 				else
 					SetFeedbackLoopCypher(1, "always", LockinString +"theta", NaN, EFMFilters[%trEFM][%PGain], EFMFilters[%trEFM][%IGain], 0, LockinString+"FreqOffset",  EFMFilters[%trEFM][%DGain])
 				endif
-			elseif (imagefunc == "trefm")
+			elseif (stringmatch(imagefunc, "trefm"))
 				td_wv(LockinString+"FreqOffset", 0)
-			elseif (imagefunc == "skpm" || imagefunc == "skpmspv")
+			elseif (stringmatch(imagefunc, "skpm") || stringmatch(imagefunc, "skpmspv"))
 				td_wv((LockinString + "PhaseOffset"), CalPhaseOffset)
 				error+= td_xsetoutwavePair(1, "Event.2", "ARC.PIDSLoop.0.Setpoint", Xupwave, "ARC.PIDSLoop.1.Setpoint", Yupwave, -UpInterpolation)	
 				error+= td_xsetoutwave(2, "Event.2", "ARC.PIDSLoop.3.Setpoint", ReadWaveZback, -UpInterpolation)
@@ -1204,7 +1205,7 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 
 			SetPassFilter(1, q = EFMFilters[%trEFM][%q], i = EFMFilters[%trEFM][%i])
 
-			if (imagefunc == "skpm" || imagefunc == "skpmspv")
+			if (stringmatch(imagefunc, "skpm") || stringmatch(imagefunc, "skpmspv"))
 				lastvoltage = 0
 			
 				if (i != 0)
@@ -1226,7 +1227,7 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 				
 				SetFeedbackLoop(5, "Always", LockinString+"theta", td_rv(LockinString+"theta"), freq_PGain, freq_IGain, freq_DGain, "Output.A", 0)
 
-				if (imagefunc == "skpmspv || gWGDeviceAddress != 0)
+				if (stringmatch(imagefunc, "skpmspv") || gWGDeviceAddress != 0)
 					setvf(ACVoltage, ACFrequency,"WG")		
 				else
 					loadarbwave(ACFrequency, ACVoltage)	
@@ -1276,7 +1277,7 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 			// ************  End of Retrace 		
 
 			// Optional Save Raw Data
-			if (imagefunc == "fftrefm" || imagefunc == "trefm" || imagefunc == "downefm")
+			if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc, "trefm") || stringmatch(imagefunc, "downefm"))
 				if(saveOption == 1)
 					string name
 					if (i < 10)		
@@ -1297,7 +1298,7 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 			j=0
 
 			do
-				if (imagefunc == "fftrefm" || imagefunc == "trefm" || imagefunc == "downefm")
+				if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc, "trefm") || stringmatch(imagefunc, "downefm"))
 					V_FitError = 0
 					V_FitOptions = 4
 					readwavefreqtemp = 0
@@ -1328,7 +1329,7 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 					FrequencyOffset[scanpoints-j-1][i]=W_Coef[1]
 					ChargingRate[scanpoints-j-1][i]=1/(W_Coef[2]) 
 					Chi2Image[scanpoints-j-1][i]=W_sigma[2]
-				elseif (imagefunc == "skpm")
+				elseif (stringmatch(imagefunc, "skpm"))
 					CPDWaveTemp = 0
 					k = 0
 					l = j * pointsPerPixel
@@ -1342,7 +1343,7 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 				
 					CPDImage[scanpoints-j-1][i] = mean(CPDWaveTemp)
 					//CPDImage[scanpoints-j-1][i] = StatsMedian(CPDWaveTemp)
-				elseif (imagefunc == "skpmspv")
+				elseif (stringmatch(imagefunc, "skpmspv"))
 					variable h = 0
 					do
 						CPDWaveTemp = 0
@@ -1372,12 +1373,12 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 			while (j < scanpoints)
 
 
-			if (imagefunc == "skpm")
+			if (stringmatch(imagefunc, "skpm"))
 				if(i>0)
 					CPDTraceBefore=CPDTrace
 				endif
 				CPDTrace = CPDImage[p][i]
-			elseif (imagefunc == "skpmspv")
+			elseif (stringmatch(imagefunc, "skpmspv"))
 				if(i>0 && j==0)
 					CPDTraceBefore=CPDTrace
 				endif
@@ -1404,22 +1405,22 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 			DoUpdate 
 			//stop height FBLoop, restart Amplitude FBLoop and move to starting point of next line
 			StopFeedbackLoop(3)
-			if (imagefunc == "gmode")
+			if (stringmatch(imagefunc, "gmode"))
 				StopFeedbackLoop(4)
 				SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","OutB","DDS")
-			elseif (imagefunc == "trefm")
+			elseif (stringmatch(imagefunc, "trefm"))
 				if (stringmatch("ARC.Lockin.0." , LockinString))
 					StopFeedbackLoop(4)
 				else
 					StopFeedbackLoopCypher(1)
 				endif
-			elseif (imagefunc == "fftrefm" || imagefunc == "skpm" || imagefunc == "skpmspv")
+			elseif (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc, "skpm") || stringmatch(imagefunc, "skpmspv"))
 				StopFeedbackLoop(4)
-			elseif (imagefunc == "skpm" || imagefunc == "skpmspv")
+			elseif (stringmatch(imagefunc, "skpm") || stringmatch(imagefunc, "skpmspv"))
 				StopFeedbackLoop(5)
 				td_stopInWaveBank(-1)
 				td_stopOutWaveBank(-1)
-			elseif (imagefunc == "downefm")
+			elseif (stringmatch(imagefunc, "downefm"))
 				td_StopOutWaveBank(0)
 				td_wv("Output.A",0)	// light
 				td_wv("Output.B",0)	// voltage
@@ -1432,20 +1433,20 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 		endif   //if (i<gPSscanlines)
 
 
-		if (imagefunc == "fftrefm" || imagefunc == "trefm" || imagefunc == "downefm" || imagefunc == "gmode" || imagefunc == "skpmspv")
+		if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc, "trefm") || stringmatch(imagefunc, "downefm") || stringmatch(imagefunc, "gmode") || stringmatch(imagefunc, "skpmspv"))
 			print "Time for last scan line (seconds) = ", (StopMSTimer(-2) -starttime2)*1e-6, " ; Time remaining (in minutes): ", ((StopMSTimer(-2) -starttime2)*1e-6*(scanlines-i-1)) / 60
-		elseif (imagefunc == "skpm")
+		elseif (stringmatch(imagefunc, "skpm"))
 			scantimes[i] = (StopMSTimer(-2) -starttime2)*1e-6
 			print "Time for last scan line (seconds) = ", scantimes[i], " ; Time remaining (in minutes): ", scantimes[i]*(scanlines-i-1) / 60
 
 		i += 1
 		
 		//Reset the primary inwaves to Nan so that gl_checkinwavetiming function works properly
-		if (imagefunc == "fftrefm" || imagefunc == "trefm" || imagefunc == "downefm" || imagefunc == "gmode")
+		if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc, "trefm") || stringmatch(imagefunc, "downefm") || stringmatch(imagefunc, "gmode"))
 			ReadWaveFreqLast[] = ReadwaveFreq[p]
 			ReadWaveZ[] = NaN
 			ReadwaveFreq[] = NaN
-		elseif (imagefunc == "skpm" || imagefunc == "skpmspv")
+		elseif (stringmatch(imagefunc, "skpm") || stringmatch(imagefunc, "skpmspv"))
 			CPDWaveLast[] = CPDWave[p]
 			ReadWaveZ[] = NaN
 			CPDWave[] = NaN
@@ -1453,7 +1454,7 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 			//ACVoltage = root:Packages:trEFM:PointScan:SKPM:ACVoltage
 			//ACVoltage+=0.05
 			//print "Vac= ", ACVoltage, " V"
-	if (imagefunc == "skpmspv")
+	if (stringmatch(imagefunc, "skpmspv"))
 		j+=1
 		while (j < 2 )	
 		i += 1
@@ -1468,7 +1469,7 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 	endif
 	
 	DoUpdate
-	if (imagefunc == "fftrefm" || imagefunc == "skpm" || imagefunc == "gmode" || imagefunc == "skpmspv")		
+	if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc, "skpm") || stringmatch(imagefunc, "gmode") || stringmatch(imagefunc, "skpmspv"))		
 		StopFeedbackLoop(3)	
 		StopFeedbackLoop(4)
 	endif
@@ -1476,7 +1477,7 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 	td_StopInWaveBank(-1)
 	td_StopOutWaveBank(-1)
 
-	if (imagefunc == "skpm"):
+	if (stringmatch(imagefunc, "skpm"))
 		if (useLineNUm != 0)
 			display ScanTimes
 			Label left "Scan time (s)";DelayUpdate
@@ -1487,7 +1488,7 @@ Function ImageScan(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanp
 	Beep
 	doscanfunc("stopengage")
 
-	if (imagefunc == "fftrefm" || imagefunc == "gmode")
+	if (stringmatch(imagefunc, "fftrefm") || stringmatch(imagefunc, "gmode"))
 		// Save Parameters file
 		CreateParametersFile(PIXELCONFIG)
 		Save/G/O/P=Path/M="\r\n" SaveWave as "parameters.cfg"
