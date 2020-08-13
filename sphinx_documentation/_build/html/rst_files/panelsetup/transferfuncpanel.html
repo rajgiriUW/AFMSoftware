@@ -1,0 +1,399 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>transferfuncpanel.ipf &mdash; AFM Igor Code  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="prev" title="trEFMPanel.ipf" href="trefmpanel.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> AFM Igor Code
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">User Guides:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../userguides/trefm_fftrefm_guide.html">trEFM and FF-trEFM Experimental Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../userguides/trefm_setup_guide.html">trEFM Igor Setup Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../userguides/panels_guide.html">Panel Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Calibration:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/voltagescan.html">VoltageScan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/calcurve.html">CalCurve.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/forcecalibration.html">ForceCalibration.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/eleccal.html">ElecCal.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Nonlocal Photocurrent:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nlpc/nlpc_panel.html">NLPC_Panel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nlpc/nplc_scan.html">NPLC_Scan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nlpc/nplc_utils.html">NPLC_Utils.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Imaging:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/gmodeimaging.html">GModeImaging.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/imagescan.html">ImageScan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/skpm.html">SKPM.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/skpmgainspanel.html">SKPMGainsPanel.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Point Scan:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../pointscan/gmodepointscan.html">GmodePointScan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pointscan/pointscan.html">PointScan.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Photoluminescence</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../pl/pl.html">PL.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Misc.</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../misc/useranalysis.html">UserAnalysis.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/redoanalysis.html">ReDoAnalysis.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Hardware Control:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/drivewaveeditor.html">DriveWaveEditor.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/wavegenerator.html">WaveGenerator.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/gpib.html">GPIB.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/triggerboxserial.html">TriggerBoxSerial.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/shuttercontrolandpanel.html">ShutterControlAndPanel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/gmode_triggers.html">GMode_Triggers.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/utilityfunctions.html">UtilityFunctions.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Panel Setup:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="trefminit.html">trEFMInit.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="trefmpanel.html">trEFMPanel.ipf</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">transferfuncpanel.ipf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#tfpanelinit">TFPanelInit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#popmenuproctf">PopMenuProcTF</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#parameters">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pixelparams">PixelParams</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#lineparams">LineParams</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#gmodetransferfuncbutton">GModeTransferFuncButton</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#processtf">ProcessTF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#loadchirp">LoadChirp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#newchirp">NewChirp</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#savetfbutton">SaveTFButton</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pointscantf">PointScanTF</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id6">Parameters</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">AFM Igor Code</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>transferfuncpanel.ipf</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/rst_files/panelsetup/transferfuncpanel.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="transferfuncpanel-ipf">
+<h1>transferfuncpanel.ipf<a class="headerlink" href="#transferfuncpanel-ipf" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="tfpanelinit">
+<h2>TFPanelInit<a class="headerlink" href="#tfpanelinit" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+</div>
+<div class="section" id="popmenuproctf">
+<h2>PopMenuProcTF<a class="headerlink" href="#popmenuproctf" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlName: string</dt><dd><p>description</p>
+</dd>
+<dt>popNum: variable</dt><dd><p>description</p>
+</dd>
+<dt>popStr: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="pixelparams">
+<h2>PixelParams<a class="headerlink" href="#pixelparams" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id1">
+<h3>Parameters<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="lineparams">
+<h2>LineParams<a class="headerlink" href="#lineparams" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id2">
+<h3>Parameters<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="gmodetransferfuncbutton">
+<h2>GModeTransferFuncButton<a class="headerlink" href="#gmodetransferfuncbutton" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id3">
+<h3>Parameters<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="processtf">
+<h2>ProcessTF<a class="headerlink" href="#processtf" title="Permalink to this headline">¶</a></h2>
+<p>Divides the response by the excitation pulse
+end</p>
+</div>
+<div class="section" id="loadchirp">
+<h2>LoadChirp<a class="headerlink" href="#loadchirp" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+</div>
+<div class="section" id="newchirp">
+<h2>NewChirp<a class="headerlink" href="#newchirp" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id4">
+<h3>Parameters<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>cba: struct</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="savetfbutton">
+<h2>SaveTFButton<a class="headerlink" href="#savetfbutton" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id5">
+<h3>Parameters<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="pointscantf">
+<h2>PointScanTF<a class="headerlink" href="#pointscantf" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id6">
+<h3>Parameters<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>xpos: variable</dt><dd><p>description</p>
+</dd>
+<dt>ypos: variable</dt><dd><p>description</p>
+</dd>
+<dt>liftheight: variable</dt><dd><p>description</p>
+</dd>
+<dt>DigitizerAverages: variable</dt><dd><p>description</p>
+</dd>
+<dt>DigitizerSamples: variable</dt><dd><p>description</p>
+</dd>
+<dt>DigitizerPretrigger: variable</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="trefmpanel.html" class="btn btn-neutral float-left" title="trEFMPanel.ipf" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Ginger Lab
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

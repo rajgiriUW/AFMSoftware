@@ -1,0 +1,892 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>GPIB.ipf &mdash; AFM Igor Code  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="TriggerBoxSerial.ipf" href="triggerboxserial.html" />
+    <link rel="prev" title="WaveGenerator.ipf" href="wavegenerator.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> AFM Igor Code
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">User Guides:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../userguides/trefm_fftrefm_guide.html">trEFM and FF-trEFM Experimental Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../userguides/trefm_setup_guide.html">trEFM Igor Setup Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../userguides/panels_guide.html">Panel Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Calibration:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/voltagescan.html">VoltageScan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/calcurve.html">CalCurve.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/forcecalibration.html">ForceCalibration.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/eleccal.html">ElecCal.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Nonlocal Photocurrent:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nlpc/nlpc_panel.html">NLPC_Panel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nlpc/nplc_scan.html">NPLC_Scan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nlpc/nplc_utils.html">NPLC_Utils.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Imaging:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/gmodeimaging.html">GModeImaging.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/imagescan.html">ImageScan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/skpm.html">SKPM.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/skpmgainspanel.html">SKPMGainsPanel.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Point Scan:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../pointscan/gmodepointscan.html">GmodePointScan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pointscan/pointscan.html">PointScan.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Photoluminescence</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../pl/pl.html">PL.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Misc.</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../misc/useranalysis.html">UserAnalysis.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/redoanalysis.html">ReDoAnalysis.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Hardware Control:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="drivewaveeditor.html">DriveWaveEditor.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wavegenerator.html">WaveGenerator.ipf</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">GPIB.ipf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#setefmvf">SetEFMvf</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#parameters">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#initboardanddeviceliaawg">InitBoardAndDeviceLIAAWG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#findlisteners">FindListeners</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#return">Return</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#gpibsetup">GPIBsetup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#getasciicode">GetAsciiCode</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Return</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#writegpib">WriteGPIB</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#readgpib">ReadGPIB</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Return</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#getfreq">GetFreq</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id6">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">Return</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#getvolt">GetVolt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id8">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#returns">Returns</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#setvf">SetVF</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id9">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#setvfsqu">SetVFSqu</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id10">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#setvfsqubis">SetVFSquBis</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id11">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#setvfsin">setVFsin</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id12">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#getlockinxyro-1to4">GetLockInXYRO_1to4</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id13">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id14">Return</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#emptyreads">EmptyReads</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id15">Return</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#setchannelioutputtoj">setChanneliOutputtoj</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id16">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#setchannelidisplayj">setChanneliDisplayj</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id17">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#setautophase">setAutoPhase</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#setreserve">setReserve</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id18">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#setlpslope">setLPslope</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id19">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#setsync">setSync</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id20">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#setfloat0orground1">setFloat0orGround1</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id21">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#setnotch">setNotch</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id22">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#sendlockinstring">sendLockinString</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id23">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#sendlockinquery">sendlockinQuery</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id24">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id25">Return</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#setlockinphase">setLockinPhase</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id26">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#setlockinsensitivity">setLockinSensitivity</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id27">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#setlockinfreq">SetLockinFreq</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id28">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#setlockinagain">SetLockinAgain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#getlockintimec">GetLockinTimeC</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id29">Return</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#lockinrecall">LockinRecall</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id30">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#setlockintimec">SetLockinTimeC</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id31">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#getlockinsens">GetLockinSens</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id32">Return</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#setupwfarbitrary">setupWFarbitrary</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id33">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#wfarbitrary">WFarbitrary</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id34">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#loadwf">LoadWF</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id35">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#findvisaaddress">findVISAAddress</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id36">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pssetting">psSetting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id37">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#psoff">psOff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pson">psOn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#psrst">psRst</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="triggerboxserial.html">TriggerBoxSerial.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shuttercontrolandpanel.html">ShutterControlAndPanel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gmode_triggers.html">GMode_Triggers.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utilityfunctions.html">UtilityFunctions.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Panel Setup:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../panelsetup/trefminit.html">trEFMInit.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../panelsetup/trefmpanel.html">trEFMPanel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../panelsetup/transferfuncpanel.html">transferfuncpanel.ipf</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">AFM Igor Code</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>GPIB.ipf</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/rst_files/hardwarecontrol/gpib.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="gpib-ipf">
+<h1>GPIB.ipf<a class="headerlink" href="#gpib-ipf" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="setefmvf">
+<h2>SetEFMvf<a class="headerlink" href="#setefmvf" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>voltage: variable</dt><dd><p>description</p>
+</dd>
+<dt>frequency: variable</dt><dd><p>description</p>
+</dd>
+<dt>sleeptime: variable <em>(optional)</em></dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="initboardanddeviceliaawg">
+<h2>InitBoardAndDeviceLIAAWG<a class="headerlink" href="#initboardanddeviceliaawg" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+</div>
+<div class="section" id="findlisteners">
+<h2>FindListeners<a class="headerlink" href="#findlisteners" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="return">
+<h3>Return<a class="headerlink" href="#return" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>V_ibcnt</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="gpibsetup">
+<h2>GPIBsetup<a class="headerlink" href="#gpibsetup" title="Permalink to this headline">¶</a></h2>
+<p>This function is very simple, it causes the board to be the CIC and sends all devices a clearI/O command. It should be safe and prudent to call this everytime you want to run a GPIB function</p>
+</div>
+<div class="section" id="getasciicode">
+<h2>GetAsciiCode<a class="headerlink" href="#getasciicode" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id1">
+<h3>Parameters<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>DeviceAddress: variable</dt><dd><p>description</p>
+</dd>
+<dt>talkOrListen: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="id2">
+<h3>Return<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="writegpib">
+<h2>WriteGPIB<a class="headerlink" href="#writegpib" title="Permalink to this headline">¶</a></h2>
+<p>This function is a wrapper for GPIBWrite2. it is used to encapsulate all the preliminary setup and clear messages as well as setting the ascii codes for the requested device</p>
+<div class="section" id="id3">
+<h3>Parameters<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>whichDeviceAddress: variable</dt><dd><p>description</p>
+</dd>
+<dt>cmdString: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="readgpib">
+<h2>ReadGPIB<a class="headerlink" href="#readgpib" title="Permalink to this headline">¶</a></h2>
+<p>This function is a wrapper for GPIBWrite2. it is used to encapsulate all the preliminary setup and clear messages as well as setting the ascii codes for the requested device the function reads in the first 4 responses and returns the response requested</p>
+<div class="section" id="id4">
+<h3>Parameters<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>whichDeviceAddress: variable</dt><dd><p>description</p>
+</dd>
+<dt>numResponses: variable</dt><dd><p>description</p>
+</dd>
+<dt>whichResponse: variable</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="id5">
+<h3>Return<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>responseString[whichResponse-1]</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="getfreq">
+<h2>GetFreq<a class="headerlink" href="#getfreq" title="Permalink to this headline">¶</a></h2>
+<p>Function that retrives the frequency of the Lockin</p>
+<div class="section" id="id6">
+<h3>Parameters<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>whichDevice: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="id7">
+<h3>Return<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>frequency</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="getvolt">
+<h2>GetVolt<a class="headerlink" href="#getvolt" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id8">
+<h3>Parameters<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>whichDevice: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="returns">
+<h3>Returns<a class="headerlink" href="#returns" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>voltage</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="setvf">
+<h2>SetVF<a class="headerlink" href="#setvf" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id9">
+<h3>Parameters<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<p>voltage: variable</p>
+<p>frequency: variable</p>
+<p>whichDevice: string</p>
+</div>
+</div>
+<div class="section" id="setvfsqu">
+<h2>SetVFSqu<a class="headerlink" href="#setvfsqu" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id10">
+<h3>Parameters<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>voltage: variable</dt><dd><p>description</p>
+</dd>
+<dt>frequency: variable</dt><dd><p>description</p>
+</dd>
+<dt>whichDevice: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="setvfsqubis">
+<h2>SetVFSquBis<a class="headerlink" href="#setvfsqubis" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id11">
+<h3>Parameters<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>voltage: variable</dt><dd><p>description</p>
+</dd>
+<dt>frequency: variable</dt><dd><p>description</p>
+</dd>
+<dt>whichDevice: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="setvfsin">
+<h2>setVFsin<a class="headerlink" href="#setvfsin" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id12">
+<h3>Parameters<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>voltage: variable</dt><dd><p>description</p>
+</dd>
+<dt>frequency: variable</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="getlockinxyro-1to4">
+<h2>GetLockInXYRO_1to4<a class="headerlink" href="#getlockinxyro-1to4" title="Permalink to this headline">¶</a></h2>
+<p>This function retrives the X, Y, R or Theta value from the lockin depending on i respectively (1-4)</p>
+<div class="section" id="id13">
+<h3>Parameters<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>i: variable</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="id14">
+<h3>Return<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>value</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="emptyreads">
+<h2>EmptyReads<a class="headerlink" href="#emptyreads" title="Permalink to this headline">¶</a></h2>
+<p>This function retrives the X, Y, R or Theta value from the lockin depending on i respectively (1-4)</p>
+<div class="section" id="id15">
+<h3>Return<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>value</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="setchannelioutputtoj">
+<h2>setChanneliOutputtoj<a class="headerlink" href="#setchannelioutputtoj" title="Permalink to this headline">¶</a></h2>
+<p>This function makes sure the channel one output is outputting the X value (not the display)</p>
+<div class="section" id="id16">
+<h3>Parameters<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>i: variable</dt><dd><p>description</p>
+</dd>
+<dt>j: variable</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="setchannelidisplayj">
+<h2>setChanneliDisplayj<a class="headerlink" href="#setchannelidisplayj" title="Permalink to this headline">¶</a></h2>
+<p>This function tells the channel what to output to the LED display</p>
+<div class="section" id="id17">
+<h3>Parameters<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>i: variable</dt><dd><p>description</p>
+</dd>
+<dt>j: variable</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="setautophase">
+<h2>setAutoPhase<a class="headerlink" href="#setautophase" title="Permalink to this headline">¶</a></h2>
+<p>This function tells the lock-in to autophase</p>
+</div>
+<div class="section" id="setreserve">
+<h2>setReserve<a class="headerlink" href="#setreserve" title="Permalink to this headline">¶</a></h2>
+<p>This function sets the lockin reserve 0 is  high, 1 is normal, 2 is low</p>
+<div class="section" id="id18">
+<h3>Parameters<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>number: variable</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="setlpslope">
+<h2>setLPslope<a class="headerlink" href="#setlpslope" title="Permalink to this headline">¶</a></h2>
+<p>This function sets the lockin low pass filter slope.
+0 is 6db , 1 is 12db, 2 is 18 db, 3 is 24 db</p>
+<div class="section" id="id19">
+<h3>Parameters<a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>number: variable</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="setsync">
+<h2>setSync<a class="headerlink" href="#setsync" title="Permalink to this headline">¶</a></h2>
+<p>This function sets the lockin to have either the sync state or not.
+0 is off, 1 is on</p>
+<div class="section" id="id20">
+<h3>Parameters<a class="headerlink" href="#id20" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>number: variable</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="setfloat0orground1">
+<h2>setFloat0orGround1<a class="headerlink" href="#setfloat0orground1" title="Permalink to this headline">¶</a></h2>
+<p>This function tells whether the input on the Lockin should be either floating or set to ground</p>
+<div class="section" id="id21">
+<h3>Parameters<a class="headerlink" href="#id21" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>number: variable</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="setnotch">
+<h2>setNotch<a class="headerlink" href="#setnotch" title="Permalink to this headline">¶</a></h2>
+<p>This function set the Lockin notch filters.
+0 sets no filter, 1 sets it at 60hz, 2 sets the 120hz, and 3 sets both</p>
+<div class="section" id="id22">
+<h3>Parameters<a class="headerlink" href="#id22" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>number: variable</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="sendlockinstring">
+<h2>sendLockinString<a class="headerlink" href="#sendlockinstring" title="Permalink to this headline">¶</a></h2>
+<p>Sends the Lock in a command</p>
+<div class="section" id="id23">
+<h3>Parameters<a class="headerlink" href="#id23" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>writtenstring: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="sendlockinquery">
+<h2>sendlockinQuery<a class="headerlink" href="#sendlockinquery" title="Permalink to this headline">¶</a></h2>
+<p>sends the lockin a command and returns a variable reponse</p>
+<div class="section" id="id24">
+<h3>Parameters<a class="headerlink" href="#id24" title="Permalink to this headline">¶</a></h3>
+<p>writtenstring: string</p>
+</div>
+<div class="section" id="id25">
+<h3>Return<a class="headerlink" href="#id25" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>response</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="setlockinphase">
+<h2>setLockinPhase<a class="headerlink" href="#setlockinphase" title="Permalink to this headline">¶</a></h2>
+<p>This function tells the lock-in to go to a specific phase</p>
+<div class="section" id="id26">
+<h3>Parameters<a class="headerlink" href="#id26" title="Permalink to this headline">¶</a></h3>
+<p>phase: variable</p>
+</div>
+</div>
+<div class="section" id="setlockinsensitivity">
+<h2>setLockinSensitivity<a class="headerlink" href="#setlockinsensitivity" title="Permalink to this headline">¶</a></h2>
+<p>This function sets the lock-in sensitivity</p>
+<div class="section" id="id27">
+<h3>Parameters<a class="headerlink" href="#id27" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>sens: variable</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="setlockinfreq">
+<h2>SetLockinFreq<a class="headerlink" href="#setlockinfreq" title="Permalink to this headline">¶</a></h2>
+<p>Function that sets the frequency of the Lockin</p>
+<div class="section" id="id28">
+<h3>Parameters<a class="headerlink" href="#id28" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>frequency: variable</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="setlockinagain">
+<h2>SetLockinAgain<a class="headerlink" href="#setlockinagain" title="Permalink to this headline">¶</a></h2>
+<p>Function that tells the Lockin to Auto Gain itself</p>
+</div>
+<div class="section" id="getlockintimec">
+<h2>GetLockinTimeC<a class="headerlink" href="#getlockintimec" title="Permalink to this headline">¶</a></h2>
+<p>Function that retrieves the TimeC of the lock_in</p>
+<div class="section" id="id29">
+<h3>Return<a class="headerlink" href="#id29" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>TimeConstant</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="lockinrecall">
+<h2>LockinRecall<a class="headerlink" href="#lockinrecall" title="Permalink to this headline">¶</a></h2>
+<p>Function that sets the TimeConstant of the lock-in</p>
+<div class="section" id="id30">
+<h3>Parameters<a class="headerlink" href="#id30" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>recall_val: variable</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="setlockintimec">
+<h2>SetLockinTimeC<a class="headerlink" href="#setlockintimec" title="Permalink to this headline">¶</a></h2>
+<p>Function that sets the TimeConstant of the lock-in</p>
+<div class="section" id="id31">
+<h3>Parameters<a class="headerlink" href="#id31" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>timeC: variable</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="getlockinsens">
+<h2>GetLockinSens<a class="headerlink" href="#getlockinsens" title="Permalink to this headline">¶</a></h2>
+<p>Function that retrieves the sens of the lock_in</p>
+<div class="section" id="id32">
+<h3>Return<a class="headerlink" href="#id32" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>Sensitivity</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="setupwfarbitrary">
+<h2>setupWFarbitrary<a class="headerlink" href="#setupwfarbitrary" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id33">
+<h3>Parameters<a class="headerlink" href="#id33" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>Voltage: variable</dt><dd><p>description</p>
+</dd>
+<dt>Fdifference: variable</dt><dd><p>description</p>
+</dd>
+<dt>Fsum: variable</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="wfarbitrary">
+<h2>WFarbitrary<a class="headerlink" href="#wfarbitrary" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id34">
+<h3>Parameters<a class="headerlink" href="#id34" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>Voltage: variable</dt><dd><p>description</p>
+</dd>
+<dt>Fdifference: variable</dt><dd><p>description</p>
+</dd>
+<dt>Fsum: variable</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="loadwf">
+<h2>LoadWF<a class="headerlink" href="#loadwf" title="Permalink to this headline">¶</a></h2>
+<p>arbitrary waveform loader</p>
+<div class="section" id="id35">
+<h3>Parameters<a class="headerlink" href="#id35" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>whichWave: wave</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="findvisaaddress">
+<h2>findVISAAddress<a class="headerlink" href="#findvisaaddress" title="Permalink to this headline">¶</a></h2>
+<p>simple function to find all relevant VISA addresses for a given instrument</p>
+<div class="section" id="id36">
+<h3>Parameters<a class="headerlink" href="#id36" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>source: string <em>(optional)</em></dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="pssetting">
+<h2>psSetting<a class="headerlink" href="#pssetting" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id37">
+<h3>Parameters<a class="headerlink" href="#id37" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>voltage: variable</dt><dd><p>description</p>
+</dd>
+<dt>current: variable <em>(optional)</em></dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="psoff">
+<h2>psOff<a class="headerlink" href="#psoff" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+</div>
+<div class="section" id="pson">
+<h2>psOn<a class="headerlink" href="#pson" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+</div>
+<div class="section" id="psrst">
+<h2>psRst<a class="headerlink" href="#psrst" title="Permalink to this headline">¶</a></h2>
+<p>functions description</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="triggerboxserial.html" class="btn btn-neutral float-right" title="TriggerBoxSerial.ipf" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="wavegenerator.html" class="btn btn-neutral float-left" title="WaveGenerator.ipf" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Ginger Lab
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

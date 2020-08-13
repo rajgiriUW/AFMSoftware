@@ -1,0 +1,508 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ForceCalibration.ipf &mdash; AFM Igor Code  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="ElecCal.ipf" href="eleccal.html" />
+    <link rel="prev" title="CalCurve.ipf" href="calcurve.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> AFM Igor Code
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">User Guides:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../userguides/trefm_fftrefm_guide.html">trEFM and FF-trEFM Experimental Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../userguides/trefm_setup_guide.html">trEFM Igor Setup Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../userguides/panels_guide.html">Panel Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Calibration:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="voltagescan.html">VoltageScan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calcurve.html">CalCurve.ipf</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ForceCalibration.ipf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#amps">amps</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#return">Return</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#amps-n">amps_n</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Return</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#getforceparms">GetForceParms</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#getforceparms-light">GetForceParms_Light</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#setupforcecalibration">SetupForceCalibration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#forcecalibration">ForceCalibration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id6">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#getfreecantileverparms">GetFreeCantileverParms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#getsurfacecantileverparms">GetSurfaceCantileverParms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fwhm">FWHM</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id7">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">Return</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#findadrive">findAdrive</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id9">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id10">Return</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#getforce">getForce</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id11">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id12">Return</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#liftto">LiftTo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id13">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#lifttoelect">LiftToElect</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id14">Parameters</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="eleccal.html">ElecCal.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Nonlocal Photocurrent:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nlpc/nlpc_panel.html">NLPC_Panel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nlpc/nplc_scan.html">NPLC_Scan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nlpc/nplc_utils.html">NPLC_Utils.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Imaging:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/gmodeimaging.html">GModeImaging.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/imagescan.html">ImageScan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/skpm.html">SKPM.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/skpmgainspanel.html">SKPMGainsPanel.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Point Scan:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../pointscan/gmodepointscan.html">GmodePointScan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pointscan/pointscan.html">PointScan.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Photoluminescence</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../pl/pl.html">PL.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Misc.</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../misc/useranalysis.html">UserAnalysis.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/redoanalysis.html">ReDoAnalysis.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Hardware Control:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/drivewaveeditor.html">DriveWaveEditor.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/wavegenerator.html">WaveGenerator.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/gpib.html">GPIB.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/triggerboxserial.html">TriggerBoxSerial.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/shuttercontrolandpanel.html">ShutterControlAndPanel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/gmode_triggers.html">GMode_Triggers.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/utilityfunctions.html">UtilityFunctions.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Panel Setup:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../panelsetup/trefminit.html">trEFMInit.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../panelsetup/trefmpanel.html">trEFMPanel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../panelsetup/transferfuncpanel.html">transferfuncpanel.ipf</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">AFM Igor Code</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>ForceCalibration.ipf</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/rst_files/calibration/forcecalibration.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="forcecalibration-ipf">
+<h1>ForceCalibration.ipf<a class="headerlink" href="#forcecalibration-ipf" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="amps">
+<h2>amps<a class="headerlink" href="#amps" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>w0: wave</dt><dd><p>description</p>
+</dd>
+<dt>w: variable</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="return">
+<h3>Return<a class="headerlink" href="#return" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>w0[0]*w0[1]^2 / sqrt( (w^2-w0[1]^2)^2 + (w * w0[1]/w0[2]) ^ 2)</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="amps-n">
+<h2>amps_n<a class="headerlink" href="#amps-n" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id1">
+<h3>Parameters<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>w0: wave</dt><dd><p>description</p>
+</dd>
+<dt>w: variable</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="id2">
+<h3>Return<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>w0[0]*w0[1]^2 / sqrt( (w^2-w0[1]^2)^2 + (w * w0[1]/w0[2]) ^ 2 + (w * w0[1] * w0[3])^2)</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="getforceparms">
+<h2>GetForceParms<a class="headerlink" href="#getforceparms" title="Permalink to this headline">¶</a></h2>
+<p>Main Force Cal Function. Must use ARC Lockin</p>
+<div class="section" id="id3">
+<h3>Parameters<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>tipV: variable</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="getforceparms-light">
+<h2>GetForceParms_Light<a class="headerlink" href="#getforceparms-light" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id4">
+<h3>Parameters<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>tipV: variable</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="setupforcecalibration">
+<h2>SetupForceCalibration<a class="headerlink" href="#setupforcecalibration" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id5">
+<h3>Parameters<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>range: variable <em>(optional)</em></dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="forcecalibration">
+<h2>ForceCalibration<a class="headerlink" href="#forcecalibration" title="Permalink to this headline">¶</a></h2>
+<p>Only works with ARC Lockin selected due to issues with td_xSetOutWave and the Cypher Lockin</p>
+<div class="section" id="id6">
+<h3>Parameters<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>tipV: variable</dt><dd><p>description</p>
+</dd>
+<dt>lighton: variable <em>(optional)</em></dt><dd><p>description</p>
+</dd>
+<dt>elecon: variable <em>(optional)</em></dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="getfreecantileverparms">
+<h2>GetFreeCantileverParms<a class="headerlink" href="#getfreecantileverparms" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+</div>
+<div class="section" id="getsurfacecantileverparms">
+<h2>GetSurfaceCantileverParms<a class="headerlink" href="#getsurfacecantileverparms" title="Permalink to this headline">¶</a></h2>
+<p>Saves/calculates cantilever parameters and saves into FinalParms</p>
+</div>
+<div class="section" id="fwhm">
+<h2>FWHM<a class="headerlink" href="#fwhm" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id7">
+<h3>Parameters<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>inwave: wave</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="id8">
+<h3>Return<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>inwavemaxloc/(fwhmH - fwhmL)</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="findadrive">
+<h2>findAdrive<a class="headerlink" href="#findadrive" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id9">
+<h3>Parameters<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>AmpVal: variable</dt><dd><p>description</p>
+</dd>
+<dt>betaVal: variable</dt><dd><p>description</p>
+</dd>
+<dt>resFval: variable</dt><dd><p>description</p>
+</dd>
+<dt>driveFval: variable</dt><dd><p>description</p>
+</dd>
+<dt>mass: variable</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="id10">
+<h3>Return<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>Ampdrive</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="getforce">
+<h2>getForce<a class="headerlink" href="#getforce" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id11">
+<h3>Parameters<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>calAmp: wave</dt><dd><p>description</p>
+</dd>
+<dt>calDef: wave</dt><dd><p>description</p>
+</dd>
+<dt>DEFINVOLS: variable</dt><dd><p>description</p>
+</dd>
+<dt>k: variable</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="id12">
+<h3>Return<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>F: variable</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="liftto">
+<h2>LiftTo<a class="headerlink" href="#liftto" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id13">
+<h3>Parameters<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>liftHeight: variable</dt><dd><p>description</p>
+</dd>
+<dt>tipVoltage: variable</dt><dd><p>description</p>
+</dd>
+<dt>lighton: variable <em>(optional)</em></dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="lifttoelect">
+<h2>LiftToElect<a class="headerlink" href="#lifttoelect" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id14">
+<h3>Parameters<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>liftHeight: variable</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="eleccal.html" class="btn btn-neutral float-right" title="ElecCal.ipf" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="calcurve.html" class="btn btn-neutral float-left" title="CalCurve.ipf" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Ginger Lab
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

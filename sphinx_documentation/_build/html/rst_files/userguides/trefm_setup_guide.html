@@ -1,0 +1,330 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>trEFM Igor Setup Guide &mdash; AFM Igor Code  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Panel Guide" href="panels_guide.html" />
+    <link rel="prev" title="trEFM and FF-trEFM Experimental Guide" href="trefm_fftrefm_guide.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> AFM Igor Code
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">User Guides:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="trefm_fftrefm_guide.html">trEFM and FF-trEFM Experimental Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">trEFM Igor Setup Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="panels_guide.html">Panel Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Calibration:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/voltagescan.html">VoltageScan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/calcurve.html">CalCurve.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/forcecalibration.html">ForceCalibration.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/eleccal.html">ElecCal.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Nonlocal Photocurrent:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nlpc/nlpc_panel.html">NLPC_Panel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nlpc/nplc_scan.html">NPLC_Scan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nlpc/nplc_utils.html">NPLC_Utils.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Imaging:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/gmodeimaging.html">GModeImaging.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/imagescan.html">ImageScan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/skpm.html">SKPM.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/skpmgainspanel.html">SKPMGainsPanel.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Point Scan:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../pointscan/gmodepointscan.html">GmodePointScan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pointscan/pointscan.html">PointScan.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Photoluminescence</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../pl/pl.html">PL.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Misc.</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../misc/useranalysis.html">UserAnalysis.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/redoanalysis.html">ReDoAnalysis.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Hardware Control:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/drivewaveeditor.html">DriveWaveEditor.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/wavegenerator.html">WaveGenerator.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/gpib.html">GPIB.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/triggerboxserial.html">TriggerBoxSerial.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/shuttercontrolandpanel.html">ShutterControlAndPanel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/gmode_triggers.html">GMode_Triggers.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/utilityfunctions.html">UtilityFunctions.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Panel Setup:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../panelsetup/trefminit.html">trEFMInit.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../panelsetup/trefmpanel.html">trEFMPanel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../panelsetup/transferfuncpanel.html">transferfuncpanel.ipf</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">AFM Igor Code</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>trEFM Igor Setup Guide</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/rst_files/userguides/trefm_setup_guide.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="trefm-igor-setup-guide">
+<h1>trEFM Igor Setup Guide<a class="headerlink" href="#trefm-igor-setup-guide" title="Permalink to this headline">¶</a></h1>
+<p>Rajiv Giridharagopal</p>
+<ol class="arabic">
+<li><p>Navigate to the “GingerLab Code/Ginger-Code-Repo/igor_code_mfp_branch” directory.</p>
+<p><img alt="directory" src="../../_images/directory.jpg" /></p>
+</li>
+<li><p>Highlight all files in the directory, then drag and drop into Igor.</p>
+<p><img alt="highlight" src="../../_images/highlight.jpg" /></p>
+</li>
+<li><p>Press compile.</p>
+<p><img alt="compile" src="../../_images/compile.jpg" /></p>
+<p>After that, a “trEFM” menu will appear.</p>
+<p><img alt="menu" src="../../_images/menu.jpg" /></p>
+</li>
+<li><p>These contain several panels.</p>
+<p><img alt="panels" src="../../_images/panels.jpg" /></p>
+<ul class="simple">
+<li><p><strong>trEFM panel</strong>: The main panel. You always need to run this.</p></li>
+<li><p><strong>SKPM panel</strong>: Only for FM-Kelvin probe.</p></li>
+<li><p><strong>PL panel</strong>: For Photoluminescence.</p></li>
+<li><p><strong>NLPC panel</strong>: For Justin’s nonlocal photocurrent measurement.</p></li>
+<li><p><strong>TF panel</strong>: For Raj’s transfer function measurement panel.</p></li>
+<li><p><strong>Reset all</strong>: Resets all the parameters.</p></li>
+</ul>
+<p><img alt="gains" src="../../_images/gains.jpg" /></p>
+<ul class="simple">
+<li><p>These contain the gains needed for these techniques.</p></li>
+<li><p>We never need to edit the trEFM ones these days.</p></li>
+<li><p>SKPM ones you should open as you WILL need to edit those for FM-SKPM</p></li>
+</ul>
+</li>
+<li><p>This is the trEFM panel.</p>
+<p><img alt="trefmpanel" src="../../_images/trefmpanel.jpg" /></p>
+<ul>
+<li><p><strong>A</strong>: Move to whichever coordinates you input.</p></li>
+<li><p><strong>B</strong>: Displays the current cantilever XY position.</p></li>
+<li><p><strong>C</strong>: Grabs the X and Y offset from the Master Panel. You’ll need to click this several times.</p></li>
+<li><p><strong>D</strong>: These set up the cantilever for FM modes.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Grab tune: Finds the drive amplitude required for the cantilever to oscillate at 0.3 V (this is effectively like hitting
+Autotune with a Target Amplitude of 0.3, but our code does its own thing)</p></li>
+<li><p>Voltage Scan: Measures the frequency shift parabola. If the system is working, you’ll get a nice parabola from -10 V to +10
+V. For very sensitive perovskites, you can set this to +/- 5 V instead.
+If you see noise, STOP! Something is not connected correctly.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><strong>E</strong>: Height scan isn’t used.</p></li>
+<li><p><strong>F</strong>: These control the various signals being sent out.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Trigger comes out of Output 0 on the ARC LED comes out of Output 1 on the ARC Voltage comes out of Output 2 on the ARC.</p></li>
+<li><p>LED is used to trigger the Gage card and, as evidenced by the name, turn on an LED or laser. Primarily it’s the trigger
+for the Gage card.</p></li>
+<li><p>Trigger, ironically, is not actually a trigger signal. It isn’t actually that important. It exists for historical reasons and
+some esoteric use cases. The output is mapped differently in GKPFM.</p></li>
+<li><p>Voltage is what is being sent to the tip during EFM mode. The output on the ARC is for diagnostic purposes.</p></li>
+<li><p>The –&gt;Recom button doesn’t do anything any more. It works on the Cypher specifically (sometimes) but is used when you
+want to trigger the system on the falling edge instead of a rising edge. This is a pretty rare use case</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</li>
+</ol>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="panels_guide.html" class="btn btn-neutral float-right" title="Panel Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="trefm_fftrefm_guide.html" class="btn btn-neutral float-left" title="trEFM and FF-trEFM Experimental Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Ginger Lab
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

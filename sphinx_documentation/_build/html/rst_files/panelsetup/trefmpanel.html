@@ -1,0 +1,982 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>trEFMPanel.ipf &mdash; AFM Igor Code  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="transferfuncpanel.ipf" href="transferfuncpanel.html" />
+    <link rel="prev" title="trEFMInit.ipf" href="trefminit.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> AFM Igor Code
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">User Guides:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../userguides/trefm_fftrefm_guide.html">trEFM and FF-trEFM Experimental Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../userguides/trefm_setup_guide.html">trEFM Igor Setup Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../userguides/panels_guide.html">Panel Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Calibration:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/voltagescan.html">VoltageScan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/calcurve.html">CalCurve.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/forcecalibration.html">ForceCalibration.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/eleccal.html">ElecCal.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Nonlocal Photocurrent:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nlpc/nlpc_panel.html">NLPC_Panel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nlpc/nplc_scan.html">NPLC_Scan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nlpc/nplc_utils.html">NPLC_Utils.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Imaging:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/gmodeimaging.html">GModeImaging.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/imagescan.html">ImageScan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/skpm.html">SKPM.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/skpmgainspanel.html">SKPMGainsPanel.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Point Scan:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../pointscan/gmodepointscan.html">GmodePointScan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pointscan/pointscan.html">PointScan.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Photoluminescence</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../pl/pl.html">PL.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Misc.</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../misc/useranalysis.html">UserAnalysis.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/redoanalysis.html">ReDoAnalysis.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Hardware Control:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/drivewaveeditor.html">DriveWaveEditor.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/wavegenerator.html">WaveGenerator.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/gpib.html">GPIB.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/triggerboxserial.html">TriggerBoxSerial.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/shuttercontrolandpanel.html">ShutterControlAndPanel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/gmode_triggers.html">GMode_Triggers.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/utilityfunctions.html">UtilityFunctions.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Panel Setup:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="trefminit.html">trEFMInit.ipf</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">trEFMPanel.ipf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#lightonbutton">LightOnButton</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#parameters">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#editgainsbutton">EditGainsButton</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#fitshiftwaveavgbutton">FitShiftWaveAvgButton</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#analysissettingsbutton">AnalysisSettingsButton</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#oneortwochannelscheckbox">OneOrTwoChannelsCHeckBox</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#updateconf">UpdateConf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lightoffbutton">LightOffButton</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#grabtunebutton">GrabTuneButton</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id6">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#voltagescanbutton">VoltageScanButton</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id7">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#heightscanbutton">HeightScanButton</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id8">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#edittipwavebutton">EditTipWaveButton</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id9">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#editlightwavebutton">EditLightWaveButton</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id10">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#editringdownwavebutton">EditRingDownWaveButton</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id11">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#edittriggerwavebutton">EditTriggerWaveButton</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id12">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#recombutton">RecomButton</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id13">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#lightonoroffbutton">LightOnOrOffButton</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id14">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#chargebutton">ChargeButton</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id15">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#multiplepointscan">MultiplePointScan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#trefmpointscanbutton">trEFMPointScanButton</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id16">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ringdownpointscanbutton">RingDownPointScanButton</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id17">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#trefmimagescanbutton">trEFMImageScanButton</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id18">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#fftrefmimagescanbutton">FFtrEFMImageScanButton</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id19">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#createparametersfile">CreateParametersFile</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id20">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#skpmimagescanbutton">SKPMImageScanButton</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id21">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#skpmpointscanbutton">SKPMPointScanButton</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id22">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#skpmpointscanbuttonpulsedbias">SKPMPointScanButtonPulsedBias</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id23">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#fftrefmpointscanbutton">FFtrEFMPointScanButton</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id24">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#gmodeimagescanbutton">GmodeImageScanButton</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id25">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#gmodepointscanbutton">GModePointScanButton</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id26">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#gmodetransferfuncbutton2">GModeTransferFUncButton2</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id27">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#commitdrivewaves">CommitDriveWaves</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#saveimagebutton">SaveImageButton</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id28">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#clearimagesbutton">ClearImagesButton</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id29">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#moveherebutton">MoveHereButton</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id30">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#getcurrentposition">GetCurrentPosition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#getcurrentpositionbutton">GetCurrentPositionButton</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id31">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#getmfpoffset">GetMFPOffset</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id32">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#tabproc">TabProc</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id33">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#lockinselectpopup">LockinSelectPopup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id34">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#popmenuproc">PopMenuProc</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id35">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#setphasedelay">SetPhaseDelay</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id36">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#setphase">SetPhase</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id37">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#forcecalbutton">ForceCalButton</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id38">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#eleccalbutton">ElecCalButton</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id39">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#eleccal-noise-button">ElecCal_Noise_Button</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id40">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#lightcalbutton">LightCalButton</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id41">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#calcurvebutton">CalCurveButton</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id42">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#redoanalysisbutton">RedoAnalysisButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ringdownimagescanbutton">RingDownImageScanButton</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id43">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#trefmxfast">trEFMXFast</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id44">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#about">About</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="transferfuncpanel.html">transferfuncpanel.ipf</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">AFM Igor Code</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>trEFMPanel.ipf</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/rst_files/panelsetup/trefmpanel.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="trefmpanel-ipf">
+<h1>trEFMPanel.ipf<a class="headerlink" href="#trefmpanel-ipf" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="lightonbutton">
+<h2>LightOnButton<a class="headerlink" href="#lightonbutton" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="editgainsbutton">
+<h2>EditGainsButton<a class="headerlink" href="#editgainsbutton" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id1">
+<h3>Parameters<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="fitshiftwaveavgbutton">
+<h2>FitShiftWaveAvgButton<a class="headerlink" href="#fitshiftwaveavgbutton" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id2">
+<h3>Parameters<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="analysissettingsbutton">
+<h2>AnalysisSettingsButton<a class="headerlink" href="#analysissettingsbutton" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id3">
+<h3>Parameters<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="oneortwochannelscheckbox">
+<h2>OneOrTwoChannelsCHeckBox<a class="headerlink" href="#oneortwochannelscheckbox" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id4">
+<h3>Parameters<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>cba: struct</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="updateconf">
+<h2>UpdateConf<a class="headerlink" href="#updateconf" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+</div>
+<div class="section" id="lightoffbutton">
+<h2>LightOffButton<a class="headerlink" href="#lightoffbutton" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id5">
+<h3>Parameters<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="grabtunebutton">
+<h2>GrabTuneButton<a class="headerlink" href="#grabtunebutton" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id6">
+<h3>Parameters<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="voltagescanbutton">
+<h2>VoltageScanButton<a class="headerlink" href="#voltagescanbutton" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id7">
+<h3>Parameters<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="heightscanbutton">
+<h2>HeightScanButton<a class="headerlink" href="#heightscanbutton" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id8">
+<h3>Parameters<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="edittipwavebutton">
+<h2>EditTipWaveButton<a class="headerlink" href="#edittipwavebutton" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id9">
+<h3>Parameters<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="editlightwavebutton">
+<h2>EditLightWaveButton<a class="headerlink" href="#editlightwavebutton" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id10">
+<h3>Parameters<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="editringdownwavebutton">
+<h2>EditRingDownWaveButton<a class="headerlink" href="#editringdownwavebutton" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id11">
+<h3>Parameters<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="edittriggerwavebutton">
+<h2>EditTriggerWaveButton<a class="headerlink" href="#edittriggerwavebutton" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id12">
+<h3>Parameters<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="recombutton">
+<h2>RecomButton<a class="headerlink" href="#recombutton" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id13">
+<h3>Parameters<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="lightonoroffbutton">
+<h2>LightOnOrOffButton<a class="headerlink" href="#lightonoroffbutton" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id14">
+<h3>Parameters<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="chargebutton">
+<h2>ChargeButton<a class="headerlink" href="#chargebutton" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id15">
+<h3>Parameters<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="multiplepointscan">
+<h2>MultiplePointScan<a class="headerlink" href="#multiplepointscan" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+</div>
+<div class="section" id="trefmpointscanbutton">
+<h2>trEFMPointScanButton<a class="headerlink" href="#trefmpointscanbutton" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id16">
+<h3>Parameters<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="ringdownpointscanbutton">
+<h2>RingDownPointScanButton<a class="headerlink" href="#ringdownpointscanbutton" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id17">
+<h3>Parameters<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="trefmimagescanbutton">
+<h2>trEFMImageScanButton<a class="headerlink" href="#trefmimagescanbutton" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id18">
+<h3>Parameters<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="fftrefmimagescanbutton">
+<h2>FFtrEFMImageScanButton<a class="headerlink" href="#fftrefmimagescanbutton" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id19">
+<h3>Parameters<a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="createparametersfile">
+<h2>CreateParametersFile<a class="headerlink" href="#createparametersfile" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id20">
+<h3>Parameters<a class="headerlink" href="#id20" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>PIXELCONFIG: wave</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="skpmimagescanbutton">
+<h2>SKPMImageScanButton<a class="headerlink" href="#skpmimagescanbutton" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id21">
+<h3>Parameters<a class="headerlink" href="#id21" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="skpmpointscanbutton">
+<h2>SKPMPointScanButton<a class="headerlink" href="#skpmpointscanbutton" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id22">
+<h3>Parameters<a class="headerlink" href="#id22" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="skpmpointscanbuttonpulsedbias">
+<h2>SKPMPointScanButtonPulsedBias<a class="headerlink" href="#skpmpointscanbuttonpulsedbias" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id23">
+<h3>Parameters<a class="headerlink" href="#id23" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="fftrefmpointscanbutton">
+<h2>FFtrEFMPointScanButton<a class="headerlink" href="#fftrefmpointscanbutton" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id24">
+<h3>Parameters<a class="headerlink" href="#id24" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="gmodeimagescanbutton">
+<h2>GmodeImageScanButton<a class="headerlink" href="#gmodeimagescanbutton" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id25">
+<h3>Parameters<a class="headerlink" href="#id25" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="gmodepointscanbutton">
+<h2>GModePointScanButton<a class="headerlink" href="#gmodepointscanbutton" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id26">
+<h3>Parameters<a class="headerlink" href="#id26" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="gmodetransferfuncbutton2">
+<h2>GModeTransferFUncButton2<a class="headerlink" href="#gmodetransferfuncbutton2" title="Permalink to this headline">¶</a></h2>
+<p>Needs debugging, loops through several chirps</p>
+<div class="section" id="id27">
+<h3>Parameters<a class="headerlink" href="#id27" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="commitdrivewaves">
+<h2>CommitDriveWaves<a class="headerlink" href="#commitdrivewaves" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+</div>
+<div class="section" id="saveimagebutton">
+<h2>SaveImageButton<a class="headerlink" href="#saveimagebutton" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id28">
+<h3>Parameters<a class="headerlink" href="#id28" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="clearimagesbutton">
+<h2>ClearImagesButton<a class="headerlink" href="#clearimagesbutton" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id29">
+<h3>Parameters<a class="headerlink" href="#id29" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="moveherebutton">
+<h2>MoveHereButton<a class="headerlink" href="#moveherebutton" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id30">
+<h3>Parameters<a class="headerlink" href="#id30" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="getcurrentposition">
+<h2>GetCurrentPosition<a class="headerlink" href="#getcurrentposition" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+</div>
+<div class="section" id="getcurrentpositionbutton">
+<h2>GetCurrentPositionButton<a class="headerlink" href="#getcurrentpositionbutton" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id31">
+<h3>Parameters<a class="headerlink" href="#id31" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="getmfpoffset">
+<h2>GetMFPOffset<a class="headerlink" href="#getmfpoffset" title="Permalink to this headline">¶</a></h2>
+<p>Moves the ARC/MFP3D Offsets over to the X/Y and then Moves Here</p>
+<div class="section" id="id32">
+<h3>Parameters<a class="headerlink" href="#id32" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="tabproc">
+<h2>TabProc<a class="headerlink" href="#tabproc" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id33">
+<h3>Parameters<a class="headerlink" href="#id33" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+<dt>tabNum: variable</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="lockinselectpopup">
+<h2>LockinSelectPopup<a class="headerlink" href="#lockinselectpopup" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id34">
+<h3>Parameters<a class="headerlink" href="#id34" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+<dt>popNum: variable</dt><dd><p>description</p>
+</dd>
+<dt>popStr: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="popmenuproc">
+<h2>PopMenuProc<a class="headerlink" href="#popmenuproc" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id35">
+<h3>Parameters<a class="headerlink" href="#id35" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+<dt>popNum: variable</dt><dd><p>description</p>
+</dd>
+<dt>popStr: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="setphasedelay">
+<h2>SetPhaseDelay<a class="headerlink" href="#setphasedelay" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id36">
+<h3>Parameters<a class="headerlink" href="#id36" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>sva: struct</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="setphase">
+<h2>SetPhase<a class="headerlink" href="#setphase" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id37">
+<h3>Parameters<a class="headerlink" href="#id37" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>sva: struct</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="forcecalbutton">
+<h2>ForceCalButton<a class="headerlink" href="#forcecalbutton" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id38">
+<h3>Parameters<a class="headerlink" href="#id38" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="eleccalbutton">
+<h2>ElecCalButton<a class="headerlink" href="#eleccalbutton" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id39">
+<h3>Parameters<a class="headerlink" href="#id39" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="eleccal-noise-button">
+<h2>ElecCal_Noise_Button<a class="headerlink" href="#eleccal-noise-button" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id40">
+<h3>Parameters<a class="headerlink" href="#id40" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="lightcalbutton">
+<h2>LightCalButton<a class="headerlink" href="#lightcalbutton" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id41">
+<h3>Parameters<a class="headerlink" href="#id41" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="calcurvebutton">
+<h2>CalCurveButton<a class="headerlink" href="#calcurvebutton" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id42">
+<h3>Parameters<a class="headerlink" href="#id42" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="redoanalysisbutton">
+<h2>RedoAnalysisButton<a class="headerlink" href="#redoanalysisbutton" title="Permalink to this headline">¶</a></h2>
+<p>ctrlname</p>
+</div>
+<div class="section" id="ringdownimagescanbutton">
+<h2>RingDownImageScanButton<a class="headerlink" href="#ringdownimagescanbutton" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id43">
+<h3>Parameters<a class="headerlink" href="#id43" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="trefmxfast">
+<h2>trEFMXFast<a class="headerlink" href="#trefmxfast" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id44">
+<h3>Parameters<a class="headerlink" href="#id44" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ba: struct</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="about">
+<h2>About<a class="headerlink" href="#about" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="transferfuncpanel.html" class="btn btn-neutral float-right" title="transferfuncpanel.ipf" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="trefminit.html" class="btn btn-neutral float-left" title="trEFMInit.ipf" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Ginger Lab
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
