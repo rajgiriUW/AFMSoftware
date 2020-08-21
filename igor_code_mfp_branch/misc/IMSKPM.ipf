@@ -3,7 +3,9 @@
 // AM-SKPM based approach using built-in Asylum functions
 // Consult Daviid's+Jake's notes on the force and NAP panel setups
 				
-Function PointScanIMSKPM(amplitude)
+Function PointScanIMSKPM_forcepanel(amplitude)
+// This method uses spoofing the force callback mode to enable detection
+// Unfortunately, without documentation readily available it's hard to use.
 	variable amplitude
 	string savDF = GetDataFolder(1)
 	SetDataFolder root:packages:MFP3D:Force:
@@ -210,4 +212,157 @@ Function Stage3()
 	ARCallbackFunc("ForceDone") // Spoof a force done Callback
 	
 	iteration_tracker += 1
+End
+
+Function FrequencyLIst()
+
+	SetDataFolder root:packages:trEFM:PointScan:SKPM
+	Make/O/N=20 frequency_list
+
+	frequency_list[0] = 1
+	frequency_list[1] = 1.8
+	frequency_list[2] = 3.7
+	frequency_list[3] = 5.6
+	frequency_list[4] = 10
+	frequency_list[5] = 18
+	frequency_list[6] =  37
+	frequency_list[7] =  56
+	frequency_list[8] = 100
+	frequency_list[9] = 178
+	frequency_list[10] = 366
+	frequency_list[11] = 562
+	frequency_list[12] = 1000
+	frequency_list[13] = 1778
+	frequency_list[14] = 3660
+	frequency_list[15] = 5623
+	frequency_list[16] = 10000
+	frequency_list[17] = 17780
+	frequency_list[18] = 36600
+	frequency_list[19] = 56230
+//	frequency_list[20] = 100000
+//	frequency_list[21] = 177800
+//	frequency_list[22] = 366000
+//	frequency_list[23] = 562300
+//	frequency_list[24] = 1000000
+//	frequency_list[25] = 1778000
+//	frequency_list[26] = 3660000
+//	frequency_list[27] = 5623000
+//	frequency_list[28] = 10000000
+
+end
+
+Function PointScanIMSKPM(xpos, ypos, liftheight)
+
+// This method uses a somewhat more "brute force" approac
+// Engage on teh surface, lift to panel height, switch the feedback methods and crosspoint
+// Then record waves for specific amounts of time
+	Variable  xpos, ypos, liftheight
+
+	String savDF = GetDataFolder(1)
+	
+	SetDataFolder root:Packages:trEFM
+	Nvar pgain, sgain, igain, adcgain, setpoint,adcgain
+	NVar interpval
+	Svar LockinString
+	NVAR ElecDrive, ElecAmp
+
+	Nvar XLVDTsens
+	Wave EFMFilters = root:packages:trEFM:EFMFilters
+	GetGlobals()
+
+	// Electrical Drive Settings	
+	variable EAmp = GV("NapDriveAmplitude")
+	variable EFreq = GV("NapDriveFrequency")
+	variable EOffset = GV("NapTipVoltage")
+	variable EPhase = GV("NapPhaseOffset")
+	
+	Nvar numcycles = root:Packages:trEFM:WaveGenerator:numcycles
+	Variable SKPM_voltage = 2.5
+	variable current_freq =1
+	
+	// For the time being, we will be recording 80000 points for 1.6 s
+	SetDataFolder root:packages:trEFM:PointScan:SKPM	
+	FrequencyList()
+	Wave Frequency_List
+	Make/O/N=(80000) IMWaves_CurrentFreq = NaN
+	Make/O/N=(80000) IM_CurrentFreq = NaN
+	
+	Make/O/N=(80000, numpnts(Frequency_List)) IMWaves = NaN
+	Make/O/N=(numpnts(Frequency_List)) IMWavesAvg = NaN
+	
+	SetPassFilter(1, a = EFMFilters[%EFM][%A], b = EFMFilters[%EFM][%B], fast = EFMFilters[%EFM][%Fast], i = EFMFilters[%EFM][%i], q = EFMFilters[%EFM][%q])
+
+	variable j = 0
+	variable k = 0 
+
+	do
+
+		IMWaves_CurrentFreq =  NaN
+	
+		k = 0
+
+		// 0) Set up WaveGenerator	
+		current_freq = Frequency_List[j]
+		setvfsqu(skpm_voltage, current_freq, "wg")	
+	
+		do
+	
+			SetDataFolder root:packages:trEFM:PointScan:SKPM
+	
+			IM_CurrentFreq = NaN
+		
+			StopFeedbackLoop(3)
+			StopFeedbackLoop(4)
+			StopFeedbackLoop(5)
+	
+			// Initial settings for outputs.
+			td_WV("Output.A", 0)
+			td_WV("Output.B", 0)
+
+			SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","OutB","DDS")
+
+			MoveXY(xpos, ypos) // Move to xy, keeping the tip raised away from the surface	
+
+			// 1) Find Surface and Lift tip to specified lift height
+			LiftTo(liftheight, 0)  // sets Feedback Loop 3 to Z-position
+	
+			// 2) Switch up Crosspoint for Electrical Mode
+			SetCrosspoint ("FilterOut","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Defl","OutC","OutA","OutB","Ground","DDS","Ground")
+
+			td_WriteValue("DDSAmplitude0",EAmp)	
+			td_WriteValue("DDSFrequency0",EFreq)	
+			td_WriteValue("DDSDCOffset0",EOffset)	
+			td_WriteValue("DDSPhaseOffset0",EPhase)
+			td_WriteValue("DDSDCOffset0",0)	
+	
+			// 3) Set up Feedback Loop for POtential
+			SetFeedbackLoop(4, "Always", "InputQ", 0, 0,  8000, 0, "Potential", 0)   // InputQ = $Lockin.0.Q , quadrature lockin output 
+
+			td_xsetinwave(0, "Event.2", "Potential", IM_CurrentFreq, "", interpval)
+			td_WriteString("Event.2", "Once")
+	
+			CheckInWaveTiming(IM_CurrentFreq)
+
+			Concatenate {IM_CurrentFreq}, IMWaves_CurrentFreq
+			
+			doscanfunc("stopengage")
+	
+			 k += 1
+	
+		while (k < numcycles)
+	
+		DeletePoints/M=1 0,1, IMWaves_CurrentFreq
+	
+		MatrixOp/O outputIM = sumrows(IMWaves_CurrentFreq) / numcols(IMWaves_CurrentFreq)
+		IMWaves[][j] = outputIM
+	
+		Redimension/N=-1 outputIM
+		IMWavesAvg[j] = mean(outputIM)
+	
+		j += 1
+	
+	while (j < numpnts(Frequency_List))
+	
+	Beep
+	
 End

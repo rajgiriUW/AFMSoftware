@@ -3,6 +3,8 @@
 
 /// Note, look at the testawg() below for how to write directly from the computer (faster than USB, more prone to errors)
 
+// THese are mostly interface functions for the Agilent/Keysight 3500 (the new, nice AWG)
+
 Function LoadTauWave(num)
 	Variable num
 	Variable defaultRM, instr
