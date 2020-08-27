@@ -217,7 +217,7 @@ End
 Function FrequencyLIst()
 
 	SetDataFolder root:packages:trEFM:PointScan:SKPM
-	Make/O/N=20 frequency_list
+	Make/O/N=22 frequency_list
 
 	frequency_list[0] = 1
 	frequency_list[1] = 1.8
@@ -239,8 +239,8 @@ Function FrequencyLIst()
 	frequency_list[17] = 17780
 	frequency_list[18] = 36600
 	frequency_list[19] = 56230
-//	frequency_list[20] = 100000
-//	frequency_list[21] = 177800
+	frequency_list[20] = 100000
+	frequency_list[21] = 177800
 //	frequency_list[22] = 366000
 //	frequency_list[23] = 562300
 //	frequency_list[24] = 1000000
@@ -284,10 +284,11 @@ Function PointScanIMSKPM(xpos, ypos, liftheight)
 	SetDataFolder root:packages:trEFM:PointScan:SKPM	
 	FrequencyList()
 	Wave Frequency_List
-	Make/O/N=(80000) IMWaves_CurrentFreq = NaN
+	Shuffle(Frequency_List)
+
 	Make/O/N=(80000) IM_CurrentFreq = NaN
 	
-	Make/O/N=(80000, numpnts(Frequency_List)) IMWaves = NaN
+	Make/O/N=(80000) IMWaves = NaN
 	Make/O/N=(numpnts(Frequency_List)) IMWavesAvg = NaN
 	
 	SetPassFilter(1, a = EFMFilters[%EFM][%A], b = EFMFilters[%EFM][%B], fast = EFMFilters[%EFM][%Fast], i = EFMFilters[%EFM][%i], q = EFMFilters[%EFM][%q])
@@ -295,45 +296,57 @@ Function PointScanIMSKPM(xpos, ypos, liftheight)
 	variable j = 0
 	variable k = 0 
 
+	Display IMWavesAvg vs Frequency_List
+	ModifyGraph log(bottom)=1
+	ModifyGraph mirror=1,fStyle=1,fSize=22,axThick=3;DelayUpdate
+	Label left "CPD (V)";DelayUpdate
+	Label bottom "Frequency (Hz)"
+	ModifyGraph mode=3,marker=16
+	
 	do
 
-		IMWaves_CurrentFreq =  NaN
+		SetDataFolder root:packages:trEFM:PointScan:SKPM
+	
+		Make/O/N=(80000) IMWaves_CurrentFreq = NaN
 	
 		k = 0
 
 		// 0) Set up WaveGenerator	
 		current_freq = Frequency_List[j]
 		setvfsqu(skpm_voltage, current_freq, "wg")	
-	
+//		LiftTo(liftheight, 0)
 		do
-	
-			SetDataFolder root:packages:trEFM:PointScan:SKPM
 	
 			IM_CurrentFreq = NaN
 		
-			StopFeedbackLoop(3)
-			StopFeedbackLoop(4)
-			StopFeedbackLoop(5)
-	
 			// Initial settings for outputs.
 			td_WV("Output.A", 0)
 			td_WV("Output.B", 0)
 
-			SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","OutB","DDS")
-
-			MoveXY(xpos, ypos) // Move to xy, keeping the tip raised away from the surface	
-
-			// 1) Find Surface and Lift tip to specified lift height
-			LiftTo(liftheight, 0)  // sets Feedback Loop 3 to Z-position
+			StopFeedbackLoop(4)
+			
+			if ( j == 0 && k ==0 )
 	
+				StopFeedbackLoop(3)
+				StopFeedbackLoop(5)
+	
+				SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","OutB","DDS")
+				MoveXY(xpos, ypos) // Move to xy, keeping the tip raised away from the surface	
+			endif
+			
+			if (j == 0 && k ==0 )
+				// 1) Find Surface and Lift tip to specified lift height
+				LiftTo(liftheight, 0)  // sets Feedback Loop 3 to Z-position
+			endif
+						
 			// 2) Switch up Crosspoint for Electrical Mode
 			SetCrosspoint ("FilterOut","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Defl","OutC","OutA","OutB","Ground","DDS","Ground")
 
 			td_WriteValue("DDSAmplitude0",EAmp)	
 			td_WriteValue("DDSFrequency0",EFreq)	
-			td_WriteValue("DDSDCOffset0",EOffset)	
+			//td_WriteValue("DDSDCOffset0",EOffset)	
 			td_WriteValue("DDSPhaseOffset0",EPhase)
-			td_WriteValue("DDSDCOffset0",0)	
+			//td_WriteValue("DDSDCOffset0",0)	
 	
 			// 3) Set up Feedback Loop for POtential
 			SetFeedbackLoop(4, "Always", "InputQ", 0, 0,  8000, 0, "Potential", 0)   // InputQ = $Lockin.0.Q , quadrature lockin output 
@@ -345,8 +358,15 @@ Function PointScanIMSKPM(xpos, ypos, liftheight)
 
 			Concatenate {IM_CurrentFreq}, IMWaves_CurrentFreq
 			
-			doscanfunc("stopengage")
-	
+			if (j == 0 && k ==0 )
+
+//				doscanfunc("stopengage")
+//				Sleep/S 1
+			endif
+
+			td_StopInWaveBank(-1)
+			td_StopOutWaveBank(-1)
+			
 			 k += 1
 	
 		while (k < numcycles)
@@ -354,15 +374,29 @@ Function PointScanIMSKPM(xpos, ypos, liftheight)
 		DeletePoints/M=1 0,1, IMWaves_CurrentFreq
 	
 		MatrixOp/O outputIM = sumrows(IMWaves_CurrentFreq) / numcols(IMWaves_CurrentFreq)
-		IMWaves[][j] = outputIM
+		Concatenate {outputIM}, IMWaves
 	
 		Redimension/N=-1 outputIM
 		IMWavesAvg[j] = mean(outputIM)
+	
+		DoUpdate
 	
 		j += 1
 	
 	while (j < numpnts(Frequency_List))
 	
+	DeletePoints/M=1 0,1, IMWaves
 	Beep
 	
+	setvfsin(0.01, 1) // lowers amplitude to turn off TTL signal
+
+	SetDataFolder root:packages:trEFM:PointScan:SKPM
+	
+End
+
+Function Shuffle(InWave)
+	Wave InWave
+	Variable n=numpnts(InWave)
+	Make/o/N=(n) order=enoise(n)
+	Sort order, InWave
 End

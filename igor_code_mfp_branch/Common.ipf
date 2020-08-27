@@ -476,7 +476,7 @@ Function LiftTo(liftHeight,tipVoltage,[lighton])
 	SetFeedbackLoop(2, "Always", LockinString +"R", setpoint, -pgain, -igain, -sgain, "Output.Z", 0)
 	
 	Sleep/s 1
-	readposition()
+//	readposition()
 	
 	// Lift the tip to the desired lift height.
 	Variable z1= td_readvalue("ZSensor") * GV("ZLVDTSens")	
@@ -484,7 +484,7 @@ Function LiftTo(liftHeight,tipVoltage,[lighton])
 	SetFeedbackLoop(3, "always",  "ZSensor", (z1 - liftHeight * 1e-9) / GV("ZLVDTSens"), 0,  EFMFilters[%ZHeight][%IGain], 0, "Output.Z", 0)
 
 	Sleep/s 1
-	readposition()
+//	readposition()
 
 	td_wv("Output.B", tipVoltage)
 	if (!ParamIsDefault(lighton) )
