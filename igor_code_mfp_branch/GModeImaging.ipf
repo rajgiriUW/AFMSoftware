@@ -621,8 +621,9 @@ Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 			endif
 
 			if (AvgWaves == 1)
-				wave avg_wave
+				
 				concatwaves(data_wave, scanpoints)
+				wave avg_wave
 				
 				Save/C/O/P = Path avg_wave as name
 			else
@@ -635,8 +636,8 @@ Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 				if (i == 0)  // only need first excitation
 					name = "CH2_000" + num2str(i) + ".ibw"	
 					if (AvgWaves == 1)
-						wave avg_wave
 						concatwaves(ch2_wave, scanpoints)
+						wave avg_wave
 				
 						Save/C/O/P = Path avg_wave as name
 					else

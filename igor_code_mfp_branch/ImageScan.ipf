@@ -1329,10 +1329,11 @@ Function ImageScanFFtrEFM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines
 			endif
 
 			if (AvgWaves == 1)
-				wave avg_wave
+
 				concatwaves(data_wave, scanpoints)
-				
+				wave avg_wave
 				Save/C/O/P = Path avg_wave as name
+
 			else
 				Save/C/O/P = Path data_wave as name
 			endif
@@ -1341,10 +1342,12 @@ Function ImageScanFFtrEFM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines
 				wave ch2_wave = root:packages:trEFM:ImageScan:FFtrEFM:ch2_wave
 				
 				if (i == 0)  // only need first excitation
+
 					name = "CH2_000" + num2str(i) + ".ibw"	
 					if (AvgWaves == 1)
-						wave avg_wave
+
 						concatwaves(ch2_wave, scanpoints)
+						wave avg_wave
 				
 						Save/C/O/P = Path avg_wave as name
 					else
@@ -1895,7 +1898,7 @@ Function ImageScanRingDownEFM(xpos, ypos, liftheight, scansizeX,scansizeY, scanl
 	// crosspoint needs to be updated to send the trigger to the gage card	
 	// Set up the crosspoint, note that KP crosspoint settings change between the trace and retrace and are reset below
 
-	SetCrosspoint ("FilterOut","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Defl","OutC","OutA","OutB","Ground","OutB","DDS")
+	SetCrosspoint ("FilterOut","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Defl","OutC","OutA","Ground","Ground","OutB","DDS")
 	
 	//stop all FBLoops except for the XY loops
 	StopFeedbackLoop(3)
