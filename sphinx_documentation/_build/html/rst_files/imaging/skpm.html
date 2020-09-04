@@ -1,0 +1,510 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>SKPM.ipf &mdash; AFM Igor Code  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="SKPMGainsPanel.ipf" href="skpmgainspanel.html" />
+    <link rel="prev" title="ImageScan.ipf" href="imagescan.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> AFM Igor Code
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">User Guides:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../userguides/trefm_fftrefm_guide.html">trEFM and FF-trEFM Experimental Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../userguides/trefm_setup_guide.html">trEFM Igor Setup Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../userguides/panels_guide.html">Panel Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Calibration:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/voltagescan.html">VoltageScan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/calcurve.html">CalCurve.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/forcecalibration.html">ForceCalibration.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/eleccal.html">ElecCal.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Nonlocal Photocurrent:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nlpc/nlpc_panel.html">NLPC_Panel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nlpc/nplc_scan.html">NPLC_Scan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nlpc/nplc_utils.html">NPLC_Utils.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Imaging:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="gmodeimaging.html">GModeImaging.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="imagescan.html">ImageScan.ipf</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">SKPM.ipf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#imagescanskpm">ImageScanSKPM</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#parameters">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pointscanskpm">PointScanSKPM</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#parameter">Parameter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pointscanskpmvoltagepulse">PointScanSKPMVoltagePulse</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Parameter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pointscanimfmskpm">PointScanIMFMSKPM</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#averageimskpmdata">averageIMSKPMdata</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#netaverageimskpmdata">NetAverageIMSKPMdata</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#netaverageimskpmdata2">NetAverageIMSKPMdata2</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#normnetaverageimskpmdata">NormNetAverageIMSKPMdata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pointscanskpmvoltagepulsetest">PointScanSKPMVoltagePulseTest</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id6">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#test">test</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id7">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#imagescanskpmspv">ImageScanSKPMSPV</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id8">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#skpmspvimagescanbutton">SKPMSPVImageScanButton</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id9">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#uselinenumforvoltage">UseLineNumforVoltage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id10">Parameters</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="skpmgainspanel.html">SKPMGainsPanel.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Point Scan:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../pointscan/gmodepointscan.html">GmodePointScan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pointscan/pointscan.html">PointScan.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Photoluminescence</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../pl/pl.html">PL.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Misc.</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../misc/useranalysis.html">UserAnalysis.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/redoanalysis.html">ReDoAnalysis.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Hardware Control:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/drivewaveeditor.html">DriveWaveEditor.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/wavegenerator.html">WaveGenerator.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/gpib.html">GPIB.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/triggerboxserial.html">TriggerBoxSerial.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/shuttercontrolandpanel.html">ShutterControlAndPanel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/gmode_triggers.html">GMode_Triggers.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/utilityfunctions.html">UtilityFunctions.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Panel Setup:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../panelsetup/trefminit.html">trEFMInit.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../panelsetup/trefmpanel.html">trEFMPanel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../panelsetup/transferfuncpanel.html">transferfuncpanel.ipf</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">AFM Igor Code</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>SKPM.ipf</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/rst_files/imaging/skpm.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="skpm-ipf">
+<h1>SKPM.ipf<a class="headerlink" href="#skpm-ipf" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="imagescanskpm">
+<h2>ImageScanSKPM<a class="headerlink" href="#imagescanskpm" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>xpos: variable</dt><dd><p>description</p>
+</dd>
+<dt>ypos: variable</dt><dd><p>description</p>
+</dd>
+<dt>liftheight: variable</dt><dd><p>description</p>
+</dd>
+<dt>scansizeX: variable</dt><dd><p>description</p>
+</dd>
+<dt>scansizeY: variable</dt><dd><p>description</p>
+</dd>
+<dt>scanlines: variable</dt><dd><p>description</p>
+</dd>
+<dt>scanpoints: variable</dt><dd><p>description</p>
+</dd>
+<dt>scanspeed: variable</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="pointscanskpm">
+<h2>PointScanSKPM<a class="headerlink" href="#pointscanskpm" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="parameter">
+<h3>Parameter<a class="headerlink" href="#parameter" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>xpos: variable</dt><dd><p>description</p>
+</dd>
+<dt>ypos: variable</dt><dd><p>description</p>
+</dd>
+<dt>liftheight: variable</dt><dd><p>description</p>
+</dd>
+<dt>dwelltime: variable</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="pointscanskpmvoltagepulse">
+<h2>PointScanSKPMVoltagePulse<a class="headerlink" href="#pointscanskpmvoltagepulse" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id1">
+<h3>Parameter<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>xpos: variable</dt><dd><p>description</p>
+</dd>
+<dt>ypos: variable</dt><dd><p>description</p>
+</dd>
+<dt>liftheight: variable</dt><dd><p>description</p>
+</dd>
+<dt>dwelltime: variable</dt><dd><p>description</p>
+</dd>
+<dt>appliedbias: variable</dt><dd><p>description</p>
+</dd>
+<dt>biasfreq: variable</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="pointscanimfmskpm">
+<h2>PointScanIMFMSKPM<a class="headerlink" href="#pointscanimfmskpm" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id2">
+<h3>Parameters<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>amplitude: variable</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="averageimskpmdata">
+<h2>averageIMSKPMdata<a class="headerlink" href="#averageimskpmdata" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id3">
+<h3>Parameters<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>numberOfFreq: variable</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="netaverageimskpmdata">
+<h2>NetAverageIMSKPMdata<a class="headerlink" href="#netaverageimskpmdata" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id4">
+<h3>Parameters<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>numberOfFreq: variable</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="netaverageimskpmdata2">
+<h2>NetAverageIMSKPMdata2<a class="headerlink" href="#netaverageimskpmdata2" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id5">
+<h3>Parameters<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>numberOfFreq: variable</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="normnetaverageimskpmdata">
+<h2>NormNetAverageIMSKPMdata<a class="headerlink" href="#normnetaverageimskpmdata" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<dl class="simple">
+<dt>numberOfFreq: variable</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="pointscanskpmvoltagepulsetest">
+<h2>PointScanSKPMVoltagePulseTest<a class="headerlink" href="#pointscanskpmvoltagepulsetest" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id6">
+<h3>Parameters<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>xpos: variable</dt><dd><p>description</p>
+</dd>
+<dt>ypos: variable</dt><dd><p>description</p>
+</dd>
+<dt>liftheight: variable</dt><dd><p>description</p>
+</dd>
+<dt>dwelltime: variable</dt><dd><p>description</p>
+</dd>
+<dt>appliedbias: variable</dt><dd><p>description</p>
+</dd>
+<dt>biasfreq: variable</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="test">
+<h2>test<a class="headerlink" href="#test" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id7">
+<h3>Parameters<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="imagescanskpmspv">
+<h2>ImageScanSKPMSPV<a class="headerlink" href="#imagescanskpmspv" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id8">
+<h3>Parameters<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>xpos: variable</dt><dd><p>description</p>
+</dd>
+<dt>ypos: variable</dt><dd><p>description</p>
+</dd>
+<dt>liftheight: variable</dt><dd><p>description</p>
+</dd>
+<dt>scansizeX: variable</dt><dd><p>description</p>
+</dd>
+<dt>scansizeY: variable</dt><dd><p>description</p>
+</dd>
+<dt>scanlines: variable</dt><dd><p>description</p>
+</dd>
+<dt>scanpoints: variable</dt><dd><p>description</p>
+</dd>
+<dt>scanspeed: variable</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="skpmspvimagescanbutton">
+<h2>SKPMSPVImageScanButton<a class="headerlink" href="#skpmspvimagescanbutton" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id9">
+<h3>Parameters<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>ctrlname: string</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="uselinenumforvoltage">
+<h2>UseLineNumforVoltage<a class="headerlink" href="#uselinenumforvoltage" title="Permalink to this headline">¶</a></h2>
+<p>function description</p>
+<div class="section" id="id10">
+<h3>Parameters<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>cba: struct</dt><dd><p>description</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="skpmgainspanel.html" class="btn btn-neutral float-right" title="SKPMGainsPanel.ipf" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="imagescan.html" class="btn btn-neutral float-left" title="ImageScan.ipf" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Ginger Lab
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
