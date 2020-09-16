@@ -1309,7 +1309,9 @@ Function ImageScanFFtrEFM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines
 		GageTransfer(1, data_wave)
 		
 		if (OneOrTwoChannels == 1)
-			GageTransfer(2, ch2_wave)
+			if (i == 0)
+				GageTransfer(2, ch2_wave)
+			endif
 		endif
 		
 		AnalyzeLineOffline(PIXELCONFIG, scanpoints, shift_wave, tfp_wave, data_wave)
