@@ -1,0 +1,860 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Panel Guide &mdash; AFM Igor Code  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="VoltageScan.ipf" href="../calibration/voltagescan.html" />
+    <link rel="prev" title="trEFM Igor Setup Guide" href="trefm_setup_guide.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> AFM Igor Code
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">User Guides:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="trefm_fftrefm_guide.html">trEFM and FF-trEFM Experimental Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="trefm_setup_guide.html">trEFM Igor Setup Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Panel Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#trefm-panel">trEFM Panel</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#main-panel">Main Panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#trefm-tab">trEFM tab</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fftrefm-tab">FFtrEFM tab</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#g-kpfm-tab">G-KPFM tab</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ring-down-tab">Ring Down tab</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#extra-tab">Extra tab</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#skpm-panel">SKPM Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pl-panel">PL Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#nlpc-panel">NLPC Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tf-panel">TF Panel</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Calibration:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/voltagescan.html">VoltageScan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/calcurve.html">CalCurve.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/forcecalibration.html">ForceCalibration.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/eleccal.html">ElecCal.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Nonlocal Photocurrent:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nlpc/nlpc_panel.html">NLPC_Panel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nlpc/nplc_scan.html">NPLC_Scan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nlpc/nplc_utils.html">NPLC_Utils.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Imaging:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/gmodeimaging.html">GModeImaging.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/imagescan.html">ImageScan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/skpm.html">SKPM.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/skpmgainspanel.html">SKPMGainsPanel.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Point Scan:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../pointscan/gmodepointscan.html">GmodePointScan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pointscan/pointscan.html">PointScan.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Photoluminescence</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../pl/pl.html">PL.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Misc.</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../misc/useranalysis.html">UserAnalysis.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/redoanalysis.html">ReDoAnalysis.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Hardware Control:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/drivewaveeditor.html">DriveWaveEditor.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/wavegenerator.html">WaveGenerator.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/gpib.html">GPIB.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/triggerboxserial.html">TriggerBoxSerial.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/shuttercontrolandpanel.html">ShutterControlAndPanel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/gmode_triggers.html">GMode_Triggers.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/utilityfunctions.html">UtilityFunctions.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Panel Setup:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../panelsetup/trefminit.html">trEFMInit.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../panelsetup/trefmpanel.html">trEFMPanel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../panelsetup/transferfuncpanel.html">transferfuncpanel.ipf</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">AFM Igor Code</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Panel Guide</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/rst_files/userguides/panels_guide.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="panel-guide">
+<h1>Panel Guide<a class="headerlink" href="#panel-guide" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="trefm-panel">
+<h2>trEFM Panel<a class="headerlink" href="#trefm-panel" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="main-panel">
+<h3>Main Panel<a class="headerlink" href="#main-panel" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="../../_images/trefm_main_labelled.jpg"><img alt="trefm_main" src="../../_images/trefm_main_labelled.jpg" style="width: 179.0px; height: 242.5px;" /></a></p>
+<ol class="upperalpha simple">
+<li><dl class="simple">
+<dt>Move Here</dt><dd><ul class="simple">
+<li><p>MoveXY()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Current XY</dt><dd><ul class="simple">
+<li><p>GetCurrentPosition()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Grab Offset</dt><dd><ul class="simple">
+<li><p>gv()</p></li>
+<li><p>MoveXY()</p></li>
+<li><p>GetCurrentPosition()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>0*!</dt><dd><ul class="simple">
+<li><p>description</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>LED is OFF / LED is ON</dt><dd><ul class="simple">
+<li><p>LightOnOff()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Grab Tune</dt><dd><ul class="simple">
+<li><p>SaveHardwareSettings()</p></li>
+<li><p>GrabTune()</p></li>
+<li><p>GetCurrentPosition()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Voltage Scan</dt><dd><ul class="simple">
+<li><p>CommitDriveWaves()</p></li>
+<li><p>VoltageScan()</p></li>
+<li><p>GetCurrentPosition()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Height Scan</dt><dd><ul class="simple">
+<li><p>CommitDriveWaves()</p></li>
+<li><p>HeightScan()</p></li>
+<li><p>GetCurrentPosition()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Edit LED Wave</dt><dd><ul class="simple">
+<li><p>LightWaveEditor()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Edit Voltage Wave</dt><dd><ul class="simple">
+<li><p>VoltageWaveEditor()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Edit Trigger Wave</dt><dd><ul class="simple">
+<li><p>TriggerWaveEditor()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>—&gt; RECOM</dt><dd><ul class="simple">
+<li><p>TrigPol()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ol>
+</div>
+<div class="section" id="trefm-tab">
+<h3>trEFM tab<a class="headerlink" href="#trefm-tab" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="../../_images/trefm_trefm_labelled.jpg"><img alt="trefm_trefm" src="../../_images/trefm_trefm_labelled.jpg" style="width: 227.0px; height: 242.5px;" /></a></p>
+<ol class="upperalpha simple">
+<li><dl class="simple">
+<dt>Point Scan</dt><dd><ul class="simple">
+<li><p>CommitDriveWaves()</p></li>
+<li><p>MultiplePointScan()</p></li>
+<li><p>PointScantrEFM()</p></li>
+<li><p>GetCurrentPosition()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Image Scan</dt><dd><ul class="simple">
+<li><p>CommitDriveWaves()</p></li>
+<li><p>ImageScan()</p></li>
+<li><p>GetCurrentPosition()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Fit Point Scan</dt><dd><ul class="simple">
+<li><p>description</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Edit Gains</dt><dd><ul class="simple">
+<li><p>description</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Save</dt><dd><ul class="simple">
+<li><p>SaveImageScan()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Clear</dt><dd><ul class="simple">
+<li><p>ClearImages()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ol>
+</div>
+<div class="section" id="fftrefm-tab">
+<h3>FFtrEFM tab<a class="headerlink" href="#fftrefm-tab" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="../../_images/trefm_fftrefm_labelled.jpg"><img alt="trefm_fftrefm" src="../../_images/trefm_fftrefm_labelled.jpg" style="width: 226.5px; height: 244.5px;" /></a></p>
+<ol class="upperalpha simple">
+<li><dl class="simple">
+<dt>Point Scan</dt><dd><ul class="simple">
+<li><p>CommitDriveWaves()</p></li>
+<li><p>PointScanFFtrEFM()</p></li>
+<li><p>GetCurrentPosition()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Image Scan</dt><dd><ul class="simple">
+<li><p>CommitDriveWaves()</p></li>
+<li><p>ImageScan()</p></li>
+<li><p>GetCurrentPosition()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Analysis Config</dt><dd><ul class="simple">
+<li><p>description</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Save</dt><dd><ul class="simple">
+<li><p>SaveImageScan()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Clear</dt><dd><ul class="simple">
+<li><p>ClearImages()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ol>
+</div>
+<div class="section" id="g-kpfm-tab">
+<h3>G-KPFM tab<a class="headerlink" href="#g-kpfm-tab" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="../../_images/trefm_gkpfm_labelled.jpg"><img alt="trefm_gkpfm" src="../../_images/trefm_gkpfm_labelled.jpg" style="width: 226.5px; height: 248.5px;" /></a></p>
+<ol class="upperalpha simple">
+<li><dl class="simple">
+<dt>Point Scan</dt><dd><ul class="simple">
+<li><p>CommitDriveWaves()</p></li>
+<li><p>PointScanGMode()</p></li>
+<li><p>GetCurrentPosition()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Image Scan</dt><dd><ul class="simple">
+<li><p>CommitDriveWaves()</p></li>
+<li><p>ImageScan()</p></li>
+<li><p>GetCurrentPosition()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Analysis Config</dt><dd><ul class="simple">
+<li><p>description</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Save</dt><dd><ul class="simple">
+<li><p>SaveImageScan()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Clear</dt><dd><ul class="simple">
+<li><p>ClearImages()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ol>
+</div>
+<div class="section" id="ring-down-tab">
+<h3>Ring Down tab<a class="headerlink" href="#ring-down-tab" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="../../_images/trefm_ringdown_labelled.jpg"><img alt="trefm_ringdown" src="../../_images/trefm_ringdown_labelled.jpg" style="width: 228.0px; height: 243.0px;" /></a></p>
+<ol class="upperalpha simple">
+<li><dl class="simple">
+<dt>Point Scan</dt><dd><ul class="simple">
+<li><p>CommitDriveWaves()</p></li>
+<li><p>MultiplePointScan()</p></li>
+<li><p>PointScanRingDown()</p></li>
+<li><p>GetCurrentPosition()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Image Scan</dt><dd><ul class="simple">
+<li><p>CommitDriveWaves()</p></li>
+<li><p>ImageScan()</p></li>
+<li><p>GetCurrentPosition()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Fit Point Scan</dt><dd><ul class="simple">
+<li><p>description</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Light is On / Light is Off</dt><dd><ul class="simple">
+<li><p>description</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Save</dt><dd><ul class="simple">
+<li><p>SaveImageScan()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Clear</dt><dd><ul class="simple">
+<li><p>ClearImages()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ol>
+</div>
+<div class="section" id="extra-tab">
+<h3>Extra tab<a class="headerlink" href="#extra-tab" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="../../_images/trefm_extra_labelled.jpg"><img alt="trefm_extra" src="../../_images/trefm_extra_labelled.jpg" style="width: 229.0px; height: 245.5px;" /></a></p>
+<ol class="upperalpha simple">
+<li><dl class="simple">
+<dt>Re-Analyze</dt><dd><ul class="simple">
+<li><p>ReDoAnalysis()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Force Calibration</dt><dd><ul class="simple">
+<li><p>GetFreeCantileverParms()</p></li>
+<li><p>GetForceParms()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Electrical Calibration</dt><dd><ul class="simple">
+<li><p>GetFreeCantileverParms()</p></li>
+<li><p>GetElecTip()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Elec+Noise Calibration (SLOW!)</dt><dd><ul class="simple">
+<li><p>GetFreeCantileverParms()</p></li>
+<li><p>GetElecNoiseTip()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Transfer Func with AWG</dt><dd><ul class="simple">
+<li><p>CommitDriveWaves()</p></li>
+<li><p>LoadChirp()</p></li>
+<li><p>PointScanTF()</p></li>
+<li><p>GetCurrentPosition()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Calibration Curve with Func Gen</dt><dd><ul class="simple">
+<li><p>CommitDriveWaves()</p></li>
+<li><p>TauScan()</p></li>
+<li><p>GetCurrentPosition()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ol>
+</div>
+</div>
+<div class="section" id="skpm-panel">
+<h2>SKPM Panel<a class="headerlink" href="#skpm-panel" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="../../_images/skpm_labelled.jpg"><img alt="skpm" src="../../_images/skpm_labelled.jpg" style="width: 327.0px; height: 208.5px;" /></a></p>
+<ol class="upperalpha simple">
+<li><dl class="simple">
+<dt>Image Scan</dt><dd><ul class="simple">
+<li><p>CommitDriveWaves()</p></li>
+<li><p>ImageScanSKPM()</p></li>
+<li><p>GetCurrentPosition()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Regular Point Scan</dt><dd><ul class="simple">
+<li><p>PointScanSKPM()</p></li>
+<li><p>GetCurrentPosition()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>With Pulsed Bias</dt><dd><ul class="simple">
+<li><p>PointScanSKPMVoltagePulse()</p></li>
+<li><p>GetCurrentPosition()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Turn on PS</dt><dd><ul class="simple">
+<li><p>PsON()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Turn off PS</dt><dd><ul class="simple">
+<li><p>PsOff()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ol>
+</div>
+<div class="section" id="pl-panel">
+<h2>PL Panel<a class="headerlink" href="#pl-panel" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="../../_images/pl_labelled.jpg"><img alt="pl" src="../../_images/pl_labelled.jpg" style="width: 170.5px; height: 319.0px;" /></a></p>
+<ol class="upperalpha simple">
+<li><dl class="simple">
+<dt>Get Cursor Pos</dt><dd><ul class="simple">
+<li><p>hcsr()</p></li>
+<li><p>vcsr()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Transfer position</dt><dd><ul class="simple">
+<li><p>TransferPosition()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Set AWG</dt><dd><ul class="simple">
+<li><p>GPIBsetup()</p></li>
+<li><p>writeGPIB()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Set LIA</dt><dd><ul class="simple">
+<li><p>LockinRecall()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Grab Offset from ARC</dt><dd><ul class="simple">
+<li><p>gv()</p></li>
+<li><p>MoveXY()</p></li>
+<li><p>GetCurrentPosition()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Move here</dt><dd><ul class="simple">
+<li><p>MoveXY()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Get Current XY</dt><dd><ul class="simple">
+<li><p>GetCurrentPosition()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Clear Images</dt><dd><ul class="simple">
+<li><p>ClearLBICImages()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Image Scan</dt><dd><ul class="simple">
+<li><p>LBICscan()</p></li>
+<li><p>GetCurrentPosition()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>0*!</dt><dd><ul class="simple">
+<li><p>description</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Save Data</dt><dd><ul class="simple">
+<li><p>SaveLBICImageScan()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ol>
+</div>
+<div class="section" id="nlpc-panel">
+<h2>NLPC Panel<a class="headerlink" href="#nlpc-panel" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="../../_images/nlpc_labelled.jpg"><img alt="nlpc" src="../../_images/nlpc_labelled.jpg" style="width: 210.0px; height: 316.5px;" /></a></p>
+<ol class="upperalpha simple">
+<li><dl class="simple">
+<dt>Test Connection</dt><dd><ul class="simple">
+<li><p>testbeep()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Move Here</dt><dd><ul class="simple">
+<li><p>MoveXY()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Current XY</dt><dd><ul class="simple">
+<li><p>GetCurrentPosition()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Grab Offset</dt><dd><ul class="simple">
+<li><p>gv()</p></li>
+<li><p>MoveXY()</p></li>
+<li><p>GetCurrentPosition()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Zero Laser</dt><dd><ul class="simple">
+<li><p>zero()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Default Settings</dt><dd><ul class="simple">
+<li><p>nplcinit()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Start Scanning</dt><dd><ul class="simple">
+<li><p>ImageScanNLPC()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ol>
+</div>
+<div class="section" id="tf-panel">
+<h2>TF Panel<a class="headerlink" href="#tf-panel" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="../../_images/tf_labelled.jpg"><img alt="tf" src="../../_images/tf_labelled.jpg" style="width: 224.5px; height: 207.0px;" /></a></p>
+<ol class="upperalpha simple">
+<li><dl class="simple">
+<dt>Pixel-wise Settings</dt><dd><ul class="simple">
+<li><p>PopMenuProcTF()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Line-wise Settings</dt><dd><ul class="simple">
+<li><p>PixelParams()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Save TF</dt><dd><ul class="simple">
+<li><p>CreateParametersFile()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Transfer Func with AWG</dt><dd><ul class="simple">
+<li><p>CommitDriveWaves()</p></li>
+<li><p>LoadChirp()</p></li>
+<li><p>PointScanTF()</p></li>
+<li><p>GetCurrentPosition()</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ol>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../calibration/voltagescan.html" class="btn btn-neutral float-right" title="VoltageScan.ipf" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="trefm_setup_guide.html" class="btn btn-neutral float-left" title="trEFM Igor Setup Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Ginger Lab
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

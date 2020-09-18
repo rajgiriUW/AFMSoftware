@@ -1,0 +1,652 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Welcome to AFM Igor Code documentation! &mdash; AFM Igor Code  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="trEFM and FF-trEFM Experimental Guide" href="rst_files/userguides/trefm_fftrefm_guide.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="#" class="icon icon-home" alt="Documentation Home"> AFM Igor Code
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">User Guides:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/userguides/trefm_fftrefm_guide.html">trEFM and FF-trEFM Experimental Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/userguides/trefm_setup_guide.html">trEFM Igor Setup Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/userguides/panels_guide.html">Panel Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Calibration:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/calibration/voltagescan.html">VoltageScan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/calibration/calcurve.html">CalCurve.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/calibration/forcecalibration.html">ForceCalibration.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/calibration/eleccal.html">ElecCal.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Nonlocal Photocurrent:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/nlpc/nlpc_panel.html">NLPC_Panel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/nlpc/nplc_scan.html">NPLC_Scan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/nlpc/nplc_utils.html">NPLC_Utils.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Imaging:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/imaging/gmodeimaging.html">GModeImaging.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/imaging/imagescan.html">ImageScan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/imaging/skpm.html">SKPM.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/imaging/skpmgainspanel.html">SKPMGainsPanel.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Point Scan:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/pointscan/gmodepointscan.html">GmodePointScan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/pointscan/pointscan.html">PointScan.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Photoluminescence</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/pl/pl.html">PL.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Misc.</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/misc/useranalysis.html">UserAnalysis.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/misc/redoanalysis.html">ReDoAnalysis.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Hardware Control:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/hardwarecontrol/drivewaveeditor.html">DriveWaveEditor.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/hardwarecontrol/wavegenerator.html">WaveGenerator.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html">GPIB.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/hardwarecontrol/triggerboxserial.html">TriggerBoxSerial.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/hardwarecontrol/shuttercontrolandpanel.html">ShutterControlAndPanel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/hardwarecontrol/gmode_triggers.html">GMode_Triggers.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/hardwarecontrol/utilityfunctions.html">UtilityFunctions.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Panel Setup:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/panelsetup/trefminit.html">trEFMInit.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html">trEFMPanel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/panelsetup/transferfuncpanel.html">transferfuncpanel.ipf</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">AFM Igor Code</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Welcome to AFM Igor Code documentation!</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="welcome-to-afm-igor-code-documentation">
+<h1>Welcome to AFM Igor Code documentation!<a class="headerlink" href="#welcome-to-afm-igor-code-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">User Guides:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/userguides/trefm_fftrefm_guide.html">trEFM and FF-trEFM Experimental Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/userguides/trefm_fftrefm_guide.html#flow-cell-tip-setup">Flow Cell/Tip Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/userguides/trefm_fftrefm_guide.html#setting-up-the-afm">Setting up the AFM</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/userguides/trefm_setup_guide.html">trEFM Igor Setup Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/userguides/panels_guide.html">Panel Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/userguides/panels_guide.html#trefm-panel">trEFM Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/userguides/panels_guide.html#skpm-panel">SKPM Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/userguides/panels_guide.html#pl-panel">PL Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/userguides/panels_guide.html#nlpc-panel">NLPC Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/userguides/panels_guide.html#tf-panel">TF Panel</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Calibration:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/calibration/voltagescan.html">VoltageScan.ipf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/calibration/voltagescan.html#getglobals">GetGlobals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/calibration/voltagescan.html#grabtune">GrabTune</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/calibration/voltagescan.html#voltagescan">VoltageScan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/calibration/voltagescan.html#heightscan">HeightScan</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/calibration/calcurve.html">CalCurve.ipf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/calibration/calcurve.html#tauscan">TauScan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/calibration/calcurve.html#phasescan180">PhaseScan180</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/calibration/calcurve.html#generatecurve">GenerateCurve</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/calibration/forcecalibration.html">ForceCalibration.ipf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/calibration/forcecalibration.html#amps">amps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/calibration/forcecalibration.html#amps-n">amps_n</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/calibration/forcecalibration.html#getforceparms">GetForceParms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/calibration/forcecalibration.html#getforceparms-light">GetForceParms_Light</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/calibration/forcecalibration.html#setupforcecalibration">SetupForceCalibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/calibration/forcecalibration.html#forcecalibration">ForceCalibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/calibration/forcecalibration.html#getfreecantileverparms">GetFreeCantileverParms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/calibration/forcecalibration.html#getsurfacecantileverparms">GetSurfaceCantileverParms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/calibration/forcecalibration.html#fwhm">FWHM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/calibration/forcecalibration.html#findadrive">findAdrive</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/calibration/forcecalibration.html#getforce">getForce</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/calibration/forcecalibration.html#liftto">LiftTo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/calibration/forcecalibration.html#lifttoelect">LiftToElect</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/calibration/eleccal.html">ElecCal.ipf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/calibration/eleccal.html#getelectip">GetElecTip</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/calibration/eleccal.html#getelecnoisetip">GetElecNoiseTip</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/calibration/eleccal.html#forcecalibration-noise">ForceCalibration_Noise</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Nonlocal Photocurrent:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/nlpc/nlpc_panel.html">NLPC_Panel.ipf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/nlpc/nlpc_panel.html#nplcinit">nplcinit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/nlpc/nlpc_panel.html#testbeepbutton">TestBeepButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/nlpc/nlpc_panel.html#nplc-reengagecheckproc">NPLC_REengageCheckProc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/nlpc/nlpc_panel.html#nlpc-scanbutton">NLPC_ScanButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/nlpc/nlpc_panel.html#nlpc-zerobutton">NLPC_ZeroButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/nlpc/nlpc_panel.html#nlpc-reset">NLPC_Reset</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/nlpc/nplc_scan.html">NPLC_Scan.ipf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/nlpc/nplc_scan.html#imagescannlpc">ImageScanNLPC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/nlpc/nplc_scan.html#testcalibration">testcalibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/nlpc/nplc_scan.html#nlpc2">NLPC2</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/nlpc/nplc_utils.html">NPLC_Utils.ipf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/nlpc/nplc_utils.html#testbeep">testbeep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/nlpc/nplc_utils.html#getinfo">getinfo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/nlpc/nplc_utils.html#getstep">getstep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/nlpc/nplc_utils.html#setstep">setstep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/nlpc/nplc_utils.html#getspeed">getspeed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/nlpc/nplc_utils.html#setspeed">setspeed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/nlpc/nplc_utils.html#getaccel">getaccel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/nlpc/nplc_utils.html#setaccel">setaccel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/nlpc/nplc_utils.html#getpos">getpos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/nlpc/nplc_utils.html#setpos">setpos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/nlpc/nplc_utils.html#zero">zero</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/nlpc/nplc_utils.html#closeport">closeport</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/nlpc/nplc_utils.html#testmotion">testmotion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/nlpc/nplc_utils.html#imagevariousbias">ImageVariousBias</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Imaging:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/imaging/gmodeimaging.html">GModeImaging.ipf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/imaging/gmodeimaging.html#imagescangmode">ImageScanGmode</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/imaging/imagescan.html">ImageScan.ipf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/imaging/imagescan.html#imagescantrefm">ImageScantrEFM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/imaging/imagescan.html#imagescanfftrefm">ImageScanFFtrEFM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/imaging/imagescan.html#saveimagescan">SaveImageScan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/imaging/imagescan.html#clearimages">ClearImages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/imaging/imagescan.html#gl-resaveimagefunc">gl_ResaveImageFunc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/imaging/imagescan.html#imagescanringdownefm">ImageScanRingDownEFM</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/imaging/skpm.html">SKPM.ipf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/imaging/skpm.html#imagescanskpm">ImageScanSKPM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/imaging/skpm.html#pointscanskpm">PointScanSKPM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/imaging/skpm.html#pointscanskpmvoltagepulse">PointScanSKPMVoltagePulse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/imaging/skpm.html#pointscanimfmskpm">PointScanIMFMSKPM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/imaging/skpm.html#averageimskpmdata">averageIMSKPMdata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/imaging/skpm.html#netaverageimskpmdata">NetAverageIMSKPMdata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/imaging/skpm.html#netaverageimskpmdata2">NetAverageIMSKPMdata2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/imaging/skpm.html#normnetaverageimskpmdata">NormNetAverageIMSKPMdata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/imaging/skpm.html#pointscanskpmvoltagepulsetest">PointScanSKPMVoltagePulseTest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/imaging/skpm.html#test">test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/imaging/skpm.html#imagescanskpmspv">ImageScanSKPMSPV</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/imaging/skpm.html#skpmspvimagescanbutton">SKPMSPVImageScanButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/imaging/skpm.html#uselinenumforvoltage">UseLineNumforVoltage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/imaging/skpmgainspanel.html">SKPMGainsPanel.ipf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/imaging/skpmgainspanel.html#setpgaincpd">SetPGainCPD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/imaging/skpmgainspanel.html#setigaincpd">SetIGainCPD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/imaging/skpmgainspanel.html#setdgaincpd">SetDGainCPD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/imaging/skpmgainspanel.html#setpgain">SetPGain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/imaging/skpmgainspanel.html#setigain">SetIGain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/imaging/skpmgainspanel.html#setdgain">SetDGain</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Point Scan:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/pointscan/gmodepointscan.html">GmodePointScan.ipf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/pointscan/gmodepointscan.html#pointscangmode">PointScanGMode</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/pointscan/pointscan.html">PointScan.ipf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/pointscan/pointscan.html#pointscantrefm">PointScantrEFM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/pointscan/pointscan.html#pointscanfftrefm">PointScanFFtrEFM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/pointscan/pointscan.html#pointscanringdown">PointScanRingDown</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Photoluminescence</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/pl/pl.html">PL.ipf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/pl/pl.html#lbicscan">LBICscan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/pl/pl.html#plpointscan">PLpointscan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/pl/pl.html#lbicinit">LBICInit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/pl/pl.html#lbicimagescanbutton">LBICImageScanButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/pl/pl.html#lbicimagescanbuttonsd">LBICImageScanButtonSD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/pl/pl.html#savelbicimagebutton">SaveLBICImageButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/pl/pl.html#savelbicimagescan">SaveLBICImageScan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/pl/pl.html#clearlbicimagesbutton">ClearLBICImagesButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/pl/pl.html#clearlbicimages">ClearLBICImages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/pl/pl.html#setlockinforpl">SetLockInForPL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/pl/pl.html#setawgforpl">SetAWGForPL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/pl/pl.html#getcursorposition">GetCursorPosition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/pl/pl.html#plxfast">PLXFast</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/pl/pl.html#uselinenum">UseLineNum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/pl/pl.html#transferposition">TransferPosition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/pl/pl.html#transferpositionbutton">TransferPositionButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/pl/pl.html#lbicscanframedown">LBICscanFrameDown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/pl/pl.html#buttonproc">ButtonProc</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Misc.</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/misc/useranalysis.html">UserAnalysis.ipf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/misc/useranalysis.html#makeimage">MakeImage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/misc/useranalysis.html#aver">aver</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/misc/redoanalysis.html">ReDoAnalysis.ipf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/misc/redoanalysis.html#redoanalysis">ReDoAnalysis</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Hardware Control:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/hardwarecontrol/drivewaveeditor.html">DriveWaveEditor.ipf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/drivewaveeditor.html#voltagewaveeditor">VoltageWaveEditor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/drivewaveeditor.html#triggerwaveeditor">TriggerWaveEditor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/drivewaveeditor.html#lightwaveeditor">LightWaveEditor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/drivewaveeditor.html#ringdownwaveeditor">RingDownWaveEditor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/drivewaveeditor.html#cutwaveeditor">CutWaveEditor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/drivewaveeditor.html#cutdriveproc">CutDriveProc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/drivewaveeditor.html#initarfedriveparmsgl">InitARFEDriveParmsGL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/drivewaveeditor.html#cleandrivewave">CleanDriveWave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/drivewaveeditor.html#appendcycles">AppendCycles</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/hardwarecontrol/wavegenerator.html">WaveGenerator.ipf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/wavegenerator.html#loadtauwave">LoadTauWave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/wavegenerator.html#loadchirpwave">LoadChirpWave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/wavegenerator.html#testawg">testawg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/wavegenerator.html#loadarbwave">LoadArbWave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/wavegenerator.html#turnoffawg">TurnOffAWG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/wavegenerator.html#clearawgerror">clearAWGError</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/wavegenerator.html#loadtaubwave">LoadTauBWave</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html">GPIB.ipf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#setefmvf">SetEFMvf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#initboardanddeviceliaawg">InitBoardAndDeviceLIAAWG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#findlisteners">FindListeners</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#gpibsetup">GPIBsetup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#getasciicode">GetAsciiCode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#writegpib">WriteGPIB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#readgpib">ReadGPIB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#getfreq">GetFreq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#getvolt">GetVolt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#setvf">SetVF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#setvfsqu">SetVFSqu</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#setvfsqubis">SetVFSquBis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#setvfsin">setVFsin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#getlockinxyro-1to4">GetLockInXYRO_1to4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#emptyreads">EmptyReads</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#setchannelioutputtoj">setChanneliOutputtoj</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#setchannelidisplayj">setChanneliDisplayj</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#setautophase">setAutoPhase</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#setreserve">setReserve</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#setlpslope">setLPslope</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#setsync">setSync</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#setfloat0orground1">setFloat0orGround1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#setnotch">setNotch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#sendlockinstring">sendLockinString</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#sendlockinquery">sendlockinQuery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#setlockinphase">setLockinPhase</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#setlockinsensitivity">setLockinSensitivity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#setlockinfreq">SetLockinFreq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#setlockinagain">SetLockinAgain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#getlockintimec">GetLockinTimeC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#lockinrecall">LockinRecall</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#setlockintimec">SetLockinTimeC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#getlockinsens">GetLockinSens</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#setupwfarbitrary">setupWFarbitrary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#wfarbitrary">WFarbitrary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#loadwf">LoadWF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#findvisaaddress">findVISAAddress</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#pssetting">psSetting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#psoff">psOff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#pson">psOn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gpib.html#psrst">psRst</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/hardwarecontrol/triggerboxserial.html">TriggerBoxSerial.ipf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/triggerboxserial.html#phaseset">phaseset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/triggerboxserial.html#phaseres">phaseres</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/triggerboxserial.html#freqset">freqset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/triggerboxserial.html#trigpol">trigpol</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/hardwarecontrol/shuttercontrolandpanel.html">ShutterControlAndPanel.ipf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/shuttercontrolandpanel.html#openportbutton">OpenPortButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/shuttercontrolandpanel.html#closeportbutton">ClosePortButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/shuttercontrolandpanel.html#vdtinitbutton">VDTinitButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/shuttercontrolandpanel.html#initshutterbutton">InitShutterButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/shuttercontrolandpanel.html#openshutterbutton">OpenShutterButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/shuttercontrolandpanel.html#closeshutterbutton">CloseShutterButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/shuttercontrolandpanel.html#selectport">SelectPort</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/shuttercontrolandpanel.html#closetport">ClosetPort</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/shuttercontrolandpanel.html#initshutter">InitShutter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/shuttercontrolandpanel.html#setshutterangle">SetShutterAngle</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/hardwarecontrol/gmode_triggers.html">GMode_Triggers.ipf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gmode_triggers.html#setuppulse">setupPulse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gmode_triggers.html#line-trigger">Line_Trigger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gmode_triggers.html#useroutandtrigger">UserOutAndTrigger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/gmode_triggers.html#kpfm-lim">KPFM_lim</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/hardwarecontrol/utilityfunctions.html">UtilityFunctions.ipf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/utilityfunctions.html#resetall">ResetAll</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/utilityfunctions.html#setcrosspoint">SetCrossPoint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/utilityfunctions.html#setpassfilter">SetPassFilter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/utilityfunctions.html#setfeedbackloop">SetFeedbackLoop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/utilityfunctions.html#setfeedbackloopcypher">SetFeedbackLoopCypher</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/utilityfunctions.html#stopfeedbackloop">StopFeedbackLoop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/utilityfunctions.html#stopfeedbackloopcypher">StopFeedbackLoopCypher</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/utilityfunctions.html#readposition">ReadPosition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/utilityfunctions.html#movexyz">MoveXYZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/utilityfunctions.html#movexy">MoveXY</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/utilityfunctions.html#checkinwavetiming">CheckInWaveTiming</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/utilityfunctions.html#lightonoff">LightOnOff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/utilityfunctions.html#wavegenerator">wavegenerator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/hardwarecontrol/utilityfunctions.html#wavegeneratoroffset">wavegeneratoroffset</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Panel Setup:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/panelsetup/trefminit.html">trEFMInit.ipf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefminit.html#trefminit">trEFMInit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefminit.html#setdefaultgainsandfilters">SetDefaultGainsAndFilters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefminit.html#savehardwaresettings">SaveHardwareSettings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefminit.html#makepixelconfig">MakePixelConfig</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefminit.html#pson-button">PSON_button</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefminit.html#psoff-button">PSOff_button</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html">trEFMPanel.ipf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#lightonbutton">LightOnButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#editgainsbutton">EditGainsButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#fitshiftwaveavgbutton">FitShiftWaveAvgButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#analysissettingsbutton">AnalysisSettingsButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#oneortwochannelscheckbox">OneOrTwoChannelsCHeckBox</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#updateconf">UpdateConf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#lightoffbutton">LightOffButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#grabtunebutton">GrabTuneButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#voltagescanbutton">VoltageScanButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#heightscanbutton">HeightScanButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#edittipwavebutton">EditTipWaveButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#editlightwavebutton">EditLightWaveButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#editringdownwavebutton">EditRingDownWaveButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#edittriggerwavebutton">EditTriggerWaveButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#recombutton">RecomButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#lightonoroffbutton">LightOnOrOffButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#chargebutton">ChargeButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#multiplepointscan">MultiplePointScan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#trefmpointscanbutton">trEFMPointScanButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#ringdownpointscanbutton">RingDownPointScanButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#trefmimagescanbutton">trEFMImageScanButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#fftrefmimagescanbutton">FFtrEFMImageScanButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#createparametersfile">CreateParametersFile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#skpmimagescanbutton">SKPMImageScanButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#skpmpointscanbutton">SKPMPointScanButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#skpmpointscanbuttonpulsedbias">SKPMPointScanButtonPulsedBias</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#fftrefmpointscanbutton">FFtrEFMPointScanButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#gmodeimagescanbutton">GmodeImageScanButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#gmodepointscanbutton">GModePointScanButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#gmodetransferfuncbutton2">GModeTransferFUncButton2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#commitdrivewaves">CommitDriveWaves</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#saveimagebutton">SaveImageButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#clearimagesbutton">ClearImagesButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#moveherebutton">MoveHereButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#getcurrentposition">GetCurrentPosition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#getcurrentpositionbutton">GetCurrentPositionButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#getmfpoffset">GetMFPOffset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#tabproc">TabProc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#lockinselectpopup">LockinSelectPopup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#popmenuproc">PopMenuProc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#setphasedelay">SetPhaseDelay</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#setphase">SetPhase</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#forcecalbutton">ForceCalButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#eleccalbutton">ElecCalButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#eleccal-noise-button">ElecCal_Noise_Button</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#lightcalbutton">LightCalButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#calcurvebutton">CalCurveButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#redoanalysisbutton">RedoAnalysisButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#ringdownimagescanbutton">RingDownImageScanButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#trefmxfast">trEFMXFast</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/trefmpanel.html#about">About</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rst_files/panelsetup/transferfuncpanel.html">transferfuncpanel.ipf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/transferfuncpanel.html#tfpanelinit">TFPanelInit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/transferfuncpanel.html#popmenuproctf">PopMenuProcTF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/transferfuncpanel.html#pixelparams">PixelParams</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/transferfuncpanel.html#lineparams">LineParams</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/transferfuncpanel.html#gmodetransferfuncbutton">GModeTransferFuncButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/transferfuncpanel.html#processtf">ProcessTF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/transferfuncpanel.html#loadchirp">LoadChirp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/transferfuncpanel.html#newchirp">NewChirp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/transferfuncpanel.html#savetfbutton">SaveTFButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_files/panelsetup/transferfuncpanel.html#pointscantf">PointScanTF</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="rst_files/userguides/trefm_fftrefm_guide.html" class="btn btn-neutral float-right" title="trEFM and FF-trEFM Experimental Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Ginger Lab
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

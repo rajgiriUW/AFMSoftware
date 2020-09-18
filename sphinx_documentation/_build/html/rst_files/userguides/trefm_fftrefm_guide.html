@@ -1,0 +1,566 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>trEFM and FF-trEFM Experimental Guide &mdash; AFM Igor Code  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="trEFM Igor Setup Guide" href="trefm_setup_guide.html" />
+    <link rel="prev" title="Welcome to AFM Igor Code documentation!" href="../../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> AFM Igor Code
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">User Guides:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">trEFM and FF-trEFM Experimental Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#flow-cell-tip-setup">Flow Cell/Tip Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#setting-up-the-afm">Setting up the AFM</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="trefm_setup_guide.html">trEFM Igor Setup Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="panels_guide.html">Panel Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Calibration:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/voltagescan.html">VoltageScan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/calcurve.html">CalCurve.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/forcecalibration.html">ForceCalibration.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/eleccal.html">ElecCal.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Nonlocal Photocurrent:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nlpc/nlpc_panel.html">NLPC_Panel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nlpc/nplc_scan.html">NPLC_Scan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nlpc/nplc_utils.html">NPLC_Utils.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Imaging:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/gmodeimaging.html">GModeImaging.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/imagescan.html">ImageScan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/skpm.html">SKPM.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/skpmgainspanel.html">SKPMGainsPanel.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Point Scan:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../pointscan/gmodepointscan.html">GmodePointScan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pointscan/pointscan.html">PointScan.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Photoluminescence</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../pl/pl.html">PL.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Misc.</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../misc/useranalysis.html">UserAnalysis.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/redoanalysis.html">ReDoAnalysis.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Hardware Control:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/drivewaveeditor.html">DriveWaveEditor.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/wavegenerator.html">WaveGenerator.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/gpib.html">GPIB.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/triggerboxserial.html">TriggerBoxSerial.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/shuttercontrolandpanel.html">ShutterControlAndPanel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/gmode_triggers.html">GMode_Triggers.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/utilityfunctions.html">UtilityFunctions.ipf</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Panel Setup:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../panelsetup/trefminit.html">trEFMInit.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../panelsetup/trefmpanel.html">trEFMPanel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../panelsetup/transferfuncpanel.html">transferfuncpanel.ipf</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">AFM Igor Code</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>trEFM and FF-trEFM Experimental Guide</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/rst_files/userguides/trefm_fftrefm_guide.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="trefm-and-ff-trefm-experimental-guide">
+<h1>trEFM and FF-trEFM Experimental Guide<a class="headerlink" href="#trefm-and-ff-trefm-experimental-guide" title="Permalink to this headline">¶</a></h1>
+<p>Phillip Cox, October 2012</p>
+<div class="section" id="flow-cell-tip-setup">
+<h2>Flow Cell/Tip Setup<a class="headerlink" href="#flow-cell-tip-setup" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p>Typically these experiments are performed with the sample housed
+within a flow cell. If the sample is simply in air, then it will
+photo-oxidize during the process of imaging, and performance will
+degrade with time.</p></li>
+<li><p>To setup a flow cell, you will need several items:</p>
+<blockquote>
+<div><p><a class="reference internal" href="../../_images/image1.jpg"><img alt="image1" src="../../_images/image1.jpg" style="width: 3.24419in; height: 1.32524in;" /></a> <a class="reference internal" href="../../_images/image2.jpg"><img alt="image2" src="../../_images/image2.jpg" style="width: 2.2093in; height: 1.6531in;" /></a></p>
+</div></blockquote>
+</li>
+<li><p>Specifically, you’ll need the flow cell housing (the
+plastic beige thing), an o-ring that fits inside this casing, a
+glass disk, a thin copper wire, some tape, a spanner wrench, and a
+metal ring that fastens the glass disk in place. All of these items
+can be found in the tiny gray cubbies on top of the workbench in
+G44B. Don’t forget the small plastic red/clear screw that caps the
+air line on the flow cell.</p>
+<p><a class="reference internal" href="../../_images/image3.jpg"><img alt="image3" src="../../_images/image3.jpg" style="width: 2.72083in; height: 2.93542in;" /></a></p>
+</li>
+<li><p>Begin by cleaning the glass disk. We normally clean twice, first
+with ethanol, followed by a glass-cleaner. After each wash, wipe the
+disk off thoroughly with a kim wipe. If there is leftover epoxy from
+a previous user, use a razor blade to scrape it off the disk,
+holding the razor nearly parallel to the disk. Be careful and wear
+gloves during this process. It is almost always a good idea to use a
+fresh, clean, sharp razor.</p></li>
+<li><p>Once the disk is clean, it can be placed onto the flow cell. First
+make sure the small rubber o-ring is in place on the inside of the
+cell, then cover it with the glass disk. Using a spanner wrench,
+screw in the metal disk on top of the glass disk. Over-tightening
+can cause the metal disk to pop out, so only apply a reasonable
+amount of pressure.</p></li>
+<li><p>Since the sample needs to be grounded, we thread a copper wire
+through one of the ports in the flow cell. See the picture to see
+how this is done. Since the copper wire will eventually be attached
+to the sample with silver paint, tape should be used to secure the
+wire firmly in place on the glass disk. Ensure that the wire is
+tightly secured by moving the copper wire around on the outside of
+the flow cell; if little movement occurs on the inside of the flow
+cell, then the wire is secured well.</p></li>
+<li><p>Before going up to the glovebox, you’ll need a tip secured in a chip
+holder, and the chip holder needs to be secured with what Asylum
+calls a “paddle holder.” The tips we normally use for trEFM are
+silicon probes coated with Cr/Pt, with a force constant of 30-40 N/m
+and a resonant frequency of around 300 kHz.</p></li>
+<li><p>Start by grabbing a tapping mode chip holder that has a flow cell skirt
+attached, and set it on top of a chip holder platform:</p>
+<p><a class="reference internal" href="../../_images/image4.jpg"><img alt="image4" src="../../_images/image4.jpg" style="width: 1.77847in; height: 1.74375in;" /></a></p>
+</li>
+<li><p>Using a small phillips screwdriver, loosen the screw on
+top of the chip holder, but do not remove it completely. Using small
+metal forceps (I like the curvy ones, I think they grip best) gently
+grab a tip from the box and place it on top of the chip holder. If
+you can, Place the back-end of the tip underneath the metal platform
+that is tightened by the screw you just loosened. The tip should be
+well-centered under the metal platform, and should extend out far
+enough over the clear quartz area. Once the tip is in place, tighten
+the screw (once again, not too tight). Test that the tip is secure
+by applying a small amount of pressure to the <em>side</em> of the tip with
+metal tweezers. If the tip doesn’t move, you are in business.</p>
+<p><a class="reference internal" href="../../_images/image5.jpg"><img alt="image5" src="../../_images/image5.jpg" style="width: 2.84861in; height: 2.13125in;" /></a></p>
+</li>
+<li><p>There are two types of paddle holders and your choice is completely
+dependent on personal preference. Either type is essentially
+composed of two paddles that you’ll want to place underneath the
+metal washer that holds the chip holder to the flow cell skirt. See
+picture for positioning. If using the black paddle holder, the
+paddles can be held in place by using the small metal spanner with
+two small screws. Thumb-tight is all that is necessary.</p>
+<p><a class="reference internal" href="../../_images/image6.jpg"><img alt="image6" src="../../_images/image6.jpg" style="width: 1.6in; height: 1.66in;" /></a>
+<a class="reference internal" href="../../_images/image7.jpg"><img alt="image7" src="../../_images/image7.jpg" style="width: 1.60248in; height: 1.66279in;" /></a></p>
+</li>
+<li><p>The last thing you’ll need is either some cotton-swabs or small
+pipette tips, and a paper “target.” If you use cotton-swabs, cut
+them into thirds. These will be used for mixing and placing epoxy.</p></li>
+<li><p>Before moving on, it is best to take the tip and put it on the AFM
+for alignment. Use your preferred method to find the tip with the
+laser within the AFM. Details on how to align a tip can be found in
+another SOP. When done, take it off the AFM and pack it up with
+everything else.</p></li>
+<li><p>When everything is ready, put it in a small container and take it up
+to the glovebox where your samples are.</p></li>
+<li><p>After everything is loaded in the glovebox, start by placing the
+chip holder and flow cell onto some clean kim wipes in as much of an
+open, clean space as possible. You’ll want a decent amount
+of room to work in. Put the flow cell on top of the paper
+target for positioning. You will also need to put gloves on to
+prevent epoxy from getting on the glovebox gloves.</p>
+<p><a class="reference internal" href="../../_images/image8.jpg"><img alt="image8" src="../../_images/image8.jpg" style="width: 2.54792in; height: 1.90694in;" /></a></p>
+</li>
+<li><p>Grab a small square of aluminum foil and place it on a
+flat, sturdy surface. Generally there is a 24 well-container in the
+glovebox that is labeled “Ginger Epoxy.” Using your cotton swab
+thirds (the wood side, not the cotton!), grab a small amount of each
+type of epoxy from separate wells (using a different cotton swab for
+each material) and rub it off onto the aluminum foil. Again with a
+cotton swab wood, mix the two chemicals together well in equal
+proportions. When they are well mixed, grab a small amount with a
+cotton swab and place two <em>small</em> dots diagonally apart from each other
+on the glass disk.</p>
+<p><a class="reference internal" href="../../_images/image9.jpg"><img alt="image9" src="../../_images/image9.jpg" style="width: 2.57222in; height: 1.92986in;" /></a></p>
+</li>
+<li><p>Quickly grab your sample with forceps and place it glass-side down
+on top of the epoxy. It is important to make sure the portion of the
+sample that has ITO is in line with the copper wire. If you miss the
+positioning slightly, it’s okay, just use forceps to slide the
+sample around slightly until it is in a good position.</p></li>
+<li><p>After the epoxy dries (maybe about 5 minutes) use forceps
+to make a small scratch in the sample, being sure to remove all of
+the active layer and PEDOT:PSS, so that the wire can be in contact
+with the ITO underneath. Use forceps to position the wire flat on top of
+the scratched area. Paint it down with silver paint.</p>
+<p><a class="reference internal" href="../../_images/image10.jpg"><img alt="image10" src="../../_images/image10.jpg" style="width: 2.04583in; height: 1.86042in;" /></a></p>
+</li>
+<li><p>When the silver paint is dry, attach the chip holder to the flow
+cell with the three thumb-screws. Align the straight edge of the
+flow cell with the straight edge of the paddle holder. See picture
+for positioning.</p></li>
+<li><p>Now head back to the AFM!</p></li>
+</ol>
+</div>
+<div class="section" id="setting-up-the-afm">
+<h2>Setting up the AFM<a class="headerlink" href="#setting-up-the-afm" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p><a class="reference internal" href="../../_images/image11.jpg"><img alt="image11" src="../../_images/image11.jpg" style="width: 2.39514in; height: 1.97153in;" /></a></p>
+</div></blockquote>
+<ol class="arabic">
+<li><p>To set up the nitrogen/air flow, go to the back of the AFM.
+There should be a three-way valve connecting white plastic hoses to
+two flowmeters that are taped to a wooden stand. One of the
+flowmeters controls nitrogen flow, and the other controls the house
+air flow. Make sure the flowmeters are set to zero. Start by opening
+the main valve on the nitrogen tank. Open the three-way valve to the
+nitrogen tube, then adjust the flowmeter to read 0.1. Inside the AFM
+enclosure is a small plastic tube that attaches to the flow cell. You
+should be able to feel nitrogen coming out with a very light force;
+it can be necessary to put the tube outlet up to your lips to feel
+anything. This is as it should be. Leave the tube as it is for now.</p>
+<p><a class="reference internal" href="../../_images/image12.jpg"><img alt="image12" src="../../_images/image12.jpg" style="width: 2.45349in; height: 2.10286in;" /></a>
+<a class="reference internal" href="../../_images/image13.jpg"><img alt="image13" src="../../_images/image13.jpg" style="width: 2.38372in; height: 2.10985in;" /></a></p>
+</li>
+<li><p>Put the AFM head upside down on the side platform inside
+the enclosure. Attach the flow cell to the underside of the AFM. If
+you’re using the black paddle holder, you’ll need to carefully
+remove the metal spanner holding the paddles in place. It’s easiest
+to completely unscrew one side, and then unscrew the other. Be
+careful not to let the paddles slip out of place.</p>
+<p><a class="reference internal" href="../../_images/image14.jpg"><img alt="image14" src="../../_images/image14.jpg" style="width: 2.825in; height: 2.12014in;" /></a></p>
+</li>
+<li><p>Put the AFM head back upright onto the microscope. Attach the
+nitrogen/air flow tube to the flow cell, as well as the ground wire
+to the copper electrode on the right of the microscope. At this
+point you can start a timer for 30 minutes, since the sample is now
+under a constant nitrogen flow. The sample will need to be
+completely purged with nitrogen before starting any trEFM scans,
+otherwise the device runs the risk of being photo-oxidized and
+damaged.</p></li>
+<li><p>Lower the front and back of the AFM head until the flow
+cell fits snugly and flat in the microscope’s objective hole. Often
+it will sort of “snap” or “click” into place. Once it’s in place,
+you can <strong>now</strong> <strong>push the paddles in</strong>, essentially releasing the
+chip holder. If you push the paddles in prior to getting the flow
+cell into the objective hole, the tip is likely to crash into the
+surface of the sample and break.</p>
+<p><a class="reference internal" href="../../_images/image15.jpg"><img alt="image15" src="../../_images/image15.jpg" style="width: 3.08125in; height: 2.31181in;" /></a></p>
+</li>
+<li><p>Now it’s a good idea to tune the tip. Go to the “Tune”
+tab of the Master Panel. For these tips, we generally tune to an
+amplitude of 0.800 V (or 800 mV) with a target percent of -5.0%. Hit
+auto-tune (queue jokes about modern pop music). Once the program
+finishes, you should see it report the “Drive Amplitude” of the tip
+in the same Tune panel. If the tip is good, its drive amplitude
+should be anywhere from 20 to ~150. Anything above this is
+questionable for trEFM and could be the result of a damaged tip, a
+misaligned tip, or a misaligned photodiode.</p>
+<p><a class="reference internal" href="../../_images/image16.jpg"><img alt="image16" src="../../_images/image16.jpg" style="width: 3.41806in; height: 1.84861in;" /></a></p>
+</li>
+<li><p>Go back to the Main panel of the Master Panel. Change the
+Set Point to 650 mV. Now you can approach the surface of the sample.
+Click engage on the “Sum and Deflection Meter”, and start lowering
+the AFM head slowly and evenly between the front and back. After
+hitting engage, the Z-Voltage should increase to its maximum value
+of 150. This means that the piezo element which controls the height
+of the tip is fully extended. It’s a good practice to place the
+small level on top of the AFM head and make sure the tip is
+balanced. When the tip gets close to the surface, the amplitude will
+drop quickly and once it reaches the set point, the computer will
+issue a short “beep” and the Z-Voltage will start dropping very
+quickly. When you see the amplitude begin to drop, it’s a good idea
+to start lowering the AFM head only with the front lever. Lower the
+front lever until the Z-Voltage reads about 70, then click withdraw.</p>
+<p><a class="reference internal" href="../../_images/image17.jpg"><img alt="image17" src="../../_images/image17.jpg" style="width: 4.38333in; height: 1.94028in;" /></a></p>
+</li>
+<li><p>Retune the tip, then hit engage again, and make sure the Z-Voltage
+is at about 70.</p></li>
+<li><p>At this point the sample needs to continue purging under nitrogen
+for 30 minutes.</p></li>
+<li><p>Once the sample has purged, it’s a good idea to start
+with a simple topography scan. Under the main panel of the Master
+Panel, there are a number of settings for the size, shape, angle,
+position, and feedback settings for a topography image. I normally
+start by doing a 5x5 μm scan with 256 points and lines. Before
+starting the scan, click on “Path” and on the new window that pops
+up click “Browse” and navigate to the folder you want to save data
+in. When you’re ready to begin a scan, hit “Do Scan.” Usually I
+immediately hit “Last Scan” right after beginning, otherwise the
+program will just continually scan more and more images until you
+hit stop. Clicking Last Scan makes it so that the program stops
+after taking only one image.</p>
+<p><a class="reference internal" href="../../_images/image18.jpg"><img alt="image18" src="../../_images/image18.jpg" style="width: 2.63194in; height: 2.87153in;" /></a></p>
+</li>
+<li><p>Once the scan starts, it is usually necessary to right-click the
+HeightRetrace window and select “Fix Scale.” It may also be
+necessary to manually change the scale by changing the “Data Scale”
+and “Data Offset” values under the “Ht” tab of the Master Channel
+Panel. Within this window, make sure the “Save Planefit” option is
+set to None. This will force Igor to save the raw data, and not
+pre-processed data.</p></li>
+<li><p>You should see a topography image begin to form. To maximize the
+resolution and quality of the image, you should optimize the
+feedback settings. Generally the only ones that need changing are
+the Set Point, Integral Gain, and Feedback Filter.</p>
+<ol class="loweralpha">
+<li><p>The set point essentially adjusts how close the tip is
+to the surface. The set point should be low enough that it
+responds quickly to the van der Waal’s forces of the surface as
+it scans, but high enough that the tip doesn’t crash into the
+surface or pick up debris and get damaged.</p>
+<p><a class="reference internal" href="../../_images/image19.jpg"><img alt="image19" src="../../_images/image19.jpg" style="width: 2.55694in; height: 1.54583in;" /></a></p>
+</li>
+<li><p>Integral gain adjusts how quickly or slowly the feedback system
+responds to changes in the surface topography. If the integral
+gain is really low, then the tip will move up too slowly if it
+encounters a high feature in the topography. Consequently, if the
+integral gain is too high, the tip will respond too rapidly to
+changes in the topography, causing “waves” in the topography
+image that are a result of the feedback system overcorrecting,
+and not the actual surface of the sample. Generally it is a good
+idea to increase the integral gain until waves appear, and then
+reduce it slightly until the waves go away.</p></li>
+<li><p>The feedback filter will cut out any changes in the tip frequency
+that are below a particular cutoff point. We typically use a
+value of 1.0-3.0 kHz.</p></li>
+</ol>
+</li>
+<li><p>If everything looks good, a high-resolution image can be taken by
+increasing the number of points and lines. The number of points to
+lines needs to be proportional to the width and length of the image
+size. Generally, an image with 512 points and lines is sufficient.</p></li>
+</ol>
+<p>Setting up the Trigger Box</p>
+<p>The trigger box is an external piece of electronics that does a couple
+things. Overall, it triggers the LED to turn on at a particular point in
+the phase of the oscillation of the tip, as well as the analog to
+digital converter (the Gage card) to start collecting raw deflection
+data for a particular window of time. Setup of the box can be a bit
+confusing if it’s not already hooked up, but thankfully measures have
+been taken to explicitly label each and every BNC cable. Should any
+labels or BNC cables be missing, the following documents each connection
+that must be made.</p>
+<ol class="arabic simple">
+<li><p>Connect a BNC between the left-most “X-DEFL INP” on the trigger box
+and “Ch 2” on the Gage card.</p></li>
+<li><p>Connect the deflection BNC coming out of the AFM enclosure to the
+right-most “X-DEFL INP” on the Gage card.</p></li>
+<li><p>The toggle on the trigger box should be set to “1 kHz.”</p></li>
+<li><p>Connect a BNC between “TRIGGER INP” and BNC Output 1 on the ARC2.</p></li>
+<li><p>Connect a BNC between “TTL TRIG 50-ohm” and “Trig” on the Gage card.</p></li>
+<li><p>Plug the BNC coming out of the AFM enclosure from the LEDs to “LED
+Out” on the trigger box.</p></li>
+<li><p>Connect the LED Pwr BNC from the trigger box to a power supply (we
+usually use the Tenma Power Supply). Note that the Protek Power
+Supply is no longer used but remains on the computer table should it
+become necessary.</p></li>
+</ol>
+<blockquote>
+<div><p>See the following images for identification/naming of equipment:</p>
+<p><a class="reference internal" href="../../_images/image20.jpg"><img alt="image20" src="../../_images/image20.jpg" style="width: 3.01163in; height: 2.25992in;" /></a><a class="reference internal" href="../../_images/image21.jpg"><img alt="image21" src="../../_images/image21.jpg" style="width: 2.98837in; height: 2.24247in;" /></a></p>
+<p><a class="reference internal" href="../../_images/image22.jpg"><img alt="image22" src="../../_images/image22.jpg" style="width: 3.00616in; height: 2.25581in;" /></a> <a class="reference internal" href="../../_images/image23.jpg"><img alt="image23" src="../../_images/image23.jpg" style="width: 2.99396in; height: 2.24419in;" /></a><a class="reference internal" href="../../_images/image24.jpg"><img alt="image24" src="../../_images/image24.jpg" style="width: 3.04049in; height: 2.27907in;" /></a></p>
+</div></blockquote>
+<ol class="arabic simple">
+<li><p>The last thing to do is to make sure everything is turned on. Each
+power supply needs to be powered on and the “Output” switches pushed
+in. Make sure the voltage on the Tenma power supply isn’t so large
+that it will burn out the LED (do this BEFORE pushing in the output
+switch). The trigger box itself has two switches. To turn them on,
+flip them both upwards.</p></li>
+<li><p>Keep in mind that the trigger box contains two 9 V batteries. If the
+trigger box later appears to not be working, begin troubleshooting by
+taking the 9 V batteries out of the trigger box and checking to see
+they are not dead (or below about 7 V) with a fluke meter. Replace if
+necessary.</p></li>
+</ol>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="trefm_setup_guide.html" class="btn btn-neutral float-right" title="trEFM Igor Setup Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../../index.html" class="btn btn-neutral float-left" title="Welcome to AFM Igor Code documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Ginger Lab
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
