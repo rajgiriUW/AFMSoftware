@@ -104,19 +104,18 @@ Function PointScantrEFM(xpos, ypos, liftheight)
 	while((StopMSTimer(-2) - StartTime) < 300*1e3) 
 	readposition()
 	// Set the Cantilever to Resonance.
-	if (ElecDrive == 0)
-		td_WV(LockinString + "Amp", calsoftd)
-		td_WV(LockinString + "freq", calresfreq)
-		td_WV(LockinString + "PhaseOffset", calphaseoffset)
-	endif
+	td_WV(LockinString + "Amp", calsoftd)
+	td_WV(LockinString + "freq", calresfreq)
+	td_WV(LockinString + "PhaseOffset", calphaseoffset)
+
 
 	if (ElecDrive != 0)
-		SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","DDS","Ground")
-		td_WV(LockinString + "Amp", elecAmp)
-		td_WV(LockinString + "freq", calresfreq)
-		td_WV(LockinString + "PhaseOffset", calphaseoffset)
+//		SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","DDS","Ground")
+//		td_WV(LockinString + "Amp", elecAmp)
+//		td_WV(LockinString + "freq", calresfreq)
+//		td_WV(LockinString + "PhaseOffset", calphaseoffset)
 
-		print td_rv("Amplitude")
+//		print td_rv("Amplitude")
 	endif
 
 	// Wait for frequency to stabilize.

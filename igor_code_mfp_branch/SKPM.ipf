@@ -504,7 +504,7 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 		if (gWGDeviceAddress != 0)
 			setvf(ACVoltage, ACFrequency,"WG")		
 		else
-			loadarbwave(ACFrequency, ACVoltage)	
+			loadarbwave(ACFrequency, ACVoltage, 0)	
 		endif
 
 		sleep/S 1/4

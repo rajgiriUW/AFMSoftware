@@ -24,6 +24,7 @@ Function PointScanGMode(xpos, ypos, liftheight,DigitizerAverages,DigitizerSample
 	Nvar pgain, sgain, igain, adcgain, setpoint,adcgain
 	Svar LockinString
 	Nvar XLVDTsens
+	NVAR elecdrive
 	Wave EFMFilters = root:packages:trEFM:EFMFilters
 	Variable XLVDToffset = td_Rv("XLVDToffset")
 	GetGlobals()
@@ -130,11 +131,21 @@ Function PointScanGMode(xpos, ypos, liftheight,DigitizerAverages,DigitizerSample
 	td_WriteValue("DDSFrequency0",EFreq)	
 	td_WriteValue("DDSDCOffset0",EOffset)	
 	td_WriteValue("DDSPhaseOffset0",EPhase)
+	
+	if (elecDrive != 0) 
+		
+		LoadArbWave(EFreq, EAmp, EOffset /2)
+		td_WriteValue("DDSAmplitude0", 0)		// turn off DDS amplitude
+		SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","Ground","OutA","Ground","Ground","OutB","Ground")
+	
+	endif
+	
+	
 	// Wait for frequency to stabilize.
 	startTime = StopMSTimer(-2)
 	do 
 	while((StopMSTimer(-2) - StartTime) < 300*1e3) 
-	
+
 	Sleep/S 1/30
 	GageAcquire()
 	// Fire data collection event.
@@ -157,6 +168,15 @@ Function PointScanGMode(xpos, ypos, liftheight,DigitizerAverages,DigitizerSample
 	endif
 	
 	AnalyzePointScan(PIXELCONFIG, gagewave,shiftwave)
+	
+	if (ElecDrive != 0)
+		TurnOffAWG()
+
+		startTime = StopMSTimer(-2)
+		do 
+		while((StopMSTimer(-2) - StartTime) < 300*1e3) 
+
+	endif
 	
 	// reset the dds settings.
 	SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","Ground", "DDS")

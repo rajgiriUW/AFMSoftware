@@ -80,6 +80,7 @@ Function LoadChirpWave(filename, [offset, amplitude, sampling_rate])
 end
 
 Function LoadPulseWave(freq, amp, pulsewidth, offset)
+// Needed if you want to do voltage pulses synced
 	Variable freq, amp, pulsewidth, offset
 	Variable defaultRM, instr
 	String resourceName = "USB0::0x0957::0x2907::MY52500433::0::INSTR"
@@ -126,8 +127,8 @@ function testawg() // scratchspace for quick testing
 	
 end
 
-Function LoadArbWave(freq, amp)
-	Variable freq, amp
+Function LoadArbWave(freq, amp, offset)
+	Variable freq, amp, offset
 	Variable num
 	Variable defaultRM, instr
 	String resourceName = "USB0::0x0957::0x2907::MY52500433::0::INSTR"
@@ -139,6 +140,7 @@ Function LoadArbWave(freq, amp)
 	VISAWrite instr, "FUNC SIN"
 	VISAWrite instr, "FREQ "+ num2str(freq)
 	VISAWrite instr, "VOLT " + num2str(amp)
+	VISAWrite instr, "VOLT:OFFS  " + num2str(offset)
 	
 	VISAWrite instr, "OUTP ON\n"
 
@@ -157,6 +159,22 @@ function TurnOffAWG()
 	
 	VISAWrite instr, "*RST\n"
 	VISAWrite instr, "OUTP OFF\n"
+	
+	viClose(instr)
+	viClose(defaultRM)
+	
+end
+
+function TurnOnAWG()
+
+	Variable defaultRM, instr
+	String resourceName = "USB0::0x0957::0x2907::MY52500433::0::INSTR"
+	
+	viOpenDefaultRM(defaultRM)
+	viOpen(defaultRM, resourceName, 0, 0, instr)
+	
+	VISAWrite instr, "*RST\n"
+	VISAWrite instr, "OUTP ON\n"
 	
 	viClose(instr)
 	viClose(defaultRM)

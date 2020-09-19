@@ -25,6 +25,8 @@ Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 	SetDataFolder root:packages:trEFM
 	Svar LockinString
 	
+	NVAR ElecDrive
+	
 	Wave PIXELCONFIG = root:packages:trEFM:FFtrEFMConfig:PIXELCONFIG
 	Wave CSACQUISITIONCONFIG = root:packages:GageCS:CSACQUISITIONCONFIG
 	Wave CSTRIGGERCONFIG = root:packages:GageCS:CSTRIGGERCONFIG
@@ -565,6 +567,18 @@ Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 		td_WriteValue("DDSFrequency0",EFreq)	
 		td_WriteValue("DDSDCOffset0",EOffset)	
 		td_WriteValue("DDSPhaseOffset0",EPhase)
+		
+		if (elecdrive != 0)
+		
+			LoadArbWave(EFreq, EAmp, EOffset/2)
+			td_WriteValue("DDSAmplitude0", 0)		// turn off DDS amplitude
+			SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","Ground","OutA","Ground","Ground","OutB","Ground")
+		
+			startTime = StopMSTimer(-2)
+			do 
+			while((StopMSTimer(-2) - StartTime) < 300*1e3) 
+		
+		endif
 				
 		// If not using the new trigger box with invertable output, uncomment these lines and comment the subsequent 2 setoutwave(pair) lines
 //		error+= td_xsetoutwavePair(2,"Event.2", "ARC.PIDSLoop.0.Setpoint", Xupwave,"ARC.PIDSLoop.3.Setpoint", ReadWaveZback,-UpInterpolation)	
@@ -601,9 +615,22 @@ Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 		GageTransfer(1, data_wave)
 		
 		if (OneOrTwoChannels == 1)
-			if (i == 0 )
+
+			if (i == 0 ) // only really care about the first line, every line is the same
 				GageTransfer(2, ch2_wave)
 			endif
+			
+		endif
+		
+		if (ElecDrive != 0)
+		
+			TurnOffAWG()
+
+			startTime = StopMSTimer(-2)
+			do 
+			while((StopMSTimer(-2) - StartTime) < 300*1e3) 
+	
+		
 		endif
 		
 		AnalyzeLineOffline(PIXELCONFIG, scanpoints, shift_wave, tfp_wave, data_wave)
