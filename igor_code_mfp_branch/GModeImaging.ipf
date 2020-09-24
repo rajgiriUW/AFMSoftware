@@ -622,17 +622,6 @@ Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 			
 		endif
 		
-		if (ElecDrive != 0)
-		
-			TurnOffAWG()
-
-			startTime = StopMSTimer(-2)
-			do 
-			while((StopMSTimer(-2) - StartTime) < 300*1e3) 
-	
-		
-		endif
-		
 		AnalyzeLineOffline(PIXELCONFIG, scanpoints, shift_wave, tfp_wave, data_wave)
 
 		// ************  End of Retrace 		
@@ -713,6 +702,17 @@ Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 		if (i < scanlines)//////////////
 		
 			DoUpdate 
+			
+			if (ElecDrive != 0)
+		
+				TurnOffAWG()
+
+				startTime = StopMSTimer(-2)
+				do 
+				while((StopMSTimer(-2) - StartTime) < 300*1e3) 
+			
+			endif
+			
 			//stop height FBLoop, restart Amplitude FBLoop and move to starting point of next line
 			StopFeedbackLoop(3)	
 			StopFeedbackLoop(4)	
