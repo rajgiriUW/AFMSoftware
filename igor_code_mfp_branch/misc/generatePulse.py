@@ -73,15 +73,29 @@ if __name__ == '__main__':
 
     print('Generating! This is slow, so hang on')
     
-    GenerateBiTaus(50e-6, 300e-6, 0.5, 0.5, '0')
-    GenerateTaus(10e-6, 1, '5')
-    GenerateTaus(300e-6, 1, '6')
+    #GenerateBiTaus(50e-6, 300e-6, 0.5, 0.5, '0')
+    GenerateTaus(1e-6, 1, '5')
+    GenerateTaus(3e-6, 1, '6')
     #GenerateBiTaus(50e-6, 300e-6, 0.9, 0.1, '1')
 	#GenerateBiTaus(50e-6, 300e-6, 0.1, 0.9, '2')
     #GenerateBiTaus(10e-6, 300e-6, 0.5, 0.5, '3')
     #GenerateBiTaus(100e-6, 800e-6, 0.5, 0.5, '4')
-	
-    
+
+    GenerateTaus(1e-7, 1, '0')
+    GenerateTaus(2e-7, 1, '1')
+    GenerateTaus(5e-7, 1, '2')
+    GenerateTaus(1e-6, 1, '3')
+    GenerateTaus(2e-6, 1, '4')
+    GenerateTaus(5e-6, 1, '5')
+    GenerateTaus(1e-5, 1, '6')
+    GenerateTaus(2e-5, 1, '7')
+    GenerateTaus(5e-5, 1, '8')
+    GenerateTaus(1e-4, 1, '9')
+    GenerateTaus(2e-4, 1, '10')
+    GenerateTaus(5e-4, 1, '11')
+    GenerateTaus(1e-3, 1, '12')
+
+
     """GenerateTaus(1e-8, 1, '0')
     GenerateTaus(3.162e-8, 1, '1')
     GenerateTaus(1e-7, 1, '2')

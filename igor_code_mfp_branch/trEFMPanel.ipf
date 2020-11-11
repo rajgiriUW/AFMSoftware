@@ -944,6 +944,16 @@ Function FFtrEFMPointScanButton(ctrlname) : ButtonControl
 	matrixop/o avgwave = sumrows(gagewave)/numcols(gagewave)
 	Redimension/N=-1 avgwave
 
+	CreateParametersFile(PIXELCONFIG)
+	
+	if (strlen(PathList("PointScan", ";", "")) == 0)
+		NewPath PointScan
+		
+	endif
+	
+	Save/G/O/P=PointScan/M="\r\n" SaveWave as "ps_parameters.cfg"
+	Save/C/P=PointScan/M="\r\n" gagewave as "pointscan.ibw"
+	
 	SetDataFolder savDF
 	
 End
