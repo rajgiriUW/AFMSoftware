@@ -281,7 +281,7 @@ Function LoadChirp()
 	NVAR ChirpCenter = root:packages:trEFM:TF:ChirpCenter
 	NVAR ChirpWidth = root:packages:trEFM:TF:ChirpWidth
 	
-	string cmd = "cmd.exe /K cd C:\\Data\\Raj && python generate_chirp.py " + num2str(ChirpCenter) + " " + num2str(ChirpWidth) + " " + num2str(length) + " -s " + num2str(sampling_rate) + " && Exit"
+	string cmd = "cmd.exe /K cd C:\Users\Asylum User\Desktop\GingerLab Code\Ginger-Code-Repo\igor_code_mfp_branch\misc && python generate_chirp.py " + num2str(ChirpCenter) + " " + num2str(ChirpWidth) + " " + num2str(length) + " -s " + num2str(sampling_rate) + " && Exit"
 	ExecuteScriptText cmd
 
 	print "Generated chirp with frequency", num2str(ChirpCenter), "Hz and width", num2str(ChirpWidth), "Hz,", num2str(length), "seconds long and sampled at",num2str(sampling_rate), "Hz"  

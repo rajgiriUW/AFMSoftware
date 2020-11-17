@@ -84,6 +84,7 @@ Function trEFMInit()
 	Variable/G ElecAmp = 0
 	
 	Variable/G AvgWaves = 0
+	Variable/G UsePython = 0
 	
 	// Panel global variables
 	SetDataFolder  root:Packages:trEFM:ImageScan

@@ -218,6 +218,7 @@ Function PointScanFFtrEFM(xpos, ypos, liftheight,DigitizerAverages,DigitizerSamp
 	Nvar pgain, sgain, igain, adcgain, setpoint,adcgain
 	Svar LockinString
 	Nvar XLVDTsens
+	NVAR UsePython
 	Wave EFMFilters = root:packages:trEFM:EFMFilters
 	Variable XLVDToffset = td_Rv("XLVDToffset")
 	GetGlobals()
@@ -345,7 +346,9 @@ Function PointScanFFtrEFM(xpos, ypos, liftheight,DigitizerAverages,DigitizerSamp
 		GageTransfer(2, ch2_wave)
 	endif
 
-	AnalyzePointScan(PIXELCONFIG, gagewave,shiftwave)
+	if (UsePython == 0)
+		AnalyzePointScan(PIXELCONFIG, gagewave,shiftwave)
+	endif
 	
 	// reset the dds settings.
 	td_WV(LockinString + "Amp", calhardd)

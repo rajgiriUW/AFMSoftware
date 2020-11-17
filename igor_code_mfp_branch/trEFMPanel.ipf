@@ -878,6 +878,7 @@ Function FFtrEFMPointScanButton(ctrlname) : ButtonControl
 	Nvar liftheight
 	Nvar gxpos, gypos
 	Nvar WavesCommitted
+	Nvar UsePython
 	
 	if(WavesCommitted == 0)
 		Abort "Drive waves have not been committed."
@@ -953,6 +954,10 @@ Function FFtrEFMPointScanButton(ctrlname) : ButtonControl
 	
 	Save/G/O/P=PointScan/M="\r\n" SaveWave as "ps_parameters.cfg"
 	Save/C/P=PointScan/M="\r\n" gagewave as "pointscan.ibw"
+	
+	if (UsePython == 1)
+		PyPS(gagewave, SaveWave)
+	endif
 	
 	SetDataFolder savDF
 	
@@ -1192,9 +1197,15 @@ End
 Function ClearImagesButton(ctrlname): ButtonControl
 
 	String ctrlname
-	SetDataFolder root:packages:trEFM:ImageScan:trEFM
-	ClearImages()
-	
+	variable clearimg
+	Prompt clearimg, "Clearing Images! Confirm?"
+	DoPrompt ">>>", clearimg
+	if(V_flag==1)
+		Abort			//Aborts if you hit cancel
+	else
+		SetDataFolder root:packages:trEFM:ImageScan:trEFM
+		ClearImages()
+	endif
 End
 
 Function MoveHereButton(ctrlname): ButtonControl
@@ -1321,6 +1332,7 @@ Function TabProc(ctrlName,tabNum) : TabControl
 	ModifyControl ElecAmp disable = (!isGMode && !isFFtrEFM)
 	ModifyControl OneorTwoChannelBox disable = (!isGmode && !isFFtrEFM)
 	ModifyControl AvgWaves disable = (!isGmode && !isFFtrEFM)
+	ModifyControl PythonButton disable = (!isGmode && !isFFtrEFM)
 
 	// Ring Down
 
@@ -1482,7 +1494,7 @@ Window trEFMImagingPanel() : Panel
 	SetVariable scanspeedT2,pos={375,160},size={121,16},title="Scan Speed(um/s)"
 	SetVariable scanspeedT2,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scanspeed
 	Button savebuttonT2,pos={434,188},size={99,33},proc=SaveImageButton,title="Save"
-	Button clearbuttonT2,pos={493,229},size={40,20},proc=ClearImagesButton,title="Clear"
+	Button clearbuttonT2,pos={510,37},size={40,20},proc=ClearImagesButton,title="Clear"
 	SetVariable scanwidthT2,pos={396,62},size={100,16},title="Width (µm)        "
 	SetVariable scanwidthT2,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scansizex
 	SetVariable cyclesT3,pos={529,50},size={85,16},disable=1,title="# of Cycles"
@@ -1563,8 +1575,10 @@ Window trEFMImagingPanel() : Panel
 	CheckBox OneorTwoCHannelBox,pos={265,153},size={92,14},proc=OneOrTwoChannelsCHeckBox,title="Two Channels?"
 	CheckBox OneorTwoCHannelBox,variable= root:packages:trEFM:ImageScan:OneorTwoChannels,side= 1
 	Button transferfuncparams,pos={402,255},size={136,34},disable=1,proc=GModeTransferFUncButton,title="Transfer Func with AWG"
-	CheckBox AvgWaves,pos={362,238},size={80,14},title="Avg Waves?"
+	CheckBox AvgWaves,pos={459,255},size={80,14},title="Avg Waves?"
 	CheckBox AvgWaves,variable= root:packages:trEFM:AvgWaves,side= 1
+	CheckBox PythonButton,pos={482,278},size={57,14},title="Python?"
+	CheckBox PythonButton,variable= root:packages:trEFM:UsePython,side= 1
 	ToolsGrid snap=1,visible=1,grid=(0,28.35,5)
 EndMacro
 
