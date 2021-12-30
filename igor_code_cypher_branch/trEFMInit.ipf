@@ -68,6 +68,7 @@ Function trEFMInit()
 	Variable/G RingDownVoltage
 	Variable/G LightOn
 	String/G LockinString = "ARC.Lockin.0."
+	String/G ImageFunctionString
 
 	// cut drive variables
 	Variable/G cutpreV = 0
@@ -81,6 +82,11 @@ Function trEFMInit()
 	// Elec Drive variables
 	Variable/G ElecDrive = 0
 	Variable/G ElecAmp = 0
+	
+	Variable/G AvgWaves = 0
+	Variable/G UsePython = 0
+	Variable/G ElecTopo = 0
+	Variable/G ElecEFMDrive = 0 // use electric AC drive for regular trEFM
 	
 	// Panel global variables
 	SetDataFolder  root:Packages:trEFM:ImageScan
@@ -143,13 +149,8 @@ Function trEFMInit()
 	
 
 	Make/O/N = (800) timekeeper
-	SetScale d,0,800,"ms",timekeeper
-		Variable i = 0, timeperiod
-	timeperiod = 16/800
-	do
-		timekeeper[i]= i * timeperiod
-		i += 1	
-	while (i < 800)
+	SetScale d,0,16,"ms",timekeeper
+
 	// Setup image scan variables.
 	SetDataFolder root:Packages:trEFM:ImageScan
 	Variable/G scansizex, scansizey, scanlines, scanpoints, scanspeed, numavgsperpoint, xoryscan, fitstarttime, fitstoptime
@@ -394,7 +395,7 @@ End
 
 Function MakePixelConfig()
 
-	Make/O/N = (14,1) PIXELCONFIG
+	Make/O/N = (15,1) PIXELCONFIG
 	
 	SetDimLabel 0, 0, Trigger, PIXELCONFIG
 	SetDimLabel  0,1,  total_time,PIXELCONFIG
@@ -409,7 +410,8 @@ Function MakePixelConfig()
 	SetDimLabel  0,10, wavelet_parameter, PIXELCONFIG
 	SetDimLabel  0,11,recombination, PIXELCONFIG
 	SetDimLabel  0,12,phase_fitting, PIXELCONFIG
-	SetDimLabel  0,13,emd_analysis, PIXELCONFIG
+	SetDimLabel  0,13,stft, PIXELCONFIG
+	SetDimLabel  0,14, fft_time_res, PIXELCONFIG
 	
 	PIXELCONFIG[%trigger][0] = 4.096e-4
 	PIXELCONFIG[%total_time][0] = 8.192e-4
@@ -421,7 +423,8 @@ Function MakePixelConfig()
 	PIXELCONFIG[%filter_taps] [0]= 999
 	PIXELCONFIG[%region_of_interest][0] = 3e-4
 	PIXELCONFIG[%phase_fitting] = 0	// True/False
-	PIXELCONFIG[%emd_analysis] = 0	// True/False
+	PIXELCONFIG[%stft] = 0	// True/False
+	PIXELCONFIG[%fft_time_res] = 20e-6
 End
 
 

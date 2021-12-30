@@ -336,7 +336,7 @@ Function LoadChirp_Cypher()
 		Abort			//Aborts if you cancel the save option
 	endif
 	
-	ExecuteScriptText "cmd.exe /K cd C:\\AsylumResearch\\v16\\Ginger Code\\misc && copy chirp.dat F: && Exit"
+	ExecuteScriptText "cmd.exe /K cd C:\\AsylumResearch\\v16\\Ginger Code\\misc && copy chirp.dat G: && Exit"
 
 	Prompt copychirp, "Insert Flash Drive in Wave Generator"
 	DoPrompt ">>>",copychirp
@@ -517,8 +517,13 @@ Function PointScanTF(xpos, ypos, liftheight,DigitizerAverages,DigitizerSamples,D
 //	SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","DDS","Ground")
 	
 	// Tip is grounded and sample is connected to the WaveGenerator
-	SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","OutB","Ground")
-	td_WV(LockinString + "Amp", 0)
+	SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","Ground","Ground")
+	variable error = 0
+	error += 	td_WV(LockinString + "Amp", 0)
+	
+	if (error != 0)
+		print error
+	endif
 //	variable EAmp = GV("NapDriveAmplitude")
 //	variable EFreq = GV("NapDriveFrequency")
 //	variable EOffset = GV("NapTipVoltage")
@@ -551,7 +556,7 @@ Function PointScanTF(xpos, ypos, liftheight,DigitizerAverages,DigitizerSamples,D
 	GageTransfer(1, gagewave)
 	
 	if (OneOrTwoChannels == 1)
-		GageTransfer(2, ch2_wave)
+//		GageTransfer(2, ch2_wave)
 	endif
 	
 //	AnalyzePointScan(PIXELCONFIG, gagewave,shiftwave)

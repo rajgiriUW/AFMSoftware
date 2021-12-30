@@ -185,8 +185,10 @@ Function SetPassFilter(SetorReset, [x,y,z,a,b,fast,i,i1,q,q1])
 
 End
 
-Function SetFeedbackLoop(whichLoop,startWhen,maintainWhat,setpoint,pgain,igain,sgain,changeWhat,dgain)
+Function SetFeedbackLoop(whichLoop,startWhen,maintainWhat,setpoint,pgain,igain,sgain,changeWhat,dgain, [name, arcZ])
 	Variable whichLoop,setpoint,pgain,igain,sgain,dgain
+	string name
+	variable arcZ
 	String startWhen,maintainWhat,changeWhat
 
 	Struct ARFeedbackStruct FB
@@ -209,11 +211,24 @@ Function SetFeedbackLoop(whichLoop,startWhen,maintainWhat,setpoint,pgain,igain,s
 	FB.Setpoint = setpoint
 	FB.Output = changeWhat
 	FB.Bank = whichLoop
+	
+	// These two are necessary to both constrain to ARC backpack and to ensure that the alias is correct on the Cypher
+	if (!ParamIsDefault(name))
+		FB.LoopName = name
+	endif
+
+	if (!ParamIsDefault(arcZ))
+		FB.DontSwapToBackPack = 1
+	endif
 
 	string error = ""
 	error +=	IR_WRitePIDSLoop(FB)
-
+	//print error
 	ARREportError(ErrorStr) 
+	if (str2num(error) != 0)
+		print "Feedback loop error", error
+	endif
+
 end
 	
 Function SetFeedbackLoop_v14(whichLoop,startWhen,maintainWhat,setpoint,pgain,igain,sgain,changeWhat,dgain)
@@ -625,4 +640,44 @@ function wavegeneratoroffset(amplitude,frequency,outputletter,event,bank)
 	//td_WriteString("Event.2", "Once")
 	td_WriteString("Event.1", "Once")
 	
+end
+
+Function LiftTo(liftHeight,tipVoltage,[lighton])
+	Variable liftHeight, tipVoltage,lighton
+	SetDataFolder root:packages:trefm
+
+	Wave EFMFilters
+	NVAR setpoint, pgain, sgain,igain
+	SVAR LockinString
+	
+	NVAR calsoftd = root:packages:trEFM:VoltageScan:calsoftd
+	Nvar calresfreq  = root:packages:trEFM:VoltageScan:calresfreq
+	NVAR calphaseoffset = root:packages:trEFM:VoltageScan:calphaseoffset
+	NVAR calengagefreq = root:packages:trEFM:VoltageScan:calengagefreq
+	NVAR calhardd = root:packages:trEFM:VoltageScan:calhardd
+	
+	SetCrosspoint("FilterOut", "Ground", "ACDefl", "Ground", "Ground", "Ground", "Off", "Off", "Off", "Defl", "Ground", "OutA", "OutB", "Ground", "OutB", "DDS")
+
+	// Find surface
+	td_WV((LockinString + "Amp"), calhardd)
+	td_WV(LockinString + "Freq", calengagefreq)
+	td_WV(LockinString + "PhaseOffset", calphaseoffset)
+	SetFeedbackLoop(2, "Always", LockinString +"R", setpoint, -pgain, -igain, -sgain, "Output.Z", 0)
+	
+	Sleep/s 1
+//	readposition()
+	
+	// Lift the tip to the desired lift height.
+	Variable z1= td_readvalue("ZSensor") * GV("ZLVDTSens")	
+	StopFeedbackLoop(2)
+	SetFeedbackLoop(3, "always",  "ZSensor", (z1 - liftHeight * 1e-9) / GV("ZLVDTSens"), 0,  EFMFilters[%ZHeight][%IGain], 0, "Output.Z", 0)
+
+	Sleep/s 1
+//	readposition()
+
+	td_wv("Output.B", tipVoltage)
+	if (!ParamIsDefault(lighton) )
+		td_wv("Output.A", 5)
+	endif
+
 end

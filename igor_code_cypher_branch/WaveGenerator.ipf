@@ -90,10 +90,9 @@ end
 
 Function LoadPulseWave(freq, amp, pulsewidth, offset)
 // Needed if you want to do voltage pulses synced
-//e.g. loadpulsewave(100, 2, 0.001, -2) is square from -6 V to 2V
-// Amplitude = +/- voltage listed. Offset is 1/2 the offset value
-// For -4 to 0 that is (..,2, -1) because 4 V total swing, centered at 2 * -1 V
-// Essentially, just double the values that you might expect to make them actually correct
+// Keep in mind the output impedance is defaults to 50 ohm, which means the actual
+// voltage will be doubled unless you put a 50 ohm load (the BNC cap) in parallel with the output.
+// a reasonable default is LoadPulseWave(100, 2, 0.003, -0.5) to get a 100 Hz, 2 V with -0.5 V offset, 3 ms long
 	Variable freq, amp, pulsewidth, offset
 	Variable defaultRM, instr
 	String resourceName = "USB0::0x0957::0x2907::MY52500433::0::INSTR"

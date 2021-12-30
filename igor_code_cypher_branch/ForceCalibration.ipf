@@ -82,6 +82,9 @@ function GetForceParms(tipV)
 	// Gets Cantilever parameters, force/k/beta/etc
 	GetSurfaceCantileverParms()
 	
+	Wave FInalParms
+	FinalParms[17][0] = tipV
+	
 	doscanfunc("stopengage")
 	sleep/S 3
 	
@@ -300,6 +303,9 @@ Function GetSurfaceCantileverParms()
 	Force0 = getForce(calAmpsVi, calDefVi, DEFINVOLS, k)
 	SurfParmsInit = {resFinit, Q, betaVal, k, Force0, ampDrive, ampVal, NaN}
 
+	variable k0 = k
+	variable omega0 = resFinit
+
 	// final parameters
 	Wavestats/Q calAmpsVf
 	resFinit = V_maxLoc
@@ -320,7 +326,7 @@ Function GetSurfaceCantileverParms()
 	if(WaveExists(root:packages:trEFM:VoltageScan:phasewave))
 		curvefit/M=2/W=0/Q poly_XOffset 3, root:packages:trEFM:VoltageScan:phasewave/X=root:packages:trEFM:VoltageScan:voltagewave/D
 		variable dFdZ = K2
-		FinalParms[7][2] = dFdZ	// electrostatic force gradient
+		FinalParms[7][2] = dFdZ * 4*k0 / omega0	// electrostatic force gradient
 	endif
 
 	SetDimLabel 1, 0, Initial, FinalParms
@@ -331,14 +337,19 @@ Function GetSurfaceCantileverParms()
 	SetDimLabel 0, 1, Q, FinalParms
 	SetDimLabel 0, 2, Beta, FinalParms
 	SetDimLabel 0, 3, SpringConstant, FinalParms
-	SetDimLabel 0, 4, Force, FinalParms
-	SetDimLabel 0, 5, DriveAmplitude, FinalParms
+	SetDimLabel 0, 4, ElectroForce, FinalParms
+	SetDimLabel 0, 5, DrivingForce, FinalParms
 	SetDimLabel 0, 6, Amplitude, FinalParms
 	SetDimLabel 0, 7, dFdZ, FinalParms
 	
-	Redimension/N=(16,-1) FinalParms
-	FinalParms[8,15][1,2] = NaN
+	Redimension/N=(18,-1) FinalParms
+	FinalParms[8,17][1,2] = NaN
 	FinalParms[8,15][0] = FreeCantileverParms[p-8]
+	
+	NVAR lift = root:packages:trEFM:liftheight
+	NVAR voltage 
+	FinalParms[16][0] = lift
+
 	
 	SetDimLabel 0, 8, AMPINVOLS, FinalParms
 	SetDimLabel 0, 9, DEFINVOLS, FinalParms
@@ -348,6 +359,9 @@ Function GetSurfaceCantileverParms()
 	SetDimLabel 0, 13, ThermalQ, FinalParms
 	SetDimLabel 0, 14, ThermalDriveAmplitude, FinalParms
 	SetDimLabel 0, 15, Mass, FinalParms
+	SetDimLabel 0, 16, LiftHeight, FinalParms
+	SetDimLabel 0, 17, Voltage, FinalParms
+	
 
 end
 
@@ -392,46 +406,7 @@ function getForce(calAmp, calDef, DEFINVOLS, k)
 end	
 
 
-Function LiftTo(liftHeight,tipVoltage,[lighton])
-	Variable liftHeight, tipVoltage,lighton
-	SetDataFolder root:packages:trefm
 
-	Wave EFMFilters
-	NVAR setpoint, pgain, sgain,igain
-	SVAR LockinString
-	
-	NVAR calsoftd = root:packages:trEFM:VoltageScan:calsoftd
-	Nvar calresfreq  = root:packages:trEFM:VoltageScan:calresfreq
-	NVAR calphaseoffset = root:packages:trEFM:VoltageScan:calphaseoffset
-	NVAR calengagefreq = root:packages:trEFM:VoltageScan:calengagefreq
-	NVAR calhardd = root:packages:trEFM:VoltageScan:calhardd
-	
-	SetCrosspoint("FilterOut", "Ground", "ACDefl", "Ground", "Ground", "Ground", "Off", "Off", "Off", "Defl", "Ground", "OutA", "OutB", "Ground", "OutB", "DDS")
-
-	// Find surface
-	td_WV((LockinString + "Amp"), calhardd)
-	td_WV(LockinString + "Freq", calengagefreq)
-	td_WV(LockinString + "PhaseOffset", calphaseoffset)
-	SetFeedbackLoop(2, "Always", LockinString +"R", setpoint, -pgain, -igain, -sgain, "Output.Z", 0)
-	
-	Sleep/s 1
-	readposition()
-	
-	// Lift the tip to the desired lift height.
-	Variable z1= td_readvalue("ZSensor") * GV("ZLVDTSens")	
-	StopFeedbackLoop(2)
-	SetFeedbackLoop(3, "always",  "ZSensor", (z1 - liftHeight * 1e-9) / GV("ZLVDTSens"), 0,  EFMFilters[%ZHeight][%IGain], 0, "Output.Z", 0)
-
-	Sleep/s 1
-	readposition()
-
-	td_wv("Output.B", tipVoltage)
-	if (!ParamIsDefault(lighton) )
-		td_wv("Output.A", 5)
-	endif
-
-	
-End
 
 Function LiftToElec(liftHeight)
 	Variable liftHeight

@@ -1,6 +1,6 @@
+#pragma rtGlobals=3		// Use modern global access method and strict wave access.
 
-
-Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanpoints, scanspeed, xoryscan,fitstarttime,fitstoptime, DigitizerAverages, DigitizerSamples, DigitizerPretrigger)
+Function ImageScanFFtrEFM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanpoints, scanspeed, xoryscan,fitstarttime,fitstoptime, DigitizerAverages, DigitizerSamples, DigitizerPretrigger)
 	
 	Variable xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanpoints, scanspeed, xoryscan, fitstarttime, fitstoptime, DigitizerAverages, DigitizerSamples, DigitizerPretrigger
 	Variable saveOption = 0
@@ -27,12 +27,11 @@ Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 	String savDF = GetDataFolder(1) // locate the current data folder
 	SetDataFolder root:packages:trEFM
 	Svar LockinString
-	NVAR UsePython	
-	NVAR ElecDrive
-	
+	NVAR UsePython
 	Wave PIXELCONFIG = root:packages:trEFM:FFtrEFMConfig:PIXELCONFIG
 	Wave CSACQUISITIONCONFIG = root:packages:GageCS:CSACQUISITIONCONFIG
 	Wave CSTRIGGERCONFIG = root:packages:GageCS:CSTRIGGERCONFIG
+	NVAR OneOrTwoChannels = root:packages:trEFM:ImageScan:OneorTwoChannels
 	
 	SetDataFolder root:packages:trEFM:ImageScan
 	Nvar numavgsperpoint
@@ -87,8 +86,6 @@ Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 	NVAR UseLineNum = root:packages:trEFM:ImageScan:UseLineNum
 	NVAR LineNum = root:packages:trEFM:ImageScan:LineNum
 	NVAR AvgWaves = root:packages:trEFM:AvgWaves
-	NVAR ElecTopo = root:packages:trEFM:ElecTopo
-	NVAR OneOrTwoChannels = root:packages:trEFM:ImageScan:OneorTwoChannels
 
 	Variable XLVDTSens = GV("XLVDTSens")
 	Variable XLVDToffset = GV("XLVDToffset")
@@ -100,9 +97,9 @@ Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 		
 	WAVE EFMFilters=root:Packages:trEFM:EFMFilters
 
-
 	//local Variables
 	Variable V_FitError=0	
+	Wave W_Sigma
 	if(!WaveExists(W_sigma))
 		Make/O W_sigma
 	else
@@ -124,7 +121,6 @@ Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 	//*******************  AAAAAAAAAAAAAAAAA **************************************//	
 	
 	ResetAll()	
-
 
 	Downinterpolation = ceil(scansizeX / (scanspeed * scanpoints * .00001))      //Moved this up here so it actually can calculate gheightscantime PC 4/29/14
 	
@@ -282,7 +278,6 @@ Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 
 	// this section creates the voltage and light waves, duplicates them and concatenates the results to a new ffPS wave		
 
-
 	// Crude concatenation routine
 	Duplicate/O lightwave, ffPSLightWave
 	Duplicate/O voltagewave, ffPSVoltWave
@@ -323,12 +318,12 @@ Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 	//******************  CCCCCCCCCCCCCCCCCC *******************************//
 	
 	Make/O/N =(scanpoints) tfp_wave, shift_wave
-	Make/O/N = (DigitizerSamples, DigitizerAverages) data_wave
-	Make/O/N = (DigitizerSamples, DigitizerAverages) ch2_wave
+	Make/O/N = (DigitizerSamples, DigitizerAverages) data_wave, ch2_wave
 	Make/O/N = (scanpoints, scanlines) tfp_array, shift_array,rate_array
 
 	// Save Parameters file
 	CreateParametersFile(PIXELCONFIG)
+	Wave SaveWave
 	Save/G/O/P=Path/M="\r\n" SaveWave as "parameters.cfg"
 	
 	//******************  DDDDDDDDDDDDDDDDDDD *******************************//	
@@ -402,28 +397,7 @@ Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 	// crosspoint needs to be updated to send the trigger to the gage card	
 	// Set up the crosspoint, note that KP crosspoint settings change between the trace and retrace and are reset below
 
-	variable EAmp = GV("NapDriveAmplitude")
-	variable EFreq = GV("NapDriveFrequency")
-	variable EOffset = GV("NapTipVoltage")
-	variable EPhase = GV("NapPhaseOffset")
-
-	if (ElecTopo == 0)
-		SetCrosspoint ("FilterOut","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","OutB","DDS")
-	else
-	// Using AC Voltage drive 
-		SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","DDS","OutA","OutB","Ground","DDS","Ground")	
-		XPTPopupFunc("CypherHolderOut1Popup", 18, "Ground")
-		XPTButtonFunc("WriteXPT")
-		
-		td_WriteValue("DDSAmplitude0", 0)
-		td_WriteValue("DDSDCOffset0", 0)	
-		Sleep/S 1/30 // To avoid sparking.
-
-		td_WriteValue("DDSAmplitude0",EAmp)	
-		td_WriteValue("DDSFrequency0",EFreq)	
-		td_WriteValue("DDSDCOffset0",EOffset)	
-		td_WriteValue("DDSPhaseOffset0",EPhase)
-	endif
+	SetCrosspoint ("FilterOut","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","OutB","DDS")
 	
 	//stop all FBLoops except for the XY loops
 	StopFeedbackLoop(3)
@@ -433,9 +407,9 @@ Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 	variable error = 0
 	td_StopInWaveBank(-1)
 		
-	// HStrEFM needs no FBL on the LIA phase angle	
-
 	SetPassFilter(1,q=EFMFilters[%EFM][%q],i=EFMFilters[%EFM][%i],a=EFMFilters[%EFM][%A],b=EFMFilters[%EFM][%B])
+
+	SetFeedbackLoop(3, "always",  "ZSensor", ReadWaveZ[scanpoints-1]-liftheight*1e-9/GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0)
 
 	// Set all DAC outputs to zero initially
 	td_wv("Output.A", 0)
@@ -445,7 +419,6 @@ Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 	
 	//******************  FFFFFFFFFFFFFFFFFFFFFF *******************************//
 	//pre-loop initialization, done only once
-
 	//move to initial scan point
 	if (XFastEFM == 1 && YFastEFM == 0)	
 		if (UseLineNum == 0)
@@ -461,8 +434,7 @@ Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 		endif
 	endif
 	
-//	SetCrosspoint ("FilterOut","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","OutB","DDS")	
-	
+	SetCrosspoint ("FilterOut","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","OutB","DDS")	
 	variable currentX = td_ReadValue("XSensor")
 	variable currentY = td_ReadValue("YSensor")
 
@@ -493,15 +465,19 @@ Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 	///Starting imaging loop here
 	
 	i=0
+	variable heightbefore, heightafter
 	do
 		starttime2 =StopMSTimer(-2) //Start timing the raised scan line
 		print "line ", i+1
 
-		// these are the actual 1D drive waves for the tip movement
-		Xdownwave[] = XYupdownwave[p][i][0]
-		Xupwave[] = XYupdownwave[p][i][1]
-		Ydownwave[] = XYupdownwave[p][i][2]
-		Yupwave[] = XYupdownwave[p][i][3]
+		if (UseLineNum == 0)	// single line scans
+			LineNum = i
+		endif
+		
+		Xdownwave[] = XYupdownwave[p][LineNum][0]
+		Xupwave[] = XYupdownwave[p][LineNum][1]
+		Ydownwave[] = XYupdownwave[p][LineNum][2]
+		Yupwave[] = XYupdownwave[p][LineNum][3]
 	
 		//****************************************************************************
 		//*** SET TRACE VALUES HERE
@@ -515,17 +491,15 @@ Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 			endif
 			
 		error+= td_xSetOutWavePair(0,"Event.0", "PIDSLoop.0.Setpoint", Xdownwave,"PIDSLoop.1.Setpoint",Ydownwave ,-DownInterpolation)
-		if (error != 0)
-			print i, "error2", error
-		endif
-
+			if (error != 0)
+				print i, "error2", error
+			endif
 
 		SetPassFilter(1,q = ImagingFilterFreq, i = ImagingFilterFreq)
 
 		td_wv(LockinString + "Amp",CalHardD) 
 		td_wv(LockinString + "Freq",CalEngageFreq) //set the frequency to the resonant frequency
 		td_wv(LockinString + "FreqOffset",0)
-		
 		td_wv("Output.A",0)
 		td_wv("Output.B",0)
 		td_wv("Output.C",0)
@@ -546,7 +520,7 @@ Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 		//ReadWaveZback is the drive wave for the z piezo		
 		ReadWaveZback[] = ReadwaveZ[scanpoints-1-p] - liftheight * 1e-9 / GV("ZLVDTSens")
 		ReadWaveZmean = Mean(ReadwaveZ) * ZLVDTSens
-		Topography[][i] = -(ReadwaveZ[p] * ZLVDTSens-ReadWaveZmean)
+		Topography[][i] = -(ReadwaveZ[p] * ZLVDTSens)//-ReadWaveZmean)
 		DoUpdate
 	
 		//****************************************************************************
@@ -554,6 +528,8 @@ Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 		//*****************************************************************************		
 		td_stopInWaveBank(-1)
 		td_stopOutWaveBank(-1)
+
+		error+= td_xsetoutwavepair(0,"Event.2,repeat", "Output.A", lightwave,"Output.B", voltagewave,-1)
 
 		// Outputs three signals from the ARC. If CutDrive is active, then "trigger" is replaced by the drive signal to the shake pieze
 		//	Otherwise, the outputs are:
@@ -564,72 +540,71 @@ Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 		//
 		// IMPORTANT: You CANNOT use cutdrive and triggerwave at the same time.
 	
-		NVAR Cutdrive = root:packages:trEFM:cutDrive
-
-		error+= td_xsetoutwavepair(0,"Event.2,repeat", "Output.A", lightwave,"Output.B", voltagewave,-1)
-//		error+= td_xsetoutwavepair(0,"Event.2,repeat", "Output.A", lightwave,"Output.C", triggerwave,-1)
-		if (CutDrive == 0)	
-//			error += td_xsetoutwave(1,"Event.2,repeat", "Output.C", triggerwave, -1)
-		elseif (CutDrive == 1)
-//			error += td_xsetoutWave(1, "Event.2,repeat", LockinString + "Amp",drivewave, -1)
-		endif
-
+		heightbefore = td_rv("Zsensor")*td_rv("ZLVDTSens")
+	
 		//stop amplitude FBLoop and start height FB for retrace
 		StopFeedbackLoop(2)		
 
 		// to keep tip from being stuck, raises 100 nm first
-		SetFeedbackLoop(3, "always",  "ZSensor", ReadWaveZ[scanpoints-1]-500*1e-9/GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0, name="OutputZ", arcZ=1) // note the integral gain of 10000
+		// to keep tip from being stuck
+		SetFeedbackLoop(3, "always",  "ZSensor", ReadWaveZ[scanpoints-1]-500*1e-9/GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0, name="OutputZ") // note the integral gain of 10000
 		sleep/S 1
 		SetFeedbackLoop(3, "always",  "ZSensor", ReadWaveZ[scanpoints-1]-liftheight*1e-9/GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0, name="OutputZ", arcZ=1) // note the integral gain of 10000
 		sleep/s 1
 
-//		SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","DDS","Ground")	
-		SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","DDS","OutA","OutB","Ground","DDS","Ground")	
-		XPTPopupFunc("CypherHolderOut1Popup", 18, "Ground")
-		XPTButtonFunc("WriteXPT")
-		
-		td_WriteValue("DDSAmplitude0", 0)
-		td_WriteValue("DDSDCOffset0", 0)	
-		Sleep/S 1/30 // To avoid sparking.
+		heightafter = td_rv("Zsensor")*td_rv("ZLVDTSens")
+		print "The lift height is", (heightbefore-heightafter)*1e9, " nm"
 
-		td_WriteValue("DDSAmplitude0",EAmp)	
-		td_WriteValue("DDSFrequency0",EFreq)	
-		td_WriteValue("DDSDCOffset0",EOffset)	
-		td_WriteValue("DDSPhaseOffset0",EPhase)
+		NVAR Cutdrive = root:packages:trEFM:cutDrive
 		
-		if (elecdrive != 0)
-		
-			LoadArbWave(EFreq, EAmp, EOffset/2)
-			td_WriteValue("DDSAmplitude0", 0)		// turn off DDS amplitude
-			SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","Ground","OutA","Ground","Ground","OutB","Ground")
-		
-			startTime = StopMSTimer(-2)
-			do 
-			while((StopMSTimer(-2) - StartTime) < 300*1e3) 
-		
+		if (CutDrive == 0)	
+//			error += td_xsetoutwave(1,"Event.2,repeat", "Output.C", triggerwave, -1)
+			error+= td_xsetoutwavePair(1,"Event.2", "$outputXLoop.Setpoint", Xupwave,"$outputYLoop.Setpoint", Yupwave,-UpInterpolation)
+			
+			if (stringmatch("ARC.Lockin.0." , LockinString))
+				error+= td_xsetoutwave(2, "Event.2", "ARC.PIDSLoop.3.Setpoint", ReadWaveZback, -UpInterpolation)
+			else
+				error+= td_xsetoutwave(2, "Event.2", "Cypher.PIDSLoop.3.Setpoint", ReadWaveZback, -UpInterpolation)
+			endif
+		elseif (CutDrive == 1)
+			error += td_xsetoutWave(1, "Event.2,repeat", LockinString + "Amp",drivewave, -1)
+			variable YIGainBack = td_rv("ARC.PIDSLoop.1.IGain")
+			variable XIGainBack = td_rv("ARC.PIDSLoop.0.IGain")
+//			error += SetFeedbackLoop(1, "Event.2", "YSensor", Yupwave[0], 0, YIGainBack, 0, "Output.Y", 0)	
+//			error += SetFeedbackLoop(1, "Always", "YSensor", Yupwave[0], 0, YIGainBack, 0, "Output.Y", 0)	
+			if (XFastEFM == 1 && YFastEFM == 0)
+				error += td_wv("PIDSLoop.1.Setpoint", Yupwave[0])
+				error+= td_xsetoutwavePair(2,"Event.2", "ARC.PIDSLoop.0.Setpoint", Xupwave,"ARC.PIDSLoop.3.Setpoint", ReadWaveZback,-UpInterpolation)	
+			else
+				error += td_wv("PIDSLoop.0.Setpoint", Yupwave[0])
+				error+= td_xsetoutwavePair(2,"Event.2", "ARC.PIDSLoop.1.Setpoint", Xupwave,"ARC.PIDSLoop.3.Setpoint", ReadWaveZback,-UpInterpolation)	
+			endif
+			if (error != 0)
+				print "error", error
+			endif
+	
 		endif
-				
-		// If not using the new trigger box with invertable output, uncomment these lines and comment the subsequent 2 setoutwave(pair) lines
-//		error+= td_xsetoutwavePair(2,"Event.2", "ARC.PIDSLoop.0.Setpoint", Xupwave,"ARC.PIDSLoop.3.Setpoint", ReadWaveZback,-UpInterpolation)	
-//		variable YIGainBack = td_rv("ARC.PIDSLoop.1.IGain")
-//		SetFeedbackLoop(1, "Event.2", "Ysensor", Yupwave[0], 0, YIGainBack, 0, "Output.Y", 0)		//	hard-set Y position each line to free up an outwavebank
 
 		SetDataFolder root:packages:treFM:imagescan:FFtrEFM
 		Make/O/N=(numpnts(ReadWaveZback)) ZTemp = NaN
 		Make/O/N=(numpnts(ReadWaveZback)) HeightTemp = NaN
+		error += td_xSetInWavePair(0,"Event.2", "ZSensor", ZTemp,"Height", HeightTemp, "", -UpInterpolation) // getting read z-sensor for debugging offset	
 		
-		error+= td_xsetoutwavePair(1,"Event.2", "$outputXLoop.Setpoint", Xupwave,"$outputYLoop.Setpoint", Yupwave,-UpInterpolation)
-		if (stringmatch("ARC.Lockin.0." , LockinString))
-			error+= td_xsetoutwave(2, "Event.2", "ARC.PIDSLoop.3.Setpoint", ReadWaveZback, -UpInterpolation)
-		else
-			error+= td_xsetoutwave(2, "Event.2", "Cypher.PIDSLoop.3.Setpoint", ReadWaveZback, -UpInterpolation)
-		endif
+		// If not using the new trigger box with invertable output, uncomment these lines and comment the subsequent 2 setoutwave(pair) lines
+//		error+= td_xsetoutwavePair(2,"Event.2", "ARC.PIDSLoop.0.Setpoint", Xupwave,"ARC.PIDSLoop.3.Setpoint", ReadWaveZback,-UpInterpolation)	
+//		variable YIGainBack = td_rv("ARC.PIDSLoop.1.IGain")
+//		SetFeedbackLoop(1, "Event.2", "Ysensor", Yupwave[0], 0, YIGainBack, 0, "Output.Y", 0)		//	hard-set Y position each line to free up an outwavebank
+		
+//		error+= td_xsetoutwavePair(1,"Event.2", "$outputXLoop.Setpoint", Xupwave,"$outputYLoop.Setpoint", Yupwave,-UpInterpolation)
 
-//		td_wv(LockinString + "Amp", CalSoftD) 
-//		td_wv(LockinString + "Freq", CalResFreq) //set the frequency to the resonant frequency	
-//		td_wv(LockinString + "FreqOffset", 0)
+//		error+= td_xsetoutwave(2, "Event.2", LockInString + "PIDSLoop.3.Setpoint", ReadWaveZback, -UpInterpolation)
+
+		td_wv(LockinString + "Amp", CalSoftD) 
+		td_wv(LockinString + "Freq", CalResFreq) //set the frequency to the resonant frequency	
+		td_wv(LockinString + "FreqOffset", 0)
 		
 //		SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","OutB","DDS")
+//		SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","DDS","OutA","OutB","Ground","OutB","DDS")
 		SetPassFilter(1, q = EFMFilters[%trEFM][%q], i = EFMFilters[%trEFM][%i])
 
 		GageAcquire()
@@ -648,16 +623,12 @@ Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 		GageTransfer(1, data_wave)
 		
 		if (OneOrTwoChannels == 1)
-
-			if (i == 0 ) // only really care about the first line, every line is the same
+			if (i == 0)
 				GageTransfer(2, ch2_wave)
 			endif
-			
 		endif
 		
 		//AnalyzeLineOffline(PIXELCONFIG, scanpoints, shift_wave, tfp_wave, data_wave)
-
-		// ************  End of Retrace 		
 
 		// Optional Save Raw Data
 
@@ -672,21 +643,23 @@ Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 			endif
 
 			if (AvgWaves == 1)
-				
+
 				concatwaves(data_wave, scanpoints)
 				wave avg_wave
-				
 				Save/C/O/P = Path avg_wave as name
+
 			else
-				Save/C/O/P = Path data_wave as name
+				Save/C/O/	P = Path data_wave as name
 			endif
-						
+			
 			if (OneOrTwoChannels == 1)
 				wave ch2_wave = root:packages:trEFM:ImageScan:FFtrEFM:ch2_wave
 				
 				if (i == 0)  // only need first excitation
+
 					name = "CH2_000" + num2str(i) + ".ibw"	
 					if (AvgWaves == 1)
+
 						concatwaves(ch2_wave, scanpoints)
 						wave avg_wave
 				
@@ -696,24 +669,18 @@ Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 					endif
 				
 				endif
-			endif
 				
+			endif
+		
 			if (UsePython == 1)
 				PyPS_cypher_image(folder_path, name, savewave)
 			endif
-			
-//				if (i < 10)		
-//					name = "CH2_000" + num2str(i) + ".ibw"
-//				elseif (i < 100)
-//					name = "CH2_00" + num2str(i) + ".ibw"
-//				else
-//					name = "CH2_0" + num2str(i) + ".ibw"
-//				endif
-
-//				Save/C/O/P = Path ch2_wave as name
-				
-		endif
 		
+		endif
+
+		// ************  End of Retrace 		
+
+
 		//**********************************************************************************
 		//***  PROCESS DATA AND UPDATE GRAPHS
 		//*******************************************************************************
@@ -739,25 +706,10 @@ Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 		if (i < scanlines)//////////////
 		
 			DoUpdate 
-			
-			if (ElecDrive != 0)
-		
-				TurnOffAWG()
-
-				startTime = StopMSTimer(-2)
-				do 
-				while((StopMSTimer(-2) - StartTime) < 300*1e3) 
-			
-			endif
-			
 			//stop height FBLoop, restart Amplitude FBLoop and move to starting point of next line
 			StopFeedbackLoop(3)	
 			StopFeedbackLoop(4)	
 			
-			SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","OutB","DDS")
-			XPTPopupFunc("CypherHolderOut1Popup", 21, "ContShake")
-			XPTButtonFunc("WriteXPT")
-		
 			td_wv(LockinString + "Amp",CalHardD) 
 			td_wv(LockinString + "Freq",CalEngageFreq)
 			td_wv(LockinString + "FreqOffset",0)	
@@ -774,13 +726,13 @@ Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 				
 		endif   //if (i<gPSscanlines)
 	
-		print "Time for last scan line (seconds) = ", (StopMSTimer(-2) -starttime2)*1e-6, " ; Time remaining (in minutes): ", ((StopMSTimer(-2) -starttime2)*1e-6*(scanlines-i-1)) / 60
-		i += 1
-		
 		//Reset the primary inwaves to Nan so that gl_checkinwavetiming function works properly
 		ReadWaveFreqLast[] = ReadwaveFreq[p]
 		ReadWaveZ[] = NaN
 		ReadwaveFreq[] = NaN
+
+		print "Time for last scan line (seconds) = ", (StopMSTimer(-2) -starttime2)*1e-6, " ; Time remaining (in minutes): ", ((StopMSTimer(-2) -starttime2)*1e-6*(scanlines-i-1)) / 60
+		i += 1
 		
 	while (i < scanlines )	
 	// end imaging loop 
@@ -801,35 +753,6 @@ Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 	Beep
 	doscanfunc("stopengage")
 
-	// Save Parameters file
-	CreateParametersFile(PIXELCONFIG)
-	Save/G/O/P=Path/M="\r\n" SaveWave as "parameters.cfg"
-
 	setdatafolder savDF	
 
 End
-
-
-function concatwaves(inw, pixels)
-	
-	Wave inw
-	variable pixels
-	variable i = 0
-	
-	variable perpixel = dimsize(inw,1)/pixels
-	
-	variable j = 0
-	
-	make/O/n=(dimsize(inw,0), pixels) avg_wave
-	
-	do
-		duplicate/O/R=[][j, j+perpixel-1] inw, tempwave
-		matrixop/o twave = sumrows(tempwave)/numcols(tempwave)
-		Redimension/N=-1 twave
-		avg_wave[][i] = twave[p]
-		j += perpixel
-		i += 1
-	while (i < pixels)
-
-
-end
