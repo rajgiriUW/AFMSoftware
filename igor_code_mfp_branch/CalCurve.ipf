@@ -1,5 +1,51 @@
 #pragma rtGlobals=3		// Use modern global access method and strict wave access.
 
+
+Function Training_Collect()
+
+	SetDataFolder root:packages:trEFM:PointScan:FFtrEFM
+
+	// Assumes we generated 100 taus in Python; see misc/generatePulse.py
+	Make/O/N=500 tau_wave_array
+	tau_wave_array[] = p 	// equivalent to numpy arange from 0 to 99 inclusive
+
+	NVAR tfp_value = root:packages:trEFM:PointScan:FFtrEFM:tfp_value
+	NVAR shift_value = root:packages:trEFM:PointScan:FFtrEFM:shift_value
+
+	NewPath/O pathtemp
+
+	String savDF = GetDataFolder(1)
+	Wave shiftwave, gagewave
+
+	Variable i = 0
+	
+	do
+	
+		// Every 100 Taus, Retune and Grab the new tune
+//		if (mod(i, 100) == 0)
+//			CantTuneFunc("DoTuneAutoButton")
+//			Sleep/S 10
+//			GrabTuneButton("")
+//			Sleep/S 5
+//		endif
+	
+		LoadTauWave(tau_wave_array[i]) // Loads the tau wave into the function generator
+		Sleep/S 15
+		
+		// Set data folder for scanning and initialize variables.
+		SetDataFolder root:Packages:trEFM:PointScan:FFtrEFM
+		FFtrEFMPointScanButton("") // pushes the point scan button
+
+		SetDataFolder root:Packages:trEFM:PointScan:FFtrEFM
+		Save/O/P = pathtemp gagewave as "wave_phase_" + num2str(i) + ".ibw"
+		Sleep/S 1		
+
+		i += 1
+			
+	while (i < 500)
+		
+end
+
 Function TauScan(xpos, ypos, liftheight, DigitizerAverages, DigitizerSamples, DigitizerPretrigger)
 
 	Variable xpos, ypos, liftheight,  DigitizerAverages, DigitizerSamples, DigitizerPretrigger

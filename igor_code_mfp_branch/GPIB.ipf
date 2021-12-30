@@ -465,10 +465,15 @@ function SetVF(voltage, frequency, whichDevice)
 	
 end
 
-function SetVFSqu(voltage, frequency, whichDevice)
+function SetVFSqu(voltage, frequency, whichDevice, [EOM])
 
 	variable voltage, frequency
 	String whichDevice
+	variable EOM
+	if (ParamIsDefault(EOM))
+		EOM = 0
+	endif
+	
 	Variable whichDeviceAddress
 	
 	String SavedDataFolder = GetDataFolder(1)
@@ -478,6 +483,10 @@ function SetVFSqu(voltage, frequency, whichDevice)
 
 	//variable offset=0 //
 	variable offset=voltage/2 //this is here because half the time we want no voltage
+	if (EOM != 0)
+		offset = 0
+	endif
+	
 	string writtenstring1
 	string writtenstring2
 	string writtenstring3

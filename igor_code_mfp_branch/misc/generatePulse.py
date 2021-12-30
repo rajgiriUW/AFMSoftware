@@ -5,8 +5,6 @@ Created on Fri Jun 05 09:35:58 2015
 @author: Cypher
 """
 import numpy as np
-#import matplotlib.pyplot as plt
-
 
 def GeneratePulse(pulse_time,voltage,total_time):
     
@@ -19,17 +17,32 @@ def GeneratePulse(pulse_time,voltage,total_time):
     
     data[:pulse_samples] = voltage
     
-    
-    
     fo = open("Pulse.dat","wb")
     
     for i in range(int(total_samples)):
         fo.write(str(data[i])+"\r")
     fo.close()
 
-def GenerateTaus(tau, beta, sfx =''):
+def GenerateTaus(tau, beta=1, sfx =''):
+    '''
+    Generate a single exponential for trEFM when applied to the substrate
     
-    print('a')
+    Parameters
+    ----------
+    tau : float
+        Time constant for the exponential
+    beta : float, optional
+        Stretching exponent. The default is 1, which means no stretch
+    sfx : string, optional
+        Suffix for saving files. The default is ''.
+
+    Returns
+    -------
+    None.
+
+    '''
+    print ('Generating tau', tau, 'with beta', beta)
+    
     sample_rate = 1.0e8 # sampling rate used in Wavegenerator code
     total_samples = 800000
     pulse_samples = 700000
@@ -43,13 +56,35 @@ def GenerateTaus(tau, beta, sfx =''):
     np.savetxt(name, data, delimiter='\n', fmt ='%.10f')
 
 def GenerateBiTaus(tau1, tau2, amp1=0.5, amp2=0.5, sfx =''):
-    """amp1 + amp2 must equal 1!!!"""
+    '''
+    Generate a biexponential 
+    Parameters
+    ----------
+    tau1 : float
+        Time constant for the first exponential
+    tau2 : float
+        Time constant for the second exponential
+    amp1 : float, optional
+        Amplitude for the first exponential. The default is 0.5.
+    amp2 : TYPE, optional
+        Amplitude for the second exponential. The default is 0.5.
+    sfx : string, optional
+        Suffix for saving files. The default is ''.
+
+    Raises
+    ------
+    ValueError
+        If amplitudes do not add to 1, this error is called.
+
+    Returns
+    -------
+    None.
+
+    '''
     
     if amp1 + amp2 != 1.0:
         raise ValueError("Amp1 + Amp2 must equal 1")
     
-    
-    print('a')
     sample_rate = 1.0e8 # sampling rate used in Wavegenerator code
     total_samples = 800000
     pulse_samples = 700000
@@ -73,14 +108,21 @@ if __name__ == '__main__':
 
     print('Generating! This is slow, so hang on')
     
-    #GenerateBiTaus(50e-6, 300e-6, 0.5, 0.5, '0')
-    GenerateTaus(1e-6, 1, '5')
-    GenerateTaus(3e-6, 1, '6')
-    #GenerateBiTaus(50e-6, 300e-6, 0.9, 0.1, '1')
-	#GenerateBiTaus(50e-6, 300e-6, 0.1, 0.9, '2')
-    #GenerateBiTaus(10e-6, 300e-6, 0.5, 0.5, '3')
-    #GenerateBiTaus(100e-6, 800e-6, 0.5, 0.5, '4')
-
+    # Manually changed to generate the original 13 
+    # Then fills in the rest
+    taus = np.logspace(-6, -3, 500)
+    
+    # To make the numbers more useful to categorize
+    rounds = np.abs([np.floor(np.log10(x)) -2 for x in taus]).astype(int)
+    for n, r in enumerate(rounds):
+        taus[n] = np.round(taus[n], r) 
+    np.savetxt('Taus_used.txt', taus, delimiter='\n', fmt ='%.10f')
+    
+    for n, t in enumerate(taus):
+        
+        GenerateTaus(t, beta=1, sfx=str(n))
+        
+    '''    
     GenerateTaus(1e-7, 1, '0')
     GenerateTaus(2e-7, 1, '1')
     GenerateTaus(5e-7, 1, '2')
@@ -94,8 +136,8 @@ if __name__ == '__main__':
     GenerateTaus(2e-4, 1, '10')
     GenerateTaus(5e-4, 1, '11')
     GenerateTaus(1e-3, 1, '12')
-
-
+    '''
+  
     """GenerateTaus(1e-8, 1, '0')
     GenerateTaus(3.162e-8, 1, '1')
     GenerateTaus(1e-7, 1, '2')

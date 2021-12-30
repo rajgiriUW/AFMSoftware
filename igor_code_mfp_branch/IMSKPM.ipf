@@ -1,262 +1,70 @@
 #pragma rtGlobals=3		
+#pragma rtGlobals = 1
+
+// Contains the IM-SKPM code methods
+// 3 Methods are included
+// 1) AM mode: David M's + Jake P's method using the Force panel to call specific Asylum functions. Raj cannot verify this method works
+// 2) AM mode: Raj's version that sets up the feedback loops to be functionally the same as that used in AM-SKPM Nap mode. 
+// 3) FM mode: to be coded. The original code for this has long since been lost.
+
 
 // AM-SKPM based approach using built-in Asylum functions
 // Consult Daviid's+Jake's notes on the force and NAP panel setups
-				
-Function PointScanIMSKPM_forcepanel(amplitude)
-// This method uses spoofing the force callback mode to enable detection
-// Unfortunately, without documentation readily available it's hard to use.
-	variable amplitude
-	string savDF = GetDataFolder(1)
-	SetDataFolder root:packages:MFP3D:Force:
-	Wave Potential
-	Variable/g SKPM_VOLTAGE
-	Variable/G iteration_tracker
-	iteration_tracker = 0
-	String/G folder_path
-	NewPath folder_path
-	Make/O/N=29 frequency_list
-	variable/G current_freq
-	String/G skpm_path
 
-	frequency_list[0] = 1
+Function IMSKPM_AM() : Panel
 	
-	frequency_list[1] = 1.8
-	frequency_list[2] = 3.7
-	frequency_list[3] = 5.6
-	
-	frequency_list[4] = 10
-
-	frequency_list[5] = 18
-	frequency_list[6] =  37
-	frequency_list[7] =  56
-
-	frequency_list[8] = 100
-	
-	frequency_list[9] = 178
-	frequency_list[10] = 366
-	frequency_list[11] = 562
-	
-	frequency_list[12] = 1000
-	
-	frequency_list[13] = 1778
-	frequency_list[14] = 3660
-	frequency_list[15] = 5623
-	
-	frequency_list[16] = 10000
-	
-	frequency_list[17] = 17780
-	frequency_list[18] = 36600
-	frequency_list[19] = 56230
-	
-	frequency_list[20] = 100000
-	frequency_list[21] = 177800
-	frequency_list[22] = 366000
-	frequency_list[23] = 562300
-	frequency_list[24] = 1000000
-	frequency_list[25] = 1778000
-	frequency_list[26] = 3660000
-	frequency_list[27] = 5623000
-	frequency_list[28] = 10000000
-
-	
-	
-	
-	//frequency_list[0] = 1
-	//frequency_list[1] = 3.7
-	//frequency_list[2] = 10
-	//frequency_list[3] =  37
-	//frequency_list[4] = 100
-	//frequency_list[5] = 366
-	//frequency_list[6] = 1000
-	//frequency_list[7] = 3660
-	//frequency_list[8] = 10000
-	//frequency_list[9] = 36600
-	//frequency_list[10] = 100000
-	//frequency_list[11] = 366000
-	//frequency_list[12] = 1000000	
-	
-	//frequency_list[1] = 1
-	//frequency_list[3] = 3.7
-	//frequency_list[5] = 10
-	//frequency_list[7] =  37
-	//frequency_list[9] = 100
-	//frequency_list[11] = 366
-	//frequency_list[12] = 1000
-	//frequency_list[10] = 3660
-	//frequency_list[8] = 10000
-	//frequency_list[6] = 36600
-	//frequency_list[4] = 100000
-	//frequency_list[2] = 366000
-	//frequency_list[0] = 1000000	
-		
-	SKPM_VOLTAGE = amplitude
-	variable i = 0
-	string name
-	variable wave_points = DimSize(Potential,0)
-	Make/O/N=(wave_points,29) IMWaves, MilliWaves, IMWavesAvg
-	ARCheckFunc("ARUserCallbackMasterCheck_1",1)
-	ARCheckFunc("ARUserCallbackForceDoneCheck_1",1)
-	PDS("ARUserCallbackForceDone","Stage1()")
-	Stage1()
-	print folder_path
-End
-
-
-Function Stage1()
-	Wave IMWaves,MIlliWaves
-	nvar SKPM_VOLTAGE
-	Wave Potential
-	nvar current_freq
-	nvar iteration_tracker = root:packages:MFP3D:Force:iteration_tracker
-	svar skpm_path
-	svar folder_path
-	Wave frequency_list
-	string name
-	string savDF2
-	
-	skpm_path = num2str(current_freq)
-	if (iteration_tracker >= 29)
-		print "That's it, we're done."
-		Save/C/O/P=folder_path IMWaves as "IMWaves.ibw"
-		Save/C/O/P=folder_path Milliwaves as "Milliwaves.ibw"
-		
-		savDF2 = GetDataFolder(1)
-		
-		SetDataFolder root:Packages:trEFM
-		//NVAR gWGDeviceAddress
-		//gWGDeviceAddress = 11
-		setvfsqu(skpm_voltage, .5, "wg")
-		//gWGDeviceAddress = 10
-		setdatafolder savDF2
-				
-		variable iiiii
-		for(iiiii = 0; iiiii <4;iiiii+=1)
-		Beep
-		Sleep/s 1/8	
-		endfor
-	
-		return 0	
-	endif
-	
-	if (iteration_tracker <= 29)
-		current_freq = frequency_list[iteration_tracker]
-		//print current_freq
-	endif
-	
-	
-	PDS("ARUserCallbackForceDone","Stage2()")
-	
-	savDF2 = GetDataFolder(1)
-	SetDataFolder root:Packages:trEFM
-	//NVAR gWGDeviceAddress
-	//gWGDeviceAddress = 11
-	setvfsqu(skpm_voltage, .5, "wg") //5V to turn the laser on
-	//gWGDeviceAddress = 10
-	setdatafolder savDF2
-	
-		
-	SimpleEngageMe("")
-	Sleep/s 1/2	
-	
-	print "the current frequency is xxx mHz"
-	
-	DoForceFunc("SingleForce_2")
-End //InitFunc
-
-Function Stage2()
-	nvar SKPM_VOLTAGE
-	svar skpm_path
-	SetDataFolder root:packages:MFP3D:Force
-	nvar current_freq
-	svar folder_path
-	Wave Potential,Milliwaves
-	string savDF2
-	
-	print folder_path
-	nvar iteration_tracker = root:packages:MFP3D:Force:iteration_tracker
-	
-	MilliWaves[][iteration_tracker] = Potential[p]
-	
-	PDS("ARUserCallbackForceDone","Stage3()")
-
-	savDF2 = GetDataFolder(1)
-	SetDataFolder root:Packages:trEFM
-	//NVAR gWGDeviceAddress
-	//gWGDeviceAddress = 11
-	setvfsqu(skpm_voltage, current_freq, "wg")
-	//gWGDeviceAddress = 10
-	setdatafolder savDF2
-		
-	SimpleEngageMe("")
-	Sleep/s 1/2
-	
-	print "the current frequency is:",current_freq,"Hz"
-				
-	DoForceFunc("SingleForce_2")
-End
-
-Function Stage3()
-	nvar iteration_tracker = root:packages:MFP3D:Force:iteration_tracker
-	svar skpm_path
-	WAve ImWAves,Potential, IMWavesAvg
-	PDS("ARUserCallbackForceDone","Stage1()")
-	
-	variable npnts = numpnts(Potential)
-	variable spnts = ceil(0.25 * npnts)	// 25% on for averaging
-	
-	IMWaves[][iteration_tracker] = Potential[p]
-	Wavestats/Q/R=[spnts,npnts] Potential
-	IMWavesAvg[iteration_tracker] = V_avg
-
-	ARCallbackFunc("ForceDone") // Spoof a force done Callback
-	
-	iteration_tracker += 1
-End
-
-Function FrequencyLIst()
-
 	SetDataFolder root:packages:trEFM:PointScan:SKPM
-	Make/O/N=22 frequency_list
+	Variable/G  numavg
+	Variable/G usehalfoffset = 0
+	
+	PauseUpdate; Silent 1		// building window...
+	NewPanel /W=(2878,686,3124,864)
+	ShowTools/A
+	SetDrawLayer UserBack
+	SetDrawEnv fillfgc= (56576,56576,56576)
+	DrawRect 6,7,230,170
+	Button button1,pos={48,14},size={142,24},proc=IMSKPMAMButton,title="IM-SKPM (AM) Point Scan"
+	SetVariable setvar1,pos={16,50},size={60,16},title="X"
+	SetVariable setvar1,limits={-inf,inf,0},value= root:packages:trEFM:gxpos
+	SetVariable setvar2,pos={16,80},size={60,16},title="Y"
+	SetVariable setvar2,limits={-inf,inf,0},value= root:packages:trEFM:gypos
+	SetVariable setvar3,pos={121,51},size={100,16},title="lift height (nm)"
+	SetVariable setvar3,limits={-inf,inf,0},value= root:packages:trEFM:liftheight
+	SetVariable setvar4,pos={100,79},size={120,16},title="Number of Averages"
+	SetVariable setvar4,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:numavg
+	SetVariable IMSKPMVoltage,pos={80,103},size={139,16},title="Function Gen Voltage"
+	SetVariable IMSKPMVoltage,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:ACVoltage
+	CheckBox UseOffset,pos={92,126},size={125,14},title="No Offset?"
+	CheckBox UseOffset,variable= root:packages:trEFM:PointScan:SKPM:usehalfoffset,side= 1
+End
 
-	frequency_list[0] = 1
-	frequency_list[1] = 1.8
-	frequency_list[2] = 3.7
-	frequency_list[3] = 5.6
-	frequency_list[4] = 10
-	frequency_list[5] = 18
-	frequency_list[6] =  37
-	frequency_list[7] =  56
-	frequency_list[8] = 100
-	frequency_list[9] = 178
-	frequency_list[10] = 366
-	frequency_list[11] = 562
-	frequency_list[12] = 1000
-	frequency_list[13] = 1778
-	frequency_list[14] = 3660
-	frequency_list[15] = 5623
-	frequency_list[16] = 10000
-	frequency_list[17] = 17780
-	frequency_list[18] = 36600
-	frequency_list[19] = 56230
-	frequency_list[20] = 100000
-	frequency_list[21] = 177800
-//	frequency_list[22] = 366000
-//	frequency_list[23] = 562300
-//	frequency_list[24] = 1000000
-//	frequency_list[25] = 1778000
-//	frequency_list[26] = 3660000
-//	frequency_list[27] = 5623000
-//	frequency_list[28] = 10000000
+/////////////////////////////////
 
-end
+Function IMSKPMAMButton(ctrlname) : ButtonControl
 
-Function PointScanIMSKPM(xpos, ypos, liftheight)
+	String ctrlname
+	String savDF = GetDataFolder(1)
+	SetDataFolder root:packages:trEFM:PointScan:SKPM
+	NVar  xpos =  root:packages:trEFM:gxpos
+	NVAR ypos =  root:packages:trEFM:gypos
+	NVAR liftheight =  root:packages:trEFM:liftheight
+	NVAR numavg
+	PointScanIMSKPM_AM(xpos, ypos, liftheight, numavg)
+	SetDataFolder savDF
+	
+End
+
+///////////////////////////////
+
+Function PointScanIMSKPM_AM(xpos, ypos, liftheight, numavg)
 
 // This method uses a somewhat more "brute force" approac
 // Engage on teh surface, lift to panel height, switch the feedback methods and crosspoint
 // Then record waves for specific amounts of time
-	Variable  xpos, ypos, liftheight
+// xpos and ypos in microns
+// liftheight in nanometers
+
+	Variable  xpos, ypos, liftheight, numavg
 
 	String savDF = GetDataFolder(1)
 	
@@ -276,15 +84,21 @@ Function PointScanIMSKPM(xpos, ypos, liftheight)
 	variable EOffset = GV("NapTipVoltage")
 	variable EPhase = GV("NapPhaseOffset")
 	
-	Nvar numcycles = root:Packages:trEFM:WaveGenerator:numcycles
-	Variable SKPM_voltage = 2.5
+//	Nvar numcycles = root:Packages:trEFM:WaveGenerator:numcycles
+	NVAR SKPM_voltage = root:packages:trEFM:PointScan:SKPM:ACVoltage // 7.47
 	variable current_freq =1
 	
 	// For the time being, we will be recording 80000 points for 1.6 s
 	SetDataFolder root:packages:trEFM:PointScan:SKPM	
 	FrequencyList()
 	Wave Frequency_List
-	Shuffle(Frequency_List)
+	NVAR useHalfOffset = root:packages:trEFM:PointScan:SKPM:usehalfoffset
+
+	// These two bits of code are for debugging/removing artifacts. 
+	// 	First line just reverses the frequencies
+	// 	Second line randomizes the frequencies 
+//	Reverse Frequency_list
+//	Shuffle(Frequency_List)
 
 	Make/O/N=(80000) IM_CurrentFreq = NaN
 	
@@ -296,13 +110,23 @@ Function PointScanIMSKPM(xpos, ypos, liftheight)
 	variable j = 0
 	variable k = 0 
 
-	Display IMWavesAvg vs Frequency_List
-	ModifyGraph log(bottom)=1
-	ModifyGraph mirror=1,fStyle=1,fSize=22,axThick=3;DelayUpdate
-	Label left "CPD (V)";DelayUpdate
-	Label bottom "Frequency (Hz)"
-	ModifyGraph mode=3,marker=16
+	DoWindow/F IMSKPM
+	if (V_flag == 0)
+		Display/K=1/N=IMSKPM IMWavesAvg vs Frequency_List
+		ModifyGraph log(bottom)=1
+		ModifyGraph mirror=1,fStyle=1,fSize=22,axThick=3;DelayUpdate
+		Label left "CPD (V)";DelayUpdate
+		Label bottom "Frequency (Hz)"
+		ModifyGraph mode=3,marker=16
+	endif
 	
+	DoWindow/F IM_CurrentFreq
+	if (V_flag == 0)
+		Display IM_CurrentFreq
+	endif
+	
+	// USB function generator, futureproofing for FM mode 
+	//TurnOnAWG()
 	do
 
 		SetDataFolder root:packages:trEFM:PointScan:SKPM
@@ -313,7 +137,8 @@ Function PointScanIMSKPM(xpos, ypos, liftheight)
 
 		// 0) Set up WaveGenerator	
 		current_freq = Frequency_List[j]
-		setvfsqu(skpm_voltage, current_freq, "wg")	
+		setvfsqu(skpm_voltage, current_freq, "wg", EOM=usehalfoffset)	 
+//		LoadArbWave(current_freq, skpm_voltage, 0) // Cypher function gen
 //		LiftTo(liftheight, 0)
 		do
 	
@@ -325,22 +150,24 @@ Function PointScanIMSKPM(xpos, ypos, liftheight)
 
 			StopFeedbackLoop(4)
 			
-			if ( j == 0 && k ==0 )
+//			if ( j == 0 && k ==0 )
 	
 				StopFeedbackLoop(3)
 				StopFeedbackLoop(5)
 	
 				SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","OutB","DDS")
 				MoveXY(xpos, ypos) // Move to xy, keeping the tip raised away from the surface	
-			endif
+//			endif
 			
-			if (j == 0 && k ==0 )
+//			if (j == 0 && k ==0 )
 				// 1) Find Surface and Lift tip to specified lift height
 				LiftTo(liftheight, 0)  // sets Feedback Loop 3 to Z-position
-			endif
+//			endif
 						
 			// 2) Switch up Crosspoint for Electrical Mode
 			SetCrosspoint ("FilterOut","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Defl","OutC","OutA","OutB","Ground","DDS","Ground")
+
+			td_wv("Output.A", 5) // turn on laser
 
 			td_WriteValue("DDSAmplitude0",EAmp)	
 			td_WriteValue("DDSFrequency0",EFreq)	
@@ -349,8 +176,18 @@ Function PointScanIMSKPM(xpos, ypos, liftheight)
 			//td_WriteValue("DDSDCOffset0",0)	
 	
 			// 3) Set up Feedback Loop for POtential
-			SetFeedbackLoop(4, "Always", "InputQ", 0, 0,  8000, 0, "Potential", 0)   // InputQ = $Lockin.0.Q , quadrature lockin output 
 
+			// Inputq or InputQ? Or use LockinString + Q
+			SetFeedbackLoop(4, "Always", "InputQ", 0, 0,  8000, 0, "Potential", 0)   // InputQ = $Lockin.0.Q , quadrature lockin output 
+			StopFeedbackLoop(3)
+			StopFeedbackLoop(5)
+
+			// 80000 points @ 50 kHz = 1.6 s @ interpval 1
+			interpval = round(5 / current_freq)
+			if (interpval < 1)
+				interpval = 1
+			endif
+			print "Interpval = ", interpval, " Frequency: ", current_Freq
 			td_xsetinwave(0, "Event.2", "Potential", IM_CurrentFreq, "", interpval)
 			td_WriteString("Event.2", "Once")
 	
@@ -367,9 +204,11 @@ Function PointScanIMSKPM(xpos, ypos, liftheight)
 			td_StopInWaveBank(-1)
 			td_StopOutWaveBank(-1)
 			
-			 k += 1
-	
-		while (k < numcycles)
+			print td_wv("Output.A", 0)
+			 k += 1 
+			 
+			DoUpdate 
+		while (k < numavg)
 	
 		DeletePoints/M=1 0,1, IMWaves_CurrentFreq
 	
@@ -384,13 +223,21 @@ Function PointScanIMSKPM(xpos, ypos, liftheight)
 		j += 1
 	
 	while (j < numpnts(Frequency_List))
+
+	Make/D/N=3/O W_coef
+	W_coef[0] = {1e-5,-.15,.05}
+	FuncFit/NTHR=1 imskpm W_coef  IMWavesAvg /X=frequency_list /D 
 	
 	DeletePoints/M=1 0,1, IMWaves
 	Beep
 	
-	setvfsin(0.01, 1) // lowers amplitude to turn off TTL signal
-
+	//setvfsin(0.01, 1) // lowers amplitude to turn off TTL signal
+	TurnOffAWG()
+	LoadArbWave(1, 0.25, 0)
 	SetDataFolder root:packages:trEFM:PointScan:SKPM
+	
+	doscanfunc("stopengage")
+	Sleep/S 1
 	
 End
 
@@ -399,4 +246,141 @@ Function Shuffle(InWave)
 	Variable n=numpnts(InWave)
 	Make/o/N=(n) order=enoise(n)
 	Sort order, InWave
+End
+
+
+Function IMSKPM_FM(xpos, ypos, liftheight, numavg)
+	Variable  xpos, ypos, liftheight, numavg
+
+	String savDF = GetDataFolder(1)
+	
+	SetDataFolder root:Packages:trEFM
+	Nvar pgain, sgain, igain, adcgain, setpoint, adcgain
+	NVAR XLVDTSens, YLVDTSens, ZLVDTSens, XLVDToffset, YLVDToffset, ZLVDToffset
+	NVAR xigain, yigain, zigain
+	Svar LockinString
+	Wave EFMFilters = root:packages:trEFM:EFMFilters
+	NVar interpval
+	NVAR ElecDrive, ElecAmp
+	GetGlobals()
+
+	SetDataFolder root:Packages:trEFM:VoltageScan
+	Nvar calsoftd, calresfreq, calphaseoffset, calengagefreq, calhardd
+	ResetAll()
+
+	SetDataFolder root:packages:trEFM:PointScan:SKPM
+	variable/G freq_PGain
+	variable/G freq_IGain 
+	variable/G freq_DGain
+	
+	NVAR LockinTimeConstant
+	NVAR LockinSensitivity
+	NVAR ACFrequency
+	NVAR ACVoltage
+	NVAR TimePerPoint
+
+
+	NVAR SKPM_voltage = root:packages:trEFM:PointScan:SKPM:ACVoltage // 7.47
+	variable current_freq =1
+	
+	// For the time being, we will be recording 80000 points for 1.6 s
+	SetDataFolder root:packages:trEFM:PointScan:SKPM	
+	FrequencyList()
+	Wave Frequency_List
+	NVAR useHalfOffset = root:packages:trEFM:PointScan:SKPM:usehalfoffset 
+
+	// These two bits of code are for debugging/removing artifacts. 
+	// 	First line just reverses the frequencies
+	// 	Second line randomizes the frequencies 
+//	Reverse Frequency_list
+//	Shuffle(Frequency_List)
+
+	Make/O/N=(80000) IM_CurrentFreq = NaN
+	
+	Make/O/N=(80000) IMWaves = NaN
+	Make/O/N=(numpnts(Frequency_List)) IMWavesAvg = NaN
+	
+	SetPassFilter(1, a = EFMFilters[%EFM][%A], b = EFMFilters[%EFM][%B], fast = EFMFilters[%EFM][%Fast], i = EFMFilters[%EFM][%i], q = EFMFilters[%EFM][%q])
+
+	variable j = 0
+	variable k = 0 
+
+	DoWindow/F IMSKPM
+	if (V_flag == 0)
+		Display/K=1/N=IMSKPM IMWavesAvg vs Frequency_List
+		ModifyGraph log(bottom)=1
+		ModifyGraph mirror=1,fStyle=1,fSize=22,axThick=3;DelayUpdate
+		Label left "CPD (V)";DelayUpdate
+		Label bottom "Frequency (Hz)"
+		ModifyGraph mode=3,marker=16
+	endif
+	
+	Make/D/N=3/O W_coef
+	W_coef[0] = {1e-5,-.15,.05}
+	FuncFit/NTHR=1 imskpm W_coef  IMWavesAvg /X=frequency_list /D 
+	
+	DoWindow IM_CurrentFreq
+	if (V_flag == 0)
+		Display IM_CurrentFreq
+	endif
+
+end
+
+Function FrequencyLIst()
+
+	SetDataFolder root:packages:trEFM:PointScan:SKPM
+	Make/O/N=30 frequency_list
+
+	frequency_list[0] = 1.8
+	frequency_list[1] = 2.5
+	frequency_list[2] = 3.7
+	frequency_list[3] = 5.6
+	frequency_list[4] = 10
+	frequency_list[5] = 18
+	frequency_list[6] =  37
+	frequency_list[7] =  56
+	frequency_list[8] = 100
+	frequency_list[9] = 178
+	frequency_list[10] = 366
+	frequency_list[11] = 562
+	frequency_list[12] = 1000
+	frequency_list[13] = 1778
+	frequency_list[14] = 3660
+	frequency_list[15] = 5623
+	frequency_list[16] = 10000
+	frequency_list[17] = 17780
+	frequency_list[18] = 36600
+	frequency_list[19] = 56230
+	frequency_list[20] = 100000
+	frequency_list[21] = 177800
+	frequency_list[22] = 366000
+	frequency_list[23] = 150
+	frequency_list[24] = 2000000
+	frequency_list[23] = 562300
+	frequency_list[24] = 1000000
+	frequency_list[25] = 1778000
+	frequency_list[26] = 3660000
+	frequency_list[27] = 5623000
+	frequency_list[28] = 10000000
+	frequency_list[29] = 14900000
+
+end
+
+Function imskpm(w,f) : FitFunc
+	Wave w
+	Variable f
+
+	//CurveFitDialog/ These comments were created by the Curve Fitting dialog. Altering them will
+	//CurveFitDialog/ make the function less convenient to work with in the Curve Fitting dialog.
+	//CurveFitDialog/ Equation:
+	//CurveFitDialog/ f(f) = 0.5 * C + A*  tau*f * (1 - exp(-1 / (2*f*tau)))
+	//CurveFitDialog/ End of Equation
+	//CurveFitDialog/ Independent Variables 1
+	//CurveFitDialog/ f
+	//CurveFitDialog/ Coefficients 3
+	//CurveFitDialog/ w[0] = tau
+	//CurveFitDialog/ w[1] = C
+	//CurveFitDialog/ w[2] = A
+
+	return 0.5 * w[1] + w[2]*  w[0]*f * (1 - exp(-1 / (2*f*w[0])))
 End

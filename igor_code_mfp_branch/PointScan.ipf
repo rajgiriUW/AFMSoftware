@@ -10,8 +10,9 @@ Function PointScantrEFM(xpos, ypos, liftheight)
 	Nvar pgain, sgain, igain, adcgain, setpoint,adcgain
 	NVar interpval
 	Svar LockinString
-	NVAR ElecDrive, ElecAmp
-	
+	NVAR ElecDrive, ElecAmp // if driving using the AWG on the substrate
+	NVAR ElecEFMDrive // if using the Electric Tune panel to drive the tip directly
+			
 	Nvar XLVDTsens
 	Wave EFMFilters = root:packages:trEFM:EFMFilters
 	Variable XLVDToffset = td_Rv("XLVDToffset")
@@ -24,12 +25,12 @@ Function PointScantrEFM(xpos, ypos, liftheight)
 	SetDataFolder root:Packages:trEFM:WaveGenerator
 	Wave gentipwave, gentriggerwave, genlightwave, gendrivewave
 	Nvar numcycles
-	CommitDriveWaves()
+	CommitDriveWaves(interpval=interpval)
 	SetDataFolder root:Packages:trEFM:PointScan:trEFM
 	
 ////////////////////////// CALC INPUT/OUTPUT WAVES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-	Make/O/N = 800 shiftwaveavg
-	Make/O/N = (800* numcycles) shiftwave // 800 points = 16 milliseconds at 50kHz sample rate
+	Make/O/N = (800*interpval) shiftwaveavg
+	Make/O/N = (800* numcycles * interpval) shiftwave // 800 points = 16 milliseconds at 50kHz sample rate, *1 is placeholder until figure out interpval logic
 	
 	shiftwave = NaN // set to NaN so we can use a procedure to determine when it is filled.
 	shiftwaveavg = 0 
@@ -78,14 +79,14 @@ Function PointScantrEFM(xpos, ypos, liftheight)
 	// Get the waves ready to read/write when Event 2 is fired.
 
 	if (cutDrive == 0)
-		td_xSetInWave(2, "Event.2" , LockinString + "freqOffset", shiftwave, "", interpval)
-		td_xSetOutWavePair(1, "Event.2,Always", "Output.A", genlightwave, "Output.C", gentriggerwave, interpval)
-		td_xSetOutWave(0, "Event.2,Always", "Output.B", gentipwave,interpval)
+		td_xSetInWave(2, "Event.2" , LockinString + "freqOffset", shiftwave, "", 1)
+		td_xSetOutWavePair(1, "Event.2,Always", "Output.A", genlightwave, "Output.C", gentriggerwave, 1)
+		td_xSetOutWave(0, "Event.2,Always", "Output.B", gentipwave, 1)
 	elseif (cutDrive == 1)
 		print "cut"
-		td_xSetInWave(2, "Event.2" , LockinString + "freqOffset", shiftwave, "", interpval)
-		td_xSetOutWave(0, "Event.2,Always", "Output.A", genlightwave, interpval)
-		td_xSetOutWavePair(1, "Event.2,Always", "Output.B", gentipwave, LockinString + "Amp", gendrivewave, interpval)
+		td_xSetInWave(2, "Event.2" , LockinString + "freqOffset", shiftwave, "", 1)
+		td_xSetOutWave(0, "Event.2,Always", "Output.A", genlightwave, 1)
+		td_xSetOutWavePair(1, "Event.2,Always", "Output.B", gentipwave, LockinString + "Amp", gendrivewave, 1)
 	endif
 
 	SetPassFilter(1, a = EFMFilters[%EFM][%A], b = EFMFilters[%EFM][%B], fast = EFMFilters[%EFM][%Fast], i = EFMFilters[%EFM][%i], q = EFMFilters[%EFM][%q])
@@ -97,8 +98,12 @@ Function PointScantrEFM(xpos, ypos, liftheight)
 	
 	// Raise up to the specified lift height.
 	StopFeedbackLoop(2)
-	SetFeedbackLoop(3, "Always", "ZSensor", (currentz - liftheight * 1e-9) / GV("ZLVDTSens"), 0,  EFMFilters[%ZHeight][%IGain], 0, "Output.Z", 0)  
-	
+	//SetFeedbackLoop(3, "Always", "ZSensor", (currentz - liftheight * 1e-9) / GV("ZLVDTSens"), 0,  EFMFilters[%ZHeight][%IGain], 0, "Output.Z", 0)  
+	SetFeedbackLoop(3, "always",  "ZSensor",  (currentz - 100 * 1e-9)/GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0, name="OutputZ") // note the integral gain of 10000
+	sleep/S 1
+	SetFeedbackLoop(3, "always",  "ZSensor", (currentz - liftheight * 1e-9) / GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0, name="OutputZ", arcZ=1) // note the integral gain of 10000
+	sleep/s 1
+
 	startTime = StopMSTimer(-2)
 	do 
 	while((StopMSTimer(-2) - StartTime) < 300*1e3) 
@@ -108,14 +113,27 @@ Function PointScantrEFM(xpos, ypos, liftheight)
 	td_WV(LockinString + "freq", calresfreq)
 	td_WV(LockinString + "PhaseOffset", calphaseoffset)
 
+	// For Elec Tune driving
+	variable EAmp = GV("NapDriveAmplitude")
+	variable EFreq = GV("NapDriveFrequency")
+	variable EOffset = GV("NapTipVoltage")
+	variable EPhase = GV("NapPhaseOffset")
 
-	if (ElecDrive != 0)
-//		SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","DDS","Ground")
-//		td_WV(LockinString + "Amp", elecAmp)
-//		td_WV(LockinString + "freq", calresfreq)
-//		td_WV(LockinString + "PhaseOffset", calphaseoffset)
 
-//		print td_rv("Amplitude")
+	if (ElecEFMDrive != 0)
+		SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","DDS","OutA","OutB","Ground","DDS","Ground")
+
+		XPTPopupFunc("CypherHolderOut1Popup", 18, "Ground")
+		XPTButtonFunc("WriteXPT")
+	
+		td_WriteValue("DDSAmplitude0", 0)
+		td_WriteValue("DDSDCOffset0", 0)	
+		Sleep/S 1/30 // To avoid sparking.
+		td_WriteValue("DDSDCOffset0",EOffset)	
+		td_WriteValue("DDSAmplitude0",EAmp)	
+		td_WriteValue("DDSFrequency0",EFreq)
+		td_WriteValue("DDSPhaseOffset0",EPhase)
+
 	endif
 
 	// Wait for frequency to stabilize.
@@ -149,14 +167,22 @@ Function PointScantrEFM(xpos, ypos, liftheight)
 	td_WV("Output.B", 0)
 
 	
-	// Average the cycles into shiftwaveavg.
+
 	Variable k = 0
 	do
-		shiftwaveavg += shiftwave[800 * k + p] + 500
+		shiftwaveavg += shiftwave[800 *interpval * k + p] + 500
 		k += 1
 	while(k < numcycles)
 	
 	DoUpdate
+
+	if (ElecEFMDrive != 0)
+		SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","Ground", "DDS")
+
+		XPTPopupFunc("CypherHolderOut1Popup", 21, "ContShake")
+		XPTButtonFunc("WriteXPT")
+	
+	endif
 
 	// reset the dds settings.
 	td_WV(LockinString + "Amp", calhardd)
@@ -183,13 +209,13 @@ Function PointScantrEFM(xpos, ypos, liftheight)
 	
 	ResetAll()
 	
-	 k = 0
+	k = 0
 	do
 		shiftwaveavg[k] = shiftwaveavg[k] / numcycles
 		shiftwaveavg[k] = shiftwaveavg[k] - 500
 		k += 1
 		
-	while(k < 800)
+	while(k < 800*interpval)
 
 	SetDataFolder savDF
 End
@@ -218,7 +244,6 @@ Function PointScanFFtrEFM(xpos, ypos, liftheight,DigitizerAverages,DigitizerSamp
 	Nvar pgain, sgain, igain, adcgain, setpoint,adcgain
 	Svar LockinString
 	Nvar XLVDTsens
-	NVAR UsePython
 	Wave EFMFilters = root:packages:trEFM:EFMFilters
 	Variable XLVDToffset = td_Rv("XLVDToffset")
 	GetGlobals()
@@ -292,11 +317,11 @@ Function PointScanFFtrEFM(xpos, ypos, liftheight,DigitizerAverages,DigitizerSamp
 	// Important! If using cutdrive you lose BNCOut0 (trigger) due to outwave bank restrictions
 	NVAR Cutdrive = root:packages:trEFM:cutDrive
 	if (cutDrive == 0)
-		td_xSetOutWavePair(1, "Event.2,Always", "Output.A", genlightwave, "Output.C", gentriggerwave, interpval)
+		td_xSetOutWavePair(1, "Event.2,Always", "Output.A", genlightwave, "Output.C", gentriggerwave, 1)
 		td_xSetOutWave(0, "Event.2,Always", "Output.B", gentipwave,interpval)
 	elseif (cutDrive == 1)
-		td_xSetOutWavePair(0, "Event.2,Always", "Output.A", genlightwave, "Output.B", gentipwave, interpval)
-		td_xSetOutWave(1, "Event.2,Always", LockinString + "Amp", gendrivewave, interpval)
+		td_xSetOutWavePair(0, "Event.2,Always", "Output.A", genlightwave, "Output.B", gentipwave, 1)
+		td_xSetOutWave(1, "Event.2,Always", LockinString + "Amp", gendrivewave, 1)
 	endif
 	
 	
@@ -306,9 +331,10 @@ Function PointScanFFtrEFM(xpos, ypos, liftheight,DigitizerAverages,DigitizerSamp
 
 	
 	// Raise up to the specified lift height.
-
-	SetFeedbackLoop(3, "Always", "ZSensor", (currentz - liftheight * 1e-9) / GV("ZLVDTSens"), 0, EFMFilters[%ZHeight][%IGain], 0, "Output.Z", 0)  
-	Sleep/S 1/30 // To avoid sparking.
+	SetFeedbackLoop(3, "always",  "ZSensor",  (currentz - 100 * 1e-9)/GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0, name="OutputZ", arcZ=1) // note the integral gain of 10000
+	sleep/S 1
+	SetFeedbackLoop(3, "always",  "ZSensor", (currentz - liftheight * 1e-9) / GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0, name="OutputZ", arcZ=1) // note the integral gain of 10000
+	sleep/s 1
 
 	// Set the Cantilever to Resonance.
 	td_WV(LockinString + "Amp", calsoftd)
@@ -346,9 +372,7 @@ Function PointScanFFtrEFM(xpos, ypos, liftheight,DigitizerAverages,DigitizerSamp
 		GageTransfer(2, ch2_wave)
 	endif
 
-	if (UsePython == 0)
-		AnalyzePointScan(PIXELCONFIG, gagewave,shiftwave)
-	endif
+	//AnalyzePointScan(PIXELCONFIG, gagewave,shiftwave)
 	
 	// reset the dds settings.
 	td_WV(LockinString + "Amp", calhardd)

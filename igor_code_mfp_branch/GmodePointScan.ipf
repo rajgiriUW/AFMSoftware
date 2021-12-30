@@ -25,6 +25,7 @@ Function PointScanGMode(xpos, ypos, liftheight,DigitizerAverages,DigitizerSample
 	Svar LockinString
 	Nvar XLVDTsens
 	NVAR elecdrive
+	NVar interpval
 	Wave EFMFilters = root:packages:trEFM:EFMFilters
 	Variable XLVDToffset = td_Rv("XLVDToffset")
 	GetGlobals()
@@ -32,10 +33,12 @@ Function PointScanGMode(xpos, ypos, liftheight,DigitizerAverages,DigitizerSample
 	SetDataFolder root:Packages:trEFM:VoltageScan
 	Nvar calsoftd, calresfreq, calphaseoffset, calengagefreq, calhardd
 	ResetAll()
+	
 	SetDataFolder root:Packages:trEFM:WaveGenerator
 	Wave gentipwave, gentriggerwave, genlightwave, gendrivewave
 	Nvar numcycles
-	CommitDriveWaves()
+	CommitDriveWaves(interpval=interpval)
+	
 	SetDataFolder root:Packages:trEFM:PointScan:FFtrEFM
 
 	Make/O/N = (DigitizerSamples,DigitizerAverages) gagewave
@@ -43,6 +46,9 @@ Function PointScanGMode(xpos, ypos, liftheight,DigitizerAverages,DigitizerSample
 	Make/O/N = (DigitizerSamples) shiftwave
 	Make/O/N = (400 * numcycles) phasewave
 	Make/O/N = 400 phasewaveavg
+	
+	// Dummy wave for checking inwavetiming
+	Make/O/N = (800*interpval) tempwaveavg
 ////////////////////////// CALC INPUT/OUTPUT WAVES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 //////////////////////////    SETTINGS   \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -95,20 +101,30 @@ Function PointScanGMode(xpos, ypos, liftheight,DigitizerAverages,DigitizerSample
 	NVAR Cutdrive = root:packages:trEFM:cutDrive
 	if (cutDrive == 0)
 //		td_xSetOutWavePair(1, "Event.2,Always", "Output.A", genlightwave, "Output.C", gentriggerwave, interpval)
-		td_xSetOutWavePair(1, "Event.2,Always", "Output.A", genlightwave, "Output.B", gentipwave, interpval)
+		td_xSetOutWavePair(1, "Event.2,Always", "Output.A", genlightwave, "Output.B", gentipwave, 1)
 //		td_xSetOutWave(0, "Event.2,Always", "Output.B", gentipwave,interpval)
 	elseif (cutDrive == 1)
-		td_xSetOutWavePair(0, "Event.2,Always", "Output.A", genlightwave, "Output.B", gentipwave, interpval)
-		td_xSetOutWave(1, "Event.2,Always", LockinString + "Amp", gendrivewave, interpval)
+		td_xSetOutWavePair(0, "Event.2,Always", "Output.A", genlightwave, "Output.B", gentipwave, 1)
+		td_xSetOutWave(1, "Event.2,Always", LockinString + "Amp", gendrivewave, 1)
 	endif
-		
+	
+	// Dummy wave
+	td_xSetInWave(2, "Event.2" , LockinString + "freqOffset", tempwaveavg, "", 1)
+	
 	SetPassFilter(1, a = EFMFilters[%EFM][%A], b = EFMFilters[%EFM][%B], fast = EFMFilters[%EFM][%Fast], i = EFMFilters[%EFM][%i], q = EFMFilters[%EFM][%q])
 
 	Variable currentz = td_RV("ZSensor") * GV("ZLVDTSens")
 
 	// Raise up to the specified lift height.
-	SetFeedbackLoop(3, "Always", "ZSensor", (currentz - liftheight * 1e-9) / GV("ZLVDTSens"), 0, EFMFilters[%ZHeight][%IGain], 0, "Output.Z", 0)  
-	Sleep/S 1/30 // To avoid sparking.
+//	SetFeedbackLoop(3, "always",  "ZSensor", (currentz - 100 * 1e-9)/GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0) // note the integral gain of 10000
+//	sleep/S 1
+//	SetFeedbackLoop(3, "Always", "ZSensor", (currentz - liftheight * 1e-9) / GV("ZLVDTSens"), 0, EFMFilters[%ZHeight][%IGain], 0, "Output.Z", 0)  
+//	Sleep/S 1/30 // To avoid sparking.
+
+	SetFeedbackLoop(3, "always",  "ZSensor",  (currentz - 100 * 1e-9)/GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0, name="OutputZ", arcZ=1) // note the integral gain of 10000
+	sleep/S 1
+	SetFeedbackLoop(3, "always",  "ZSensor", (currentz - liftheight * 1e-9) / GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0, name="OutputZ", arcZ=1) // note the integral gain of 10000
+	sleep/s 1
 
 	// Set the Cantilever to Resonance.
 //	td_WV(LockinString + "Amp", calsoftd)
@@ -122,16 +138,25 @@ Function PointScanGMode(xpos, ypos, liftheight,DigitizerAverages,DigitizerSample
 	// Write Chip DDS
 	SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","DDS","OutA","OutB","Ground","DDS","Ground")
 
+	XPTPopupFunc("CypherHolderOut1Popup", 18, "Ground")
+	XPTButtonFunc("WriteXPT")
+	
+	print td_rv("DDSDCOffset0")
+
 	variable EAmp = GV("NapDriveAmplitude")
 	variable EFreq = GV("NapDriveFrequency")
 	variable EOffset = GV("NapTipVoltage")
 	variable EPhase = GV("NapPhaseOffset")
 
-	td_WriteValue("DDSAmplitude0",EAmp)	
-	td_WriteValue("DDSFrequency0",EFreq)	
+	td_WriteValue("DDSAmplitude0", 0)
+	td_WriteValue("DDSDCOffset0", 0)	
+	Sleep/S 1/30 // To avoid sparking.
 	td_WriteValue("DDSDCOffset0",EOffset)	
+	td_WriteValue("DDSAmplitude0",EAmp)	
+	td_WriteValue("DDSFrequency0",EFreq)
 	td_WriteValue("DDSPhaseOffset0",EPhase)
 	
+	// Using AWG to drive the sample instead 
 	if (elecDrive != 0) 
 		
 		LoadArbWave(EFreq, EAmp, EOffset /2)
@@ -152,6 +177,8 @@ Function PointScanGMode(xpos, ypos, liftheight,DigitizerAverages,DigitizerSample
 	td_WriteString("Event.2", "Once")
 	GageWait(600)
 	
+	CheckInWaveTiming(tempwaveavg) // wait until the data is done collecting.
+	
 	// Stop data collection.
 	td_StopInWaveBank(-1)
 	td_StopOutWaveBank(-1)
@@ -167,7 +194,7 @@ Function PointScanGMode(xpos, ypos, liftheight,DigitizerAverages,DigitizerSample
 		GageTransfer(2, ch2_wave)
 	endif
 	
-	AnalyzePointScan(PIXELCONFIG, gagewave,shiftwave)
+//	AnalyzePointScan(PIXELCONFIG, gagewave,shiftwave)
 	
 	if (ElecDrive != 0)
 		TurnOffAWG()
@@ -180,6 +207,10 @@ Function PointScanGMode(xpos, ypos, liftheight,DigitizerAverages,DigitizerSample
 	
 	// reset the dds settings.
 	SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","Ground", "DDS")
+
+	XPTPopupFunc("CypherHolderOut1Popup", 21, "ContShake")
+	XPTButtonFunc("WriteXPT")
+	
 	td_WV(LockinString + "Amp", calhardd)
 	td_WV(LockinString + "freq", calengagefreq)
 	td_WV(LockinString + "PhaseOffset", calphaseoffset)

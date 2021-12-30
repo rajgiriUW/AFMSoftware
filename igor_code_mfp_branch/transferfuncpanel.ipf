@@ -209,7 +209,8 @@ Function GModeTransferFuncButton(ctrlname) : ButtonControl
 //	print "Generating Chirp with frequency", calengagefreq, " Hz and width", 
 
 	if (CreateNewChirp == 1)
-		LoadChirp()
+//		LoadChirp()
+		LoadChirp_Cypher()
 	endif
 	
 	KillWaves/Z root:packages:trEFM:PointScan:FFtrEFM:gagewave
@@ -281,7 +282,7 @@ Function LoadChirp()
 	NVAR ChirpCenter = root:packages:trEFM:TF:ChirpCenter
 	NVAR ChirpWidth = root:packages:trEFM:TF:ChirpWidth
 	
-	string cmd = "cmd.exe /K cd C:\Users\Asylum User\Desktop\GingerLab Code\Ginger-Code-Repo\igor_code_mfp_branch\misc && python generate_chirp.py " + num2str(ChirpCenter) + " " + num2str(ChirpWidth) + " " + num2str(length) + " -s " + num2str(sampling_rate) + " && Exit"
+	string cmd = "cmd.exe /K cd C:\\Data\\Raj && python generate_chirp.py " + num2str(ChirpCenter) + " " + num2str(ChirpWidth) + " " + num2str(length) + " -s " + num2str(sampling_rate) + " && Exit"
 	ExecuteScriptText cmd
 
 	print "Generated chirp with frequency", num2str(ChirpCenter), "Hz and width", num2str(ChirpWidth), "Hz,", num2str(length), "seconds long and sampled at",num2str(sampling_rate), "Hz"  
@@ -312,6 +313,49 @@ Function LoadChirp()
 	sleep/S 12
 
 end
+
+Function LoadChirp_Cypher()
+	variable f_center = 500e3
+	variable f_width = 400e3
+	NVAR TFDigitizerTime = root:packages:trEFM:TF:TFDigitizerTime
+	variable length = TFDigitizerTime * 1e-3
+	NVAR sampling_rate = root:packages:trEFM:TF:TFDigitizerSampleRate
+	NVAR ChirpCenter = root:packages:trEFM:TF:ChirpCenter
+	NVAR ChirpWidth = root:packages:trEFM:TF:ChirpWidth
+	
+	string cmd = "cmd.exe /K C:\Anaconda3\Scripts\activate.bat C:\Anaconda3 && cd C:\\AsylumResearch\\v16\\Ginger Code\\misc && python generate_chirp.py " + num2str(ChirpCenter) + " " + num2str(ChirpWidth) + " " + num2str(length) + " -s " + num2str(sampling_rate) + " && Exit"
+//	string cmd = "cmd.exe /K cd E:\\Raj && python generate_chirp.py " + num2str(ChirpCenter) + " " + num2str(ChirpWidth) + " " + num2str(length) + " -s " + num2str(sampling_rate) + " && Exit"
+	ExecuteScriptText cmd
+	
+	print "Generated chirp with frequency", num2str(ChirpCenter), "Hz and width", num2str(ChirpWidth), "Hz,", num2str(length), "seconds long and sampled at",num2str(sampling_rate), "Hz"  
+	
+	string copychirp
+	Prompt copychirp, "Insert a Flash Drive and press Continue"
+	DoPrompt ">>>",copychirp
+	if(V_flag==1)
+		Abort			//Aborts if you cancel the save option
+	endif
+	
+	ExecuteScriptText "cmd.exe /K cd C:\\AsylumResearch\\v16\\Ginger Code\\misc && copy chirp.dat G: && Exit"
+
+	Prompt copychirp, "Insert Flash Drive in Wave Generator"
+	DoPrompt ">>>",copychirp
+	if(V_flag==1)
+		Abort			//Aborts if you cancel the save option
+	endif
+	
+
+	// Run experiment	
+	if (sampling_rate == 10e6)
+		loadchirpwave("chirp", offset=0.0, sampling_rate="10E6") // verified on oscilloscope should be offset=0 on 6/19/2020
+	elseif (sampling_rate == 100e6)
+		loadchirpwave("chirp", offset=0.0, sampling_rate="100E6") // verified on oscilloscope should be offset=0 on 6/19/2020
+	endif
+
+	sleep/S 12
+
+end
+
 
 Function NewChirp(cba) : CheckBoxControl
 	STRUCT WMCheckboxAction &cba
@@ -473,8 +517,13 @@ Function PointScanTF(xpos, ypos, liftheight,DigitizerAverages,DigitizerSamples,D
 //	SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","DDS","Ground")
 	
 	// Tip is grounded and sample is connected to the WaveGenerator
-	SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","OutB","Ground")
-	td_WV(LockinString + "Amp", 0)
+	SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","Ground","Ground")
+	variable error = 0
+	error += 	td_WV(LockinString + "Amp", 0)
+	
+	if (error != 0)
+		print error
+	endif
 //	variable EAmp = GV("NapDriveAmplitude")
 //	variable EFreq = GV("NapDriveFrequency")
 //	variable EOffset = GV("NapTipVoltage")
@@ -507,7 +556,7 @@ Function PointScanTF(xpos, ypos, liftheight,DigitizerAverages,DigitizerSamples,D
 	GageTransfer(1, gagewave)
 	
 	if (OneOrTwoChannels == 1)
-		GageTransfer(2, ch2_wave)
+//		GageTransfer(2, ch2_wave)
 	endif
 	
 //	AnalyzePointScan(PIXELCONFIG, gagewave,shiftwave)

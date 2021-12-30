@@ -312,22 +312,31 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 	variable error = 0
 	td_StopInWaveBank(-1)
 		
-	// HStrEFM needs no FBL on the LIA phase angle	
-
 	SetPassFilter(1,q=EFMFilters[%KP][%q],i=EFMFilters[%KP][%i],a=EFMFilters[%KP][%A],b=EFMFilters[%KP][%B])
 	
+	// Load KP Gains from a text file
+	Newpath/O KPGains,"C:\Users\GingerLab\Documents\GingerCode_V14,V16_Cypher\misc"
+	LoadWave/O/G/P=KPGains/N=KPGain/Q "KPGains.txt"
+	Wave KPGain0
+	variable KPPgain = KPGain0[0]
+	variable KPIgain = KPGain0[1]
+	variable KPDgain = KPGain0[2]
+	Print "Set the KP Gains in the Ginger Code/misc/KPGains.txt File. Updates every line"
+	
 	SetFeedbackLoop(5, "Always", LockinString+"theta", td_rv(LockinString+"theta"), freq_PGain, freq_IGain, freq_DGain, "Output.A", 0)
-	SetFeedbackLoop(4, "Always", "Input.B", 0, EFMFilters[%KP][%PGain], EFMFilters[%KP][%IGain], 0, "Output.B", 0)	
+//	SetFeedbackLoop(4, "Always", "Input.B", 0, EFMFilters[%KP][%PGain], EFMFilters[%KP][%IGain], 0, "Output.B", 0)	
+	SetFeedbackLoop(4, "Always", "Input.B", 0, KPPgain, KPIgain, KPDGain, "Output.B", 0)	
 	SetFeedbackLoop(3, "Always",  "ZSensor", ReadWaveZ[scanpoints-1] - liftheight * 1e-9 / GV("ZLVDTSens"), 0, EFMFilters[%ZHeight][%IGain],0, "Output.Z",0)
 	
 	//stop all FBLoops again now that they have been initialized
-	StopFeedbackLoop(3)
-	StopFeedbackLoop(4)
-	StopFeedbackLoop(5)
+//	StopFeedbackLoop(3)
+//	StopFeedbackLoop(4)
+//	StopFeedbackLoop(5)
 	
 	// Set all DAC outputs to zero initially
 	td_wv("Output.A", 0)
 	td_wv("Output.B", 0)	
+	td_wv("Output.C", 0)	
 	//******************  EEEEEEEEEEEEEEEEEEE *******************************//	
 	
 	//******************  FFFFFFFFFFFFFFFFFFFFFF *******************************//
@@ -348,6 +357,10 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 		endif
 	endif
 	
+	SetCrosspoint ("Ground","In1","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutA","OutC","OutB","Ground","In0","DDS")
+	variable currentX = td_ReadValue("XSensor")
+	variable currentY = td_ReadValue("YSensor")
+	
 	//************************************* XYupdownwave is the final, calculated, scaled values to drive the XY piezos ************************//	
 	if (XFastEFM == 1 && YFastEFM == 0)	//x  scan direction
 		XYupdownwave[][][0] = (ScanFrameWork[q][0] + FastScanDelta*p) / XLVDTsens / 10e5 + XLVDToffset
@@ -364,6 +377,7 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 	//Set up the tapping mode feedback
 	td_wv(LockinString + "Amp",CalHardD) 
 	td_wv(LockinString + "Freq",CalEngageFreq) //set the frequency to the resonant frequency
+	td_wv(LockinString + "FreqOffset",0)
 	
 	SetFeedbackLoop(2, "Always", "Amplitude", Setpoint, -PGain, -IGain, -SGain, "Height", 0)	
 	
@@ -393,9 +407,7 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 			if (i == LineNumforVoltage2)
 				PsSetting(VoltageatLine2, current=0.7)
 			endif
-			
-			
-			
+						
 		endif
 		
 		// these are the actual 1D drive waves for the tip movement
@@ -410,11 +422,14 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 		td_StopInWaveBank(-1)
 		td_StopOutWaveBank(-1)
 		
-		td_xSetInWave(0,"Event.0", "ZSensor", ReadWaveZ,"", Downinterpolation)	
-			
-		td_xSetOutWavePair(0, "Event.0", "PIDSLoop.0.Setpoint", Xdownwave, "PIDSLoop.1.Setpoint", Ydownwave , -DownInterpolation)
-
-		
+		error+= td_xSetInWave(0,"Event.0", "ZSensor", ReadWaveZ,"", Downinterpolation)// used during Trace to record height data		
+			if (error != 0)
+				print i, "error1", error
+			endif
+		error+= td_xSetOutWavePair(0,"Event.0", "$outputXLoop.Setpoint", Xdownwave,"$outputYLoop.Setpoint",Ydownwave ,-DownInterpolation)
+			if (error != 0)
+				print i, "error2", error
+			endif		
 		SetCrosspoint ("Ground","In1","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutA","OutC","OutB","Ground","Ground","DDS")
 
 		SetPassFilter(1, q = ImagingFilterFreq, i = ImagingFilterFreq)
@@ -424,6 +439,7 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 		td_wv(LockinString + "FreqOffset", 0)
 		td_wv("Output.A", 0)
 		td_wv("Output.B", 0)
+		td_wv("Output.C",0)
 
 		if (gWGDeviceAddress != 0)
 			setvf(0, ACFrequency,"WG")
@@ -432,19 +448,21 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 		endif
 		
 		// START TOPOGRAPHY SCAN
-		print "Topo linescan starts"
 		error+= td_WriteString("Event.0", "Once")
-	
+			if (error != 0)
+				print i, "error3", error
+			endif
+			
 		starttime3 = StopMSTimer(-2) //Start timing the raised scan line
 
 		CheckInWaveTiming(ReadWaveZ) // Waits until the topography trace has been fully collected.
-		print "Topo linescan finished"
+
 		Sleep/S .05
 		
 		//ReadWaveZback is the drive wave for the z piezo		
 		ReadWaveZback[] = ReadwaveZ[scanpoints-1-p] - liftheight * 1e-9 / GV("ZLVDTSens")
 		ReadWaveZmean = Mean(ReadwaveZ) * ZLVDTSens
-		Topography[][i] = -(ReadwaveZ[p] * ZLVDTSens-ReadWaveZmean)
+		Topography[][i] = -(ReadwaveZ[p] * ZLVDTSens)//-ReadWaveZmean)
 		DoUpdate
 	
 		//****************************************************************************
@@ -452,36 +470,59 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 		//*****************************************************************************		
 		td_stopInWaveBank(-1)
 		td_stopOutWaveBank(-1)
-		td_xSetInWave(1, "Event.2", "Output.B", CPDWave,"", -1) 
-		 
+
+		error += td_xSetInWave(1, "Event.2", "Output.B", CPDWave,"", -1) 
+ 
+		// Load gains from file	 
+		LoadWave/O/G/P=KPGains/N=KPGain/Q "KPGains.txt"
+		KPPgain = KPGain0[0]
+		KPIgain = KPGain0[1]
+		KPDgain = KPGain0[2]
+		print "KP Gains", KPIGain, KPPGain, KPDGain		 
 		heightbefore = td_rv("Zsensor")*td_rv("ZLVDTSens")
 		 
 		//stop amplitude FBLoop and 
 		StopFeedbackLoop(2)		
-		SetCrosspoint ("Ground","In1","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutA","OutC","OutB","Ground","In0","DDS")
-		
-		// to keep tip from being stuck
-		SetFeedbackLoop(3, "always",  "ZSensor", ReadWaveZ[scanpoints-1]-500*1e-9/GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0) // note the integral gain of 10000
-		sleep/s .5
 
-		//start height FB for retrace
-		SetFeedbackLoop(3, "always",  "ZSensor", ReadWaveZ[scanpoints-1]-liftheight*1e-9/GV("ZLVDTSens"), 0, EFMFilters[%ZHeight][%IGain], 0, "Output.Z", 0)
-		sleep/s .5
+		// to keep tip from being stuck
+		SetFeedbackLoop(3, "always",  "ZSensor", ReadWaveZ[scanpoints-1]-500*1e-9/GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0, name="OutputZ") // note the integral gain of 10000
+		sleep/S 1
+		SetFeedbackLoop(3, "always",  "ZSensor", ReadWaveZ[scanpoints-1]-liftheight*1e-9/GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0, name="OutputZ", arcZ=1) // note the integral gain of 10000
+		sleep/s 1
 		
 		heightafter = td_rv("Zsensor")*td_rv("ZLVDTSens")
 		print "The lift height is", (heightbefore-heightafter)*1e9, " nm"
+
+		error+= td_xsetoutwavePair(1,"Event.2", "$outputXLoop.Setpoint", Xupwave,"$outputYLoop.Setpoint", Yupwave,-UpInterpolation)
+		if (stringmatch("ARC.Lockin.0." , LockinString))
+			error+= td_xsetoutwave(2, "Event.2", "ARC.PIDSLoop.3.Setpoint", ReadWaveZback, -UpInterpolation)
+		else
+			error+= td_xsetoutwave(2, "Event.2", "Cypher.PIDSLoop.3.Setpoint", ReadWaveZback, -UpInterpolation)
+		endif
+
 		
 		td_wv((LockinString + "Amp"), calsoftd) //set the amplitude from the grab tune function
 		td_wv((LockinString + "Freq"), CalResFreq) //set the frequency to the resonant frequency
 		td_wv((LockinString + "PhaseOffset"), CalPhaseOffset)  // phase offset also comes from calibration panel
-		
-		error+= td_xsetoutwavePair(1, "Event.2", "ARC.PIDSLoop.0.Setpoint", Xupwave, "ARC.PIDSLoop.1.Setpoint", Yupwave, -UpInterpolation)	
-		error+= td_xsetoutwave(2, "Event.2", "ARC.PIDSLoop.3.Setpoint", ReadWaveZback, -UpInterpolation)
+
+		SetCrosspoint ("Ground","In1","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutA","OutC","OutB","Ground","In0","DDS")
+
+
+//		if (XFastEFM == 1 && YFastEFM == 0)
+//			error += td_wv("PIDSLoop.1.Setpoint", Yupwave[0])
+//			error+= td_xsetoutwavePair(2,"Event.2", "ARC.PIDSLoop.0.Setpoint", Xupwave,"ARC.PIDSLoop.3.Setpoint", ReadWaveZback,-UpInterpolation)	
+//		else
+//			error += td_wv("PIDSLoop.0.Setpoint", Yupwave[0])
+//			error+= td_xsetoutwavePair(2,"Event.2", "ARC.PIDSLoop.1.Setpoint", Xupwave,"ARC.PIDSLoop.3.Setpoint", ReadWaveZback,-UpInterpolation)	
+//		endif
+
+//		error+= td_xsetoutwavePair(1, "Event.2", "ARC.PIDSLoop.0.Setpoint", Xupwave, "ARC.PIDSLoop.1.Setpoint", Yupwave, -UpInterpolation)	
+//		error+= td_xsetoutwave(2, "Event.2", "ARC.PIDSLoop.3.Setpoint", ReadWaveZback, -UpInterpolation)
 
 		SetPassFilter(1, q = EFMFilters[%KP][%q], i = EFMFilters[%KP][%i])
 		
+		// Use a decent initialization for feedback loop, second line onwards
 		lastvoltage = 0
-		
 		if (i != 0)
 			lk = 0
 			ll = (scanpoints - 1) * pointsPerPixel
@@ -496,7 +537,7 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 				lastvoltage = 0
 			endif	
 			printf "LastVoltage is %g\r", lastvoltage		
-			td_wv("Output.B", lastvoltage) //get the intial tip voltage close to where it was before
+			error += td_wv("Output.B", lastvoltage) //get the intial tip voltage close to where it was before
 		endif
 		
 		SetFeedbackLoop(5, "Always", LockinString+"theta", td_rv(LockinString+"theta"), freq_PGain, freq_IGain, freq_DGain, "Output.A", 0)
@@ -509,7 +550,7 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 
 		sleep/S 1/4
 		
-		//auto set LIA phase
+		//auto set LIA phase on first line
 		if (i == 0)
 				td_wv("Output.B", 3) 
 				setLockinTimeC(100/1000) //Tc100ms
@@ -523,11 +564,10 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 		
 		sleep/S 1/4
 
-		SetFeedbackLoop(4, "always",  "Input.B", 0, EFMFilters[%KP][%PGain], EFMFilters[%KP][%IGain], EFMFilters[%KP][%DGain], "Output.B", 0) 
+		SetFeedbackLoop(4, "always",  "Input.B", 0, KPPGain, KPIGain, KPDGain, "Output.B", 0) 
+//		SetFeedbackLoop(4, "always",  "Input.B", 0, EFMFilters[%KP][%PGain], EFMFilters[%KP][%IGain], EFMFilters[%KP][%DGain], "Output.B", 0) 
 		sleep/S 1/4
-		
-		print "CPD linescan starts"
-		
+				
 		//Fire retrace event here
 		error += td_WriteString("Event.2", "Once")
 		
@@ -535,8 +575,6 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 		
 		CheckInWaveTiming(CPDWave)
 	
-		print "CPD linescan finished"
-
 		//**********************************************************************************
 		//***  PROCESS DATA AND UPDATE GRAPHS
 		//*******************************************************************************
@@ -1479,7 +1517,7 @@ SetCrosspoint ("Ground","In1","ACDefl","Ground","Ground","Ground","Off","Off","O
 
 	td_wv((LockinString + "Amp"), calsoftd) //set the amplitude from the grab tune function
 //	td_wv((LockinString + "Freq"), CalResFreq) //set the frequency to the resonant frequency
-td_wv((LockinString + "Freq"), calengagefreq)	
+	td_wv((LockinString + "Freq"), calengagefreq)	
 	td_wv((LockinString + "PhaseOffset"), CalPhaseOffset)  // phase offset also comes from calibration panel
 	td_writevalue("Output.B", 0) // set voltage
 	
