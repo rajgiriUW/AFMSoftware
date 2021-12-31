@@ -531,5 +531,11 @@ Function IMSKPM_FM(xpos, ypos, liftheight, numavg)
 	
 	doscanfunc("stopengage")
 	Sleep/S 1
+	
+	StopFeedbackLoop(3)	
+	StopFeedbackLoop(4)	
+
+	td_StopInWaveBank(-1)
+	td_StopOutWaveBank(-1)
 
 end
