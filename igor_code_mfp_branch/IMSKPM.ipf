@@ -54,6 +54,20 @@ Function IMSKPMAMButton(ctrlname) : ButtonControl
 	
 End
 
+Function IMSKPMFMButton(ctrlname) : ButtonControl
+
+	String ctrlname
+	String savDF = GetDataFolder(1)
+	SetDataFolder root:packages:trEFM:PointScan:SKPM
+	NVar  xpos =  root:packages:trEFM:gxpos
+	NVAR ypos =  root:packages:trEFM:gypos
+	NVAR liftheight =  root:packages:trEFM:liftheight
+	NVAR numavg
+	PointScanIMSKPM_FM(xpos, ypos, liftheight, numavg)
+	SetDataFolder savDF
+	
+End
+
 ///////////////////////////////
 
 Function PointScanIMSKPM_AM(xpos, ypos, liftheight, numavg)
@@ -311,7 +325,7 @@ Function imskpm(w,f) : FitFunc
 End
 
 
-Function IMSKPM_FM(xpos, ypos, liftheight, numavg)
+Function PointScanIMSKPM_FM(xpos, ypos, liftheight, numavg)
 	Variable  xpos, ypos, liftheight, numavg
 
 	String savDF = GetDataFolder(1)
