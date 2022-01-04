@@ -108,10 +108,6 @@ Function PointScanIMSKPM_FM(xpos, ypos, liftheight, numavg)
 		ModifyGraph mode=3,marker=16
 	endif
 	
-	Make/D/N=3/O W_coef
-	W_coef[0] = {1e-5,-.15,.05}
-	FuncFit/NTHR=1 imskpm W_coef  IMWavesAvg /X=frequency_list /D 
-	
 	DoWindow IM_CurrentFreq
 	if (V_flag == 0)
 		Display IM_CurrentFreq
@@ -120,6 +116,8 @@ Function PointScanIMSKPM_FM(xpos, ypos, liftheight, numavg)
 	// USB function generator, futureproofing for FM mode 
 	// FM uses the Cypher AWG to apply the bias to the tip, and the old AWG to control the HV amp for IMSKPM
 	TurnOnAWG()
+	LoadArbWave(ACFrequency, skpm_voltage, 0)
+	Sleep/S 2
 	do
 
 		SetDataFolder root:packages:trEFM:PointScan:SKPM
@@ -131,8 +129,8 @@ Function PointScanIMSKPM_FM(xpos, ypos, liftheight, numavg)
 
 		// 0) Set up WaveGenerator	
 		current_freq = Frequency_List[j]
-		setvfsqu(skpm_voltage, current_freq, "wg", EOM=usehalfoffset)	
-		LoadArbWave(ACFrequency, skpm_voltage, 0)
+		setvfsqu(8, current_freq, "wg", EOM=1)	
+
 		do
 	
 			IM_CurrentFreq = NaN
@@ -175,8 +173,14 @@ Function PointScanIMSKPM_FM(xpos, ypos, liftheight, numavg)
 			if (interpval < 1)
 				interpval = 1
 			endif
+
+//	debug, remove this hard-code interpval
+//			interpval = 1
+
+
 			print "Interpval = ", interpval, " Frequency: ", current_Freq
-			td_xsetinwavepair(0, "Event.2", "Output.B", IM_CurrentFreq, "Deflection", IM_Deflection, "", interpval)
+//			td_xsetinwavepair(0, "Event.2", "Output.B", IM_CurrentFreq, "Deflection", IM_Deflection, "", interpval)
+			td_xsetinwave(0, "Event.2", "Output.B", IM_CurrentFreq, "", interpval)
 			td_WriteString("Event.2", "Once")
 	
 			CheckInWaveTiming(IM_CurrentFreq)
@@ -186,7 +190,7 @@ Function PointScanIMSKPM_FM(xpos, ypos, liftheight, numavg)
 			td_StopInWaveBank(-1)
 			td_StopOutWaveBank(-1)
 			
-			print td_wv("Output.A", 0)
+			print td_wv("Output.C", 0)
 			 k += 1 
 			 
 			DoUpdate 
