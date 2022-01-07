@@ -49,7 +49,7 @@ Function IMSKPMAMButton(ctrlname) : ButtonControl
 	NVar  xpos =  root:packages:trEFM:gxpos
 	NVAR ypos =  root:packages:trEFM:gypos
 	NVAR liftheight =  root:packages:trEFM:liftheight
-	NVAR numavg
+	NVAR numavg = root:packages:trEFM:PointScan:SKPM:numavg
 	PointScanIMSKPM_AM(xpos, ypos, liftheight, numavg)
 	SetDataFolder savDF
 	
@@ -63,7 +63,7 @@ Function IMSKPMFMButton(ctrlname) : ButtonControl
 	NVar  xpos =  root:packages:trEFM:gxpos
 	NVAR ypos =  root:packages:trEFM:gypos
 	NVAR liftheight =  root:packages:trEFM:liftheight
-	NVAR numavg
+	NVAR numavg = root:packages:trEFM:PointScan:SKPM:numavg
 	PointScanIMSKPM_FM(xpos, ypos, liftheight, numavg)
 	SetDataFolder savDF
 	

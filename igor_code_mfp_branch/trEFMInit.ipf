@@ -7,7 +7,7 @@ Menu "trEFM"
 	"PL Panel", LBICPanel()
 	"NLPC Panel", NLPC_Panel()
 	"TF Panel", TransferFuncPanel()
-	"IM-SKPM Panel", IMSKPM_AM()
+	"IM-SKPM Panel", IMSKPM_Panel()
 	"Reset All" , ResetAll()
 	SubMenu "Gains"
 		"SKPM", SKPMGainsPanelCPD()
@@ -194,6 +194,7 @@ Function trEFMInit()
 	// SKPM 
 	SetDataFolder root:Packages:trEFM:PointScan:SKPM
 	Variable/G LockinTimeConstant, LockinSensitivity, ACFrequency, ACVoltage, TimePerPoint, AppliedBias, BiasFreq
+	Variable/G numavg = 0 
 	LockinTimeConstant = 1
 	LockinSensitivity = 14
 	ACFrequency = 1000
