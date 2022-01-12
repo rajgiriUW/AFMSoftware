@@ -12,13 +12,12 @@
 // Consult Daviid's+Jake's notes on the force and NAP panel setups
 
 Window IMSKPM_Panel() : Panel
-	
 	PauseUpdate; Silent 1		// building window...
-	NewPanel /W=(2222,164,2538,401)
+	NewPanel /W=(2790,548,3106,785)
 	ShowTools/A
 	SetDrawLayer UserBack
 	SetDrawEnv fillfgc= (56576,56576,56576)
-	DrawRect 6,8,306,232
+	DrawRect 8,9,308,233
 	Button button1,pos={48,14},size={142,24},proc=IMSKPMAMButton,title="IM-SKPM (AM) Point Scan"
 	SetVariable setvar1,pos={16,50},size={60,16},title="X"
 	SetVariable setvar1,limits={-inf,inf,0},value= root:packages:trEFM:gxpos
@@ -30,12 +29,14 @@ Window IMSKPM_Panel() : Panel
 	SetVariable setvar4,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:numavg
 	SetVariable IMSKPMVoltage,pos={80,103},size={139,16},title="Function Gen Voltage"
 	SetVariable IMSKPMVoltage,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:ACVoltage
-	CheckBox UseOffset,pos={148,126},size={69,14},title="No Offset?"
+	CheckBox UseOffset,pos={41,129},size={69,14},title="No Offset?"
 	CheckBox UseOffset,variable= root:packages:trEFM:PointScan:SKPM:usehalfoffset,side= 1
 	Button buttonFMIM,pos={25,155},size={142,24},proc=IMSKPMFMButton,title="IM-SKPM (FM) Point Scan"
 	Button buttonFMIM,fColor=(52224,52224,52224)
 	Button buttonFMIM1,pos={24,192},size={142,24},proc=IMSKPMAMButton,title="IM-EFM Point Scan"
 	Button buttonFMIM1,fColor=(47872,47872,47872)
+	SetVariable DutyCycle,pos={135,127},size={86,16},title="Duty Cycle %"
+	SetVariable DutyCycle,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:dutycycle
 EndMacro
 
 
@@ -108,6 +109,7 @@ Function PointScanIMSKPM_AM(xpos, ypos, liftheight, numavg)
 	FrequencyList()
 	Wave Frequency_List
 	NVAR useHalfOffset = root:packages:trEFM:PointScan:SKPM:usehalfoffset
+	NVAR dutycycle = root:packages:trEFM:PointScan:SKPM:dutycycle
 
 	// These two bits of code are for debugging/removing artifacts. 
 	// 	First line just reverses the frequencies
@@ -153,7 +155,7 @@ Function PointScanIMSKPM_AM(xpos, ypos, liftheight, numavg)
 
 		// 0) Set up WaveGenerator	
 		current_freq = Frequency_List[j]
-		setvfsqu(skpm_voltage, current_freq, "wg", EOM=usehalfoffset)	 
+		setvfsqu(skpm_voltage, current_freq, "wg", EOM=usehalfoffset, duty=dutycycle)	 
 //		LoadArbWave(current_freq, skpm_voltage, 0) // Cypher function gen
 //		LiftTo(liftheight, 0)
 		do

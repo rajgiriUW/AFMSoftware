@@ -465,13 +465,18 @@ function SetVF(voltage, frequency, whichDevice)
 	
 end
 
-function SetVFSqu(voltage, frequency, whichDevice, [EOM])
+function SetVFSqu(voltage, frequency, whichDevice, [EOM, duty])
 
 	variable voltage, frequency
 	String whichDevice
 	variable EOM
+	variable duty
 	if (ParamIsDefault(EOM))
 		EOM = 0
+	endif
+	
+	if (ParamIsDefault(duty))
+		duty = 50
 	endif
 	
 	Variable whichDeviceAddress
@@ -490,6 +495,7 @@ function SetVFSqu(voltage, frequency, whichDevice, [EOM])
 	string writtenstring1
 	string writtenstring2
 	string writtenstring3
+	string writtenstring4
 
 	if (gHasGPIB==1)
 		GPIBsetup()
@@ -531,26 +537,27 @@ function SetVFSqu(voltage, frequency, whichDevice, [EOM])
 					WriteGPIB(whichDeviceAddress,"BM:INT:Rate .01")
 					WriteGPIB(whichDeviceAddress, "BM:NCYC 1")
 					WriteGPIB(whichDeviceAddress,"BM:Stat on")
-					WriteGPIB(whichDeviceAddress,"APPL:squ")			
+					WriteGPIB(whichDeviceAddress,"APPL:squ")
+						
 				elseif (voltage>10)
 					voltage = 10
 				endif
 
 				sprintf writtenstring1, "freq %g" frequency
 				sprintf writtenstring2, "volt %g" voltage
-				
-				
+				sprintf writtenstring3, "volt:offs %g" offset
+				sprintf writtenstring4, "PULSe:DCYCle %g" duty
+				//WriteGPIB(whichDeviceAddress,"PULSe:DCYCle 45")
 				// change the value to change the offset to the wavegenerator
 				
 				//sprintf writtenstring3, "volt:offs %g" 2.5
-				sprintf writtenstring3, "volt:offs %g" offset
-				
 
 				WriteGPIB(whichDeviceAddress, "OUTP:LOAD Max")
 				WriteGPIB(whichDeviceAddress, writtenstring2)
 			
 				WriteGPIB(whichDeviceAddress,writtenstring1)
 				WriteGPIB(whichDeviceAddress, writtenstring3)
+				WriteGPIB(whichDeviceAddress, writtenstring4)
 				GPIB2 interfaceclear		
 			endif
 		endif

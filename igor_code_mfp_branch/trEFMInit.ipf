@@ -194,8 +194,7 @@ Function trEFMInit()
 	// SKPM 
 	SetDataFolder root:Packages:trEFM:PointScan:SKPM
 	Variable/G LockinTimeConstant, LockinSensitivity, ACFrequency, ACVoltage, TimePerPoint, AppliedBias, BiasFreq
-	Variable/G numavg = 0 
-	Variable/G usehalfoffset = 0
+
 	LockinTimeConstant = 1
 	LockinSensitivity = 14
 	ACFrequency = 1000
@@ -203,7 +202,7 @@ Function trEFMInit()
 	TimePerPoint = 20
 	AppliedBias = 0.05
 	BiasFreq = 2
-	
+
 	Variable/G Freq_PGain, Freq_IGain, Freq_DGain
 	Freq_PGain = -0.01
 	Freq_IGain = 0
@@ -211,6 +210,11 @@ Function trEFMInit()
 	
 	Variable/G DwellTime
 	DwellTime = 5
+
+	// IM-SKPM variables
+	Variable/G numavg = 0 
+	Variable/G usehalfoffset = 0
+	Variable/G dutycycle = 50
 	
 	// Single line stuff
 	Variable/G LineNumforVoltage = 0
