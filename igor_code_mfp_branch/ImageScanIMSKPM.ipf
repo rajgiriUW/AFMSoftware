@@ -432,6 +432,7 @@ Function ImageScanIMSKPM_AM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlin
 			
 		while (j <= numpnts(ReadWaveZBack))
 		
+		SetDataFolder root:Packages:trEFM:ImageScan:SKPM
 		setvf(0, ACFrequency,"WG")
 		print td_wv("Output.A", 0)
 

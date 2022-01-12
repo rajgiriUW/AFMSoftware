@@ -46,7 +46,7 @@ Window IMSKPM_Panel() : Panel
 	SetVariable scanspeedT,pos={260,99},size={113,16},title="Scan Speed(um/s)"
 	SetVariable scanspeedT,fSize=10
 	SetVariable scanspeedT,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scanspeed
-	Button button2,pos={257,16},size={142,24},proc=IMSKPMAMButton,title="IM-SKPM (AM) Image Scan"
+	Button button2,pos={257,16},size={142,24},proc=IMSKPMAM_ImageScanButton,title="IM-SKPM (AM) Image Scan"
 	SetVariable scanwidthT,pos={273,125},size={100,16},title="Width (µm)        "
 	SetVariable scanwidthT,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scansizex
 	SetVariable scanheightT,pos={273,150},size={100,16},title="Height (µm)       "
