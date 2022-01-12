@@ -13,11 +13,13 @@
 
 Window IMSKPM_Panel() : Panel
 	PauseUpdate; Silent 1		// building window...
-	NewPanel /W=(2790,548,3106,785)
+	NewPanel /W=(2090,270,2494,566)
 	ShowTools/A
 	SetDrawLayer UserBack
 	SetDrawEnv fillfgc= (56576,56576,56576)
-	DrawRect 8,9,308,233
+	DrawRect 7,9,552,436
+	SetDrawEnv fsize= 10
+	DrawText 142,159,"min: 20, max: 80"
 	Button button1,pos={48,14},size={142,24},proc=IMSKPMAMButton,title="IM-SKPM (AM) Point Scan"
 	SetVariable setvar1,pos={16,50},size={60,16},title="X"
 	SetVariable setvar1,limits={-inf,inf,0},value= root:packages:trEFM:gxpos
@@ -29,14 +31,26 @@ Window IMSKPM_Panel() : Panel
 	SetVariable setvar4,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:numavg
 	SetVariable IMSKPMVoltage,pos={80,103},size={139,16},title="Function Gen Voltage"
 	SetVariable IMSKPMVoltage,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:ACVoltage
-	CheckBox UseOffset,pos={41,129},size={69,14},title="No Offset?"
+	CheckBox UseOffset,pos={149,170},size={69,14},title="No Offset?"
 	CheckBox UseOffset,variable= root:packages:trEFM:PointScan:SKPM:usehalfoffset,side= 1
-	Button buttonFMIM,pos={25,155},size={142,24},proc=IMSKPMFMButton,title="IM-SKPM (FM) Point Scan"
+	Button buttonFMIM,pos={19,211},size={165,33},proc=IMSKPMFMButton,title="IM-SKPM (FM) Point Scan (Slow!)"
 	Button buttonFMIM,fColor=(52224,52224,52224)
-	Button buttonFMIM1,pos={24,192},size={142,24},proc=IMSKPMAMButton,title="IM-EFM Point Scan"
+	Button buttonFMIM1,pos={11,256},size={167,28},proc=IMSKPMAMButton,title="IM-EFM Point Scan (in progress)"
 	Button buttonFMIM1,fColor=(47872,47872,47872)
 	SetVariable DutyCycle,pos={135,127},size={86,16},title="Duty Cycle %"
-	SetVariable DutyCycle,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:dutycycle
+	SetVariable DutyCycle,limits={20,80,0},value= root:packages:trEFM:PointScan:SKPM:dutycycle
+	SetVariable scanpointsT,pos={272,51},size={100,16},title="Scan Points    "
+	SetVariable scanpointsT,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scanpoints
+	SetVariable scanlinesT,pos={273,75},size={100,16},title="Scan Lines     "
+	SetVariable scanlinesT,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scanlines
+	SetVariable scanspeedT,pos={260,99},size={113,16},title="Scan Speed(um/s)"
+	SetVariable scanspeedT,fSize=10
+	SetVariable scanspeedT,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scanspeed
+	Button button2,pos={257,16},size={142,24},proc=IMSKPMAMButton,title="IM-SKPM (AM) Image Scan"
+	SetVariable scanwidthT,pos={273,125},size={100,16},title="Width (µm)        "
+	SetVariable scanwidthT,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scansizex
+	SetVariable scanheightT,pos={273,150},size={100,16},title="Height (µm)       "
+	SetVariable scanheightT,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scansizey
 EndMacro
 
 
@@ -66,6 +80,38 @@ Function IMSKPMFMButton(ctrlname) : ButtonControl
 	NVAR liftheight =  root:packages:trEFM:liftheight
 	NVAR numavg = root:packages:trEFM:PointScan:SKPM:numavg
 	PointScanIMSKPM_FM(xpos, ypos, liftheight, numavg)
+	SetDataFolder savDF
+	
+End
+
+Function IMSKPMAM_ImageScanButton(ctrlname) : ButtonControl
+
+	String ctrlname
+	String savDF = GetDataFolder(1)
+	CommitDriveWaves()
+	
+	SetDataFolder root:Packages:trEFM:ImageScan
+	Nvar scansizex, scansizey, scanlines, scanpoints, scanspeed
+	SetDataFolder root:Packages:trEFM
+	Nvar liftheight
+	Nvar gxpos, gypos
+	
+	Nvar WavesCommitted
+	if(WavesCommitted == 0)
+		Abort "Drive waves have not been committed."
+	endif
+	
+	if( IsNan(gxpos) | IsNan(gypos))
+		Abort "X and Y are NaN. Make sure to get the current position before continuing."
+	endif
+
+	Svar imageFunctionString = root:packages:trEFM:ImageFunctionString
+	imageFunctionString = "skpm"
+
+	//ImageScan(gxpos, gypos, liftheight, scansizeX,scansizeY, scanlines, scanpoints, scanspeed)
+
+	ImageScanIMSKPM_AM(gxpos, gypos, liftheight, scansizeX, scansizeY, scanlines, scanpoints, scanspeed)
+	GetCurrentPosition()
 	SetDataFolder savDF
 	
 End
@@ -139,7 +185,7 @@ Function PointScanIMSKPM_AM(xpos, ypos, liftheight, numavg)
 	
 	DoWindow/F IM_CurrentFreq
 	if (V_flag == 0)
-		Display IM_CurrentFreq
+		Display/N=IM_CurrentFreq IM_CurrentFreq
 	endif
 	
 	// USB function generator, futureproofing for FM mode 
@@ -265,9 +311,6 @@ Function Shuffle(InWave)
 	Make/o/N=(n) order=enoise(n)
 	Sort order, InWave
 End
-
-
-
 
 Function FrequencyLIst()
 
