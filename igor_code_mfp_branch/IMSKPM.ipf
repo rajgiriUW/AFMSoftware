@@ -13,7 +13,7 @@
 
 Window IMSKPM_Panel() : Panel
 	PauseUpdate; Silent 1		// building window...
-	NewPanel /W=(2090,270,2494,566)
+	NewPanel /W=(2094,222,2498,518)
 	ShowTools/A
 	SetDrawLayer UserBack
 	SetDrawEnv fillfgc= (56576,56576,56576)
@@ -35,7 +35,7 @@ Window IMSKPM_Panel() : Panel
 	CheckBox UseOffset,variable= root:packages:trEFM:PointScan:SKPM:usehalfoffset,side= 1
 	Button buttonFMIM,pos={19,211},size={165,33},proc=IMSKPMFMButton,title="IM-SKPM (FM) Point Scan (Slow!)"
 	Button buttonFMIM,fColor=(52224,52224,52224)
-	Button buttonFMIM1,pos={11,256},size={167,28},proc=IMSKPMAMButton,title="IM-EFM Point Scan (in progress)"
+	Button buttonFMIM1,pos={11,256},size={167,28},proc=IM_FFtrEFMButton,title="IM-EFM Point Scan (in progress)"
 	Button buttonFMIM1,fColor=(47872,47872,47872)
 	SetVariable DutyCycle,pos={135,127},size={86,16},title="Duty Cycle %"
 	SetVariable DutyCycle,limits={20,80,0},value= root:packages:trEFM:PointScan:SKPM:dutycycle
