@@ -116,11 +116,69 @@ Function IMSKPMAM_ImageScanButton(ctrlname) : ButtonControl
 	
 End
 
+Function IM_FFtrEFMButton(ctrlname) : ButtonControl
+
+	String ctrlname
+	String savDF = GetDataFolder(1)
+	CommitDriveWaves()
+	
+	SetDataFolder root:packages:trEFM:ImageScan
+	Nvar DigitizerAverages, DigitizerSamples,DigitizerPretrigger
+	Nvar DigitizerTime, DigitizerSampleRate, DigitizerPercentPreTrig
+	DigitizerSamples = ceil(DigitizerSampleRate * DigitizerTime * 1e-3)
+	DigitizerPretrigger = ceil(DigitizerSamples * DigitizerPercentPreTrig / 100)
+
+	SetDataFolder root:Packages:trEFM
+	
+	NVAR liftheight =  root:packages:trEFM:liftheight
+	NVar  gxpos =  root:packages:trEFM:gxpos
+	NVAR gypos =  root:packages:trEFM:gypos
+	Nvar WavesCommitted
+	Nvar UsePython
+	NVAR numavg = root:packages:trEFM:PointScan:SKPM:numavg
+	
+	if(WavesCommitted == 0)
+		Abort "Drive waves have not been committed."
+	endif
+	if( IsNan(gxpos) | IsNan(gypos))
+		Abort "X and Y are NaN. Make sure to get the current position before continuing."
+	endif
+	
+	SetDataFolder root:Packages:trEFM:PointScan:FFtrEFM
+	
+	Wave PIXELCONFIG = root:packages:trEFM:FFtrEFMConfig:PIXELCONFIG
+	Make/O/N=(DigitizerSamples) timekeeper
+	Linspace2(0,PIXELCONFIG[%Total_Time],DigitizerSamples, timekeeper)
+	SetScale d,0,(DigitizerSamples),"s",timekeeper
+	
+	PixelConfig[%Trigger] = (1 - DigitizerPercentPreTrig/100) * DigitizerTime * 1e-3
+	PixelConfig[%Total_Time] = DigitizerTime * 1e-3
+	
+	PointScanIMSKPM_EFM(gxpos, gypos, liftheight, numavg, DigitizerAverages,DigitizerSamples,DigitizerPretrigger)
+	
+	// Save the Data
+	CreateParametersFile(PIXELCONFIG)
+	
+	if (strlen(PathList("PointScan", ";", "")) == 0)
+		NewPath PointScan
+	endif
+	
+	Wave SaveWave = root:packages:trEFM:pointscan:SaveWave
+	Wave GageWave = root:packages:trEFM:pointScan:gageWave
+	Save/G/O/P=PointScan/M="\r\n" SaveWave as "ps_parameters.cfg"
+	Save/C/O/P=PointScan/M="\r\n" gagewave as "pointscan.ibw"
+	
+	if (UsePython == 1)
+		PyPS_cypher(gagewave, SaveWave)
+	endif
+
+end
+
 ///////////////////////////////
 
 Function PointScanIMSKPM_AM(xpos, ypos, liftheight, numavg)
 
-// This method uses a somewhat more "brute force" approac
+// This method uses a somewhat more "brute force" approach
 // Engage on teh surface, lift to panel height, switch the feedback methods and crosspoint
 // Then record waves for specific amounts of time
 // xpos and ypos in microns
