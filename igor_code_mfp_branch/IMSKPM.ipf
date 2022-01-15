@@ -356,6 +356,7 @@ Function PointScanIMSKPM_AM(xpos, ypos, liftheight, numavg)
 	//setvfsin(0.01, 1) // lowers amplitude to turn off TTL signal
 	TurnOffAWG()
 	LoadArbWave(1, 0.25, 0)
+	setvfsqu(0.05, 0.25, "wg")	
 	SetDataFolder root:packages:trEFM:PointScan:SKPM
 	
 	doscanfunc("stopengage")
@@ -430,3 +431,130 @@ Function imskpm(w,f) : FitFunc
 End
 
 
+Function SingleFrequency_IMSKPMAM(xpos, ypos, liftheight, numavg, [interpval])
+
+	Variable  xpos, ypos, liftheight, numavg
+	variable interpval
+	
+	if (ParamIsDefault(interpval))
+	
+		interpval = 1
+		
+	endif
+	
+	String savDF = GetDataFolder(1)
+	
+	SetDataFolder root:Packages:trEFM
+	Nvar pgain, sgain, igain, adcgain, setpoint,adcgain
+	Svar LockinString
+	NVAR ElecDrive, ElecAmp
+
+	Nvar XLVDTsens
+	Wave EFMFilters = root:packages:trEFM:EFMFilters
+	GetGlobals()
+
+	// Electrical Drive Settings	
+	variable EAmp = GV("NapDriveAmplitude")
+	variable EFreq = GV("NapDriveFrequency")
+	variable EOffset = GV("NapTipVoltage")
+	variable EPhase = GV("NapPhaseOffset")
+	
+//	Nvar numcycles = root:Packages:trEFM:WaveGenerator:numcycles
+	NVAR SKPM_voltage = root:packages:trEFM:PointScan:SKPM:ACVoltage // 7.47
+	variable current_freq =1
+	
+	// For the time being, we will be recording 80000 points for 1.6 s
+	SetDataFolder root:packages:trEFM:PointScan:SKPM	
+	NVAR useHalfOffset = root:packages:trEFM:PointScan:SKPM:usehalfoffset
+	NVAR dutycycle = root:packages:trEFM:PointScan:SKPM:dutycycle
+
+	Make/O/N=(80000) IM_CurrentFreq = NaN
+	Make/O/N=(80000) IMWaves = NaN
+	
+	SetPassFilter(1, a = EFMFilters[%EFM][%A], b = EFMFilters[%EFM][%B], fast = EFMFilters[%EFM][%Fast], i = EFMFilters[%EFM][%i], q = EFMFilters[%EFM][%q])
+
+	variable j = 0
+	variable k = 0 
+
+	DoWindow/F IM_CurrentFreq
+	if (V_flag == 0)
+		Display/N=IM_CurrentFreq IM_CurrentFreq
+	endif
+	
+	// USB function generator, futureproofing for FM mode 
+	//TurnOnAWG()
+
+
+	SetDataFolder root:packages:trEFM:PointScan:SKPM
+	
+	Make/O/N=(80000) IMWaves_CurrentFreq = NaN
+	Make/O/N=(80000) IM_Deflection = NaN
+	
+	k = 0
+
+	do
+	
+		IM_CurrentFreq = NaN
+		
+		// Initial settings for outputs.
+		td_WV("Output.A", 0)
+		td_WV("Output.B", 0)
+
+		StopFeedbackLoop(4)
+		StopFeedbackLoop(3)
+		StopFeedbackLoop(5)
+	
+		SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","OutB","DDS")
+		MoveXY(xpos, ypos) // Move to xy, keeping the tip raised away from the surface	
+		
+		LiftTo(liftheight, 0)  // sets Feedback Loop 3 to Z-position
+					
+		SetCrosspoint ("FilterOut","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Defl","OutC","OutA","OutB","Ground","DDS","Ground")
+
+		td_wv("Output.A", 5) // turn on laser
+
+		td_WriteValue("DDSAmplitude0",EAmp)	
+		td_WriteValue("DDSFrequency0",EFreq)	
+		td_WriteValue("DDSPhaseOffset0",EPhase)
+
+		SetFeedbackLoop(4, "Always", "InputQ", 0, 0,  8000, 0, "Potential", 0)   // InputQ = $Lockin.0.Q , quadrature lockin output 
+		StopFeedbackLoop(3)
+		StopFeedbackLoop(5)
+
+		td_xsetinwavepair(0, "Event.2", "Potential", IM_CurrentFreq, "Deflection", IM_Deflection, "", interpval)
+		td_WriteString("Event.2", "Once")
+	
+		CheckInWaveTiming(IM_CurrentFreq)
+
+		Concatenate {IM_CurrentFreq}, IMWaves_CurrentFreq
+			
+		td_StopInWaveBank(-1)
+		td_StopOutWaveBank(-1)
+			
+		print td_wv("Output.A", 0)
+		 k += 1 
+			 
+		DoUpdate 
+	while (k < numavg)
+	
+	DeletePoints/M=1 0,1, IMWaves_CurrentFreq
+	
+	MatrixOp/O outputIM = sumrows(IMWaves_CurrentFreq) / numcols(IMWaves_CurrentFreq)
+	Concatenate {outputIM}, IMWaves
+	
+	Redimension/N=-1 outputIM
+	Print "Mean SPV is ", mean(outputIM)
+	
+	DoUpdate
+	
+	DeletePoints/M=1 0,1, IMWaves
+	Beep
+	
+	//setvfsin(0.01, 1) // lowers amplitude to turn off TTL signal
+	TurnOffAWG()
+	SetDataFolder root:packages:trEFM:PointScan:SKPM
+	
+	doscanfunc("stopengage")
+	Sleep/S 1
+	
+End

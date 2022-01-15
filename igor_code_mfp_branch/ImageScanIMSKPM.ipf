@@ -169,10 +169,6 @@ Function ImageScanIMSKPM_AM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlin
 	
 	endif
 
-	if(mod(scanpoints,32) != 0)	
-		abort "Scan Points must be divisible by 32"
-	endif
-	
 	Make/O/N = (scanpoints) ReadWaveZ, ReadWaveZback, Xdownwave, Ydownwave, Xupwave, Yupwave
 	Make/O/N = (scanpoints, scanlines, 4) XYupdownwave
 	ReadWaveZ = NaN
@@ -202,7 +198,7 @@ Function ImageScanIMSKPM_AM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlin
 	
 	dowindow/f IMTau
 	if (V_flag==0)
-		Display/K=1/n=CPD;Appendimage IMTauImage
+		Display/K=1/n=IMTau;Appendimage IMTauImage
 		SetAxis/A bottom
 		SetAxis/A left
 		Label bottom "Fast Scan (um)"
@@ -401,7 +397,7 @@ Function ImageScanIMSKPM_AM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlin
 		td_wv((LockinString + "Freq"), CalResFreq) //set the frequency to the resonant frequency
 		td_wv((LockinString + "PhaseOffset"), CalPhaseOffset)  // phase offset also comes from calibration panel
 
-		SetCrosspoint ("Ground","In1","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutA","OutC","OutB","Ground","In0","DDS")
+//		SetCrosspoint ("Ground","In1","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutA","OutC","OutB","Ground","In0","DDS")
 		SetPassFilter(1, q = EFMFilters[%KP][%q], i = EFMFilters[%KP][%i])
 		
 		if (gWGDeviceAddress != 0)
@@ -418,16 +414,22 @@ Function ImageScanIMSKPM_AM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlin
 		do
 			error += td_writevalue(	"$outputXLoop.Setpoint", Xupwave[j])
 			error += td_writevalue(	"$outputYLoop.Setpoint", Yupwave[j])
-			error += td_writevalue(	LockinString + "PIDSLoop.3.Setpoint", ReadWaveZback[j])
+			error += td_writevalue("ARC.PIDSLoop.3.Setpoint", ReadWaveZback[j])
+			
+			if (error != 0)
+				print(error)	
+			endif
+			
+			print "Line ", i, " Pixel ", j
 		
-			PointScanIMSKPM_AM(Xupwave[j], Yupwave[j], liftheight, numavg)
+//			PointScanIMSKPM_AM(Xupwave[j], Yupwave[j], liftheight, numavg)
 			Wave IMWavesAvg =  root:packages:trEFM:PointScan:SKPM:IMWavesAvg
 			Make/D/N=3/O W_coef
 			W_coef[0] = {1e-5,-.15,.05}
-			FuncFit/NTHR=1 imskpm W_coef  IMWavesAvg /X=frequency_list /D 
+			FuncFit/Q/NTHR=1 imskpm W_coef  IMWavesAvg /X=frequency_list /D 
 			
-			IMTauImage[i][numpnts(ReadWaveZBack) - j] = W_Coef[0]
-			IMSKPM_Matrix[i][numpnts(ReadWaveZBack) - j][] = IMWavesAvg[p]
+			IMTauImage[i][numpnts(ReadWaveZBack) - j - 1] = W_Coef[0]
+			IMSKPM_Matrix[i][numpnts(ReadWaveZBack) - j - 1][] = IMWavesAvg[r]
 			j += 1
 			
 		while (j <= numpnts(ReadWaveZBack))
