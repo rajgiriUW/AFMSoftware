@@ -56,7 +56,7 @@ function PyPS_cypher(ibw_wave, parameters)
 //	command = "cmd.exe /K C:\Anaconda3\Scripts\activate.bat C:\Anaconda3 && cd C:\\AsylumResearch\\v16\\Ginger Code\\misc &&"
 
 //	MFP3D computer
-	command = "cmd.exe /K C:\Users\GingerLab\anaconda3\Scripts\activate.bat C:\Users\GingerLab\anaconda3 && cd C:\Users\GingerLab\Documents\GingerCode_V14,V16_Cypher\misc &&"
+	command = "cmd.exe /K C:\Users\GingerLab\anaconda3\Scripts\activate.bat C:\Users\GingerLab\anaconda3 && C: && cd C:\Users\GingerLab\Documents\GingerCode_V14,V16_Cypher\misc &&"
 	command += " python analyze_pixel.py \"" + ibw_path + "\" && Exit"
 	print(command)
 	ExecuteScriptText command
