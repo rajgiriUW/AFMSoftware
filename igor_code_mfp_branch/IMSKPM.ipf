@@ -154,7 +154,7 @@ Function IM_FFtrEFMButton(ctrlname) : ButtonControl
 	PixelConfig[%Trigger] = (1 - DigitizerPercentPreTrig/100) * DigitizerTime * 1e-3
 	PixelConfig[%Total_Time] = DigitizerTime * 1e-3
 	
-	PointScanIMSKPM_EFM(gxpos, gypos, liftheight, numavg, DigitizerAverages,DigitizerSamples,DigitizerPretrigger)
+	PointScanIMSKPM_EFM(gxpos, gypos, liftheight, numavg)
 	
 	// Save the Data
 	CreateParametersFile(PIXELCONFIG)

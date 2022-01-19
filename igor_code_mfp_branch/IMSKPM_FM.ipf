@@ -235,8 +235,8 @@ Function PointScanIMSKPM_FM(xpos, ypos, liftheight, numavg)
 end
 
 
-Function PointScanIMSKPM_EFM(xpos, ypos, liftheight, numavg, DigitizerAverages,DigitizerSamples,DigitizerPretrigger)
-	Variable  xpos, ypos, liftheight, numavg, DigitizerAverages, DigitizerSamples, DigitizerPretrigger
+Function PointScanIMSKPM_EFM(xpos, ypos, liftheight, numavg)
+	Variable  xpos, ypos, liftheight, numavg
 
 	String savDF = GetDataFolder(1)
 	Wave PIXELCONFIG = root:packages:trEFM:FFtrEFMConfig:PIXELCONFIG
@@ -244,13 +244,9 @@ Function PointScanIMSKPM_EFM(xpos, ypos, liftheight, numavg, DigitizerAverages,D
 	Wave CSTRIGGERCONFIG = root:packages:GageCS:CSTRIGGERCONFIG
 	NVAR OneOrTwoChannels = root:packages:trEFM:ImageScan:OneorTwoChannels
 	
-	CSACQUISITIONCONFIG[%SegmentCount] = DigitizerAverages
-	CSACQUISITIONCONFIG[%SegmentSize] = DigitizerSamples
-	CSACQUISITIONCONFIG[%Depth] = DigitizerPretrigger
-	CSACQUISITIONCONFIG[%TriggerHoldoff] =  DigitizerPretrigger
-	CSTRIGGERCONFIG[%Source] = -1 //External Trigger
-	
-	GageSet(-1)
+	SetDataFolder root:packages:trEFM:ImageScan
+	Nvar DigitizerAverages, DigitizerSamples,DigitizerPretrigger
+	Nvar DigitizerTime, DigitizerSampleRate, DigitizerPercentPreTrig
 	
 	SetDataFolder root:Packages:trEFM
 	Nvar pgain, sgain, igain, adcgain, setpoint, adcgain
@@ -273,13 +269,9 @@ Function PointScanIMSKPM_EFM(xpos, ypos, liftheight, numavg, DigitizerAverages,D
 	Wave gentipwave, gentriggerwave, genlightwave, gendrivewave
 	Nvar numcycles
 	CommitDriveWaves()
-
-	SetDataFolder root:Packages:trEFM:PointScan:FFtrEFM
-	Make/O/N = (DigitizerSamples,DigitizerAverages) gagewave
-	Make/O/N = (DigitizerSamples,DigitizerAverages) ch2_wave
-	Make/O/N = (DigitizerSamples) shiftwave
 	Make/O/N = (400 * numcycles) phasewave
 	Make/O/N = 400 phasewaveavg
+
 	NVAR SKPM_voltage = root:packages:trEFM:PointScan:SKPM:ACVoltage // 7.47
 	variable current_freq =1
 	
@@ -290,9 +282,13 @@ Function PointScanIMSKPM_EFM(xpos, ypos, liftheight, numavg, DigitizerAverages,D
 	NVAR useHalfOffset = root:packages:trEFM:PointScan:SKPM:usehalfoffset 
 	NVAR dutycycle = root:packages:trEFM:PointScan:SKPM:dutycycle
 	
-	// Set up second lockin
-	GPIBsetup()
-	
+	// For saving the traces
+	NewPath Path
+		
+	PathInfo Path
+	string folder_path = ParseFilePath(5, S_Path, "\\", 0, 0)
+
+	// Initialize the AWG	
 	Setvf(0, 1,"WG")
 
 	// These two bits of code are for debugging/removing artifacts. 
@@ -341,6 +337,7 @@ Function PointScanIMSKPM_EFM(xpos, ypos, liftheight, numavg, DigitizerAverages,D
 	
 		Make/O/N=(80000) IMWaves_CurrentFreq = NaN
 		Make/O/N=(80000) IM_Deflection = NaN
+		Make/O/N = (80000) IMTrigger = 0
 	
 		k = 0
 
@@ -348,93 +345,125 @@ Function PointScanIMSKPM_EFM(xpos, ypos, liftheight, numavg, DigitizerAverages,D
 		current_freq = Frequency_List[j]
 		setvfsqu(skpm_voltage, current_freq, "wg", EOM=useHalfOffset, duty=dutycycle)	
 
-		do
+		// TO DO: Have a start trigger that is fired on each loop
+		// Add the matrixop to average the frequency trace
 	
-	// TO DO: Have a start trigger that is fired on each loop
-	// the number of digitizeraverages and samples needs to change each time and the sample rate. 1 average per sample
-	// Add the matrixop to average the frequency trace
 	
-			GageSet(-1)
-	
-			IM_CurrentFreq = NaN
-		
-			// Initial settings for outputs.
-			td_WV("Output.A", 0)
-			td_WV("Output.B", 0)
-			td_WV("Output.C", 0)
+		// Sets up the correct values to be recorded by the Gage card
+		interpval = round(5 / current_freq)
+		if (interpval < 1)
+			interpval = 1
+		endif
 			
-			StopFeedbackLoop(4)
-			StopFeedbackLoop(3)
-			StopFeedbackLoop(5)
+		variable TimePerGageTrace = 1400	// 1.6 s is the default of 80000 points at 50 kHz . 1.4 seconds gives some buffer between points. Time is in milliseconds here
+		DigitizerTime = TimePerGageTrace * interpval // default is 1.6 s, leaving some buffer room 
+		DigitizerSampleRate = 10e6 // default 10 MHz
+		DigitizerPercentPreTrig = 90 // 10% pre-trigger
+		if (interpval >= 2)
+			DigitizerSampleRate = 5e6
+		endif
+			
+		DigitizerSamples = ceil(DigitizerSampleRate * DigitizerTime * 1e-3)
+		DigitizerPretrigger = ceil(DigitizerSamples * DigitizerPercentPreTrig / 100)
+		DigitizerAverages = max(1, numavg) // overridden by the IM-SKPM Point panel . Max is there to avoid accidentally setting to 0
+
+		CSACQUISITIONCONFIG[%SegmentCount] = DigitizerAverages
+		CSACQUISITIONCONFIG[%SegmentSize] = DigitizerSamples
+		CSACQUISITIONCONFIG[%Depth] = DigitizerPretrigger
+		CSACQUISITIONCONFIG[%TriggerHoldoff] =  DigitizerPretrigger
+		CSTRIGGERCONFIG[%Source] = -1 //External Trigger
+
+		SetDataFolder root:Packages:trEFM:PointScan:FFtrEFM
+
+		Make/O/N = (DigitizerSamples,DigitizerAverages) gagewave
+		Make/O/N = (DigitizerSamples,DigitizerAverages) ch2_wave
+		Make/O/N = (DigitizerSamples) shiftwave
+		IMTrigger[10, 79999] = 2.5 // triggers once 
+
+		GageSet(-1)
 	
-			SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","OutB","DDS")
-
-			MoveXY(xpos, ypos) // Move to xy, keeping the tip raised away from the surface	
-
-			// 1) Find Surface and Lift tip to specified lift height
-			td_WV(LockinString + "Amp", calhardd)
-			td_WV(LockinString + "freq", calengagefreq)
+		IM_CurrentFreq = NaN
+		
+		// Initial settings for outputs.
+		td_WV("Output.A", 0)
+		td_WV("Output.B", 0)
+		td_WV("Output.C", 0)
+			
+		StopFeedbackLoop(4)
+		StopFeedbackLoop(3)
+		StopFeedbackLoop(5)
 	
-			SetFeedbackLoop(3, "Always", LockinString + "R", setpoint, -pgain, -igain, -sgain, "Height", 0)
+		SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","Ground","DDS")
 
-			// Wait for the feedback loops and frequency to settle.
-			starttime = StopMSTimer(-2)
-			do 
-			while((StopMSTimer(-2) - StartTime) < 2*1e6) 
+		MoveXY(xpos, ypos) // Move to xy, keeping the tip raised away from the surface	
+
+		// 1) Find Surface and Lift tip to specified lift height
+		td_WV(LockinString + "Amp", calhardd)
+		td_WV(LockinString + "freq", calengagefreq)
+	
+		SetFeedbackLoop(3, "Always", LockinString + "R", setpoint, -pgain, -igain, -sgain, "Height", 0)
+
+		// Wait for the feedback loops and frequency to settle.
+		starttime = StopMSTimer(-2)
+		do 
+		while((StopMSTimer(-2) - StartTime) < 2*1e6) 
 						
-			// 2) Soft tapping
+		// 2) Soft tapping
+		SetPassFilter(1, a = EFMFilters[%EFM][%A], b = EFMFilters[%EFM][%B], fast = EFMFilters[%EFM][%Fast], i = EFMFilters[%EFM][%i], q = EFMFilters[%EFM][%q])
+
+		Variable currentz = td_RV("ZSensor") * GV("ZLVDTSens")
+
+		// Raise up to the specified lift height.
+		SetFeedbackLoop(3, "always",  "ZSensor",  (currentz - 100 * 1e-9)/GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0, name="OutputZ", arcZ=1) // note the integral gain of 10000
+		sleep/S 1
+		SetFeedbackLoop(3, "always",  "ZSensor", (currentz - liftheight * 1e-9) / GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0, name="OutputZ", arcZ=1) // note the integral gain of 10000
+		sleep/s 1
+			
 			td_wv((LockinString + "Amp"), calsoftd) //set the amplitude from the grab tune function
 			td_wv((LockinString + "Freq"), CalResFreq) //set the frequency to the resonant frequency
 			td_wv((LockinString + "PhaseOffset"), CalPhaseOffset)  // phase offset also comes from calibration panel
 
-			td_wv("Output.C", 5) // turn on laser
-			
-			// 3) Set up Feedback Loop for FFtrEFM
-			startTime = StopMSTimer(-2)
-			do 
-			while((StopMSTimer(-2) - StartTime) < 300*1e3) 
-	
-			Sleep/S 1/30
-			GageAcquire()
-			// Fire data collection event.
-			td_WriteString("Event.2", "Once")
-			GageWait(600)
-	
-			// Stop data collection.
-			td_StopInWaveBank(-1)
-			td_StopOutWaveBank(-1)
+		td_wv("Output.C", 5) // turn on laser
+		td_xSetOutWave(0, "Event.2,Always", "Output.A", IMTrigger, interpval) // Output A goes to Trigger box
+					
+		// 3) Set up Feedback Loop for FFtrEFM
+		startTime = StopMSTimer(-2)
+		do 
+		while((StopMSTimer(-2) - StartTime) < 300*1e3) 
 		
-			// Reset outputs to zero.
-			td_WV("Output.A", 0)
-			td_WV("Output.B", 0)
-			td_WV("Output.C", 0)
+		Sleep/S 1/30
+		GageAcquire()
+		// Fire data collection event.
+		td_WriteString("Event.2", "Once")
+		GageWait(600)
+	
+		// Stop data collection.
+		td_StopInWaveBank(-1)
+		td_StopOutWaveBank(-1)
+		
+		// Reset outputs to zero.
+		td_WV("Output.A", 0)
+		td_WV("Output.B", 0)
+		td_WV("Output.C", 0)
 
-			GageTransfer(1, gagewave)
+		GageTransfer(1, gagewave)
 	
-			if (OneOrTwoChannels == 1)
-				GageTransfer(2, ch2_wave)
-			endif
+		if (OneOrTwoChannels == 1)
+			GageTransfer(2, ch2_wave)
+		endif
 
-			// 80000 points @ 50 kHz = 1.6 s @ interpval 1
-			interpval = round(5 / current_freq)
-			if (interpval < 1)
-				interpval = 1
-			endif
+		matrixop/o gagewave = sumrows(gagewave)/numcols(gagewave)
 
-			print td_wv("Output.C", 0)
-			 k += 1 
-			 
-			DoUpdate 
-			
-		while (k < numavg)
-	
-		DeletePoints/M=1 0,1, IMWaves_CurrentFreq
-	
-		MatrixOp/O outputIM = sumrows(IMWaves_CurrentFreq) / numcols(IMWaves_CurrentFreq)
-		Concatenate {outputIM}, IMWaves
-	
-		Redimension/N=-1 outputIM
-		IMWavesAvg[j] = mean(outputIM)
+		string name
+		if (j < 10)		
+			name = "IMtrEFM_000" + num2str(j) + ".ibw"
+		elseif (j < 100)
+			name = "IMtrEFM_00" + num2str(j) + ".ibw"
+		else
+			name = "IMtrEFM_0" + num2str(j) + ".ibw"
+		endif
+
+		Save/C/O/P = Path gagewave as name
 	
 		DoUpdate
 	

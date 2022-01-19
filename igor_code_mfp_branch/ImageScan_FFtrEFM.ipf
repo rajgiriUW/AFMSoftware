@@ -649,7 +649,7 @@ Function ImageScanFFtrEFM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines
 				Save/C/O/P = Path avg_wave as name
 
 			else
-				Save/C/O/	P = Path data_wave as name
+				Save/C/O/P = Path data_wave as name
 			endif
 			
 			if (OneOrTwoChannels == 1)
