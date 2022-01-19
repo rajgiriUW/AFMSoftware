@@ -300,7 +300,8 @@ Function PointScanIMSKPM_EFM(xpos, ypos, liftheight, numavg)
 	Make/O/N=(80000) IM_CurrentFreq = NaN
 	
 	Make/O/N=(80000) IMWaves = NaN
-	Make/O/N=(numpnts(Frequency_List)) IMWavesAvg = NaN
+	Make/O/N=(numpnts(Frequency_List)) IMPhaseAvg = NaN
+	Make/O/N=(80000) IMPhase = NaN
 	
 	SetPassFilter(1, a = EFMFilters[%EFM][%A], b = EFMFilters[%EFM][%B], fast = EFMFilters[%EFM][%Fast], i = EFMFilters[%EFM][%i], q = EFMFilters[%EFM][%q])
 	StopFeedbackLoop(3)
@@ -317,7 +318,7 @@ Function PointScanIMSKPM_EFM(xpos, ypos, liftheight, numavg)
 
 	DoWindow/F IMSKPM
 	if (V_flag == 0)
-		Display/K=1/N=IMSKPM IMWavesAvg vs Frequency_List
+		Display/K=1/N=IMSKPM IMPhaseAvg vs Frequency_List
 		ModifyGraph log(bottom)=1
 		ModifyGraph mirror=1,fStyle=1,fSize=22,axThick=3;DelayUpdate
 		Label left "CPD (V)";DelayUpdate
@@ -325,9 +326,9 @@ Function PointScanIMSKPM_EFM(xpos, ypos, liftheight, numavg)
 		ModifyGraph mode=3,marker=16
 	endif
 	
-	DoWindow IM_CurrentFreq
+	DoWindow IMPhase
 	if (V_flag == 0)
-		Display IM_CurrentFreq
+		Display IMPhase
 	endif
 
 	variable starttime
@@ -335,8 +336,7 @@ Function PointScanIMSKPM_EFM(xpos, ypos, liftheight, numavg)
 
 		SetDataFolder root:packages:trEFM:PointScan:SKPM
 	
-		Make/O/N=(80000) IMWaves_CurrentFreq = NaN
-		Make/O/N=(80000) IM_Deflection = NaN
+		Make/O/N=(80000) IMPhase = NaN
 		Make/O/N = (80000) IMTrigger = 0
 	
 		k = 0
@@ -357,10 +357,10 @@ Function PointScanIMSKPM_EFM(xpos, ypos, liftheight, numavg)
 			
 		variable TimePerGageTrace = 1400	// 1.6 s is the default of 80000 points at 50 kHz . 1.4 seconds gives some buffer between points. Time is in milliseconds here
 		DigitizerTime = TimePerGageTrace * interpval // default is 1.6 s, leaving some buffer room 
-		DigitizerSampleRate = 10e6 // default 10 MHz
+		DigitizerSampleRate = 1e6 // default 1 MHz since all data are 1.6 s long
 		DigitizerPercentPreTrig = 90 // 10% pre-trigger
 		if (interpval >= 2)
-			DigitizerSampleRate = 5e6
+			DigitizerSampleRate = 1e6
 		endif
 			
 		DigitizerSamples = ceil(DigitizerSampleRate * DigitizerTime * 1e-3)
@@ -406,7 +406,7 @@ Function PointScanIMSKPM_EFM(xpos, ypos, liftheight, numavg)
 		// Wait for the feedback loops and frequency to settle.
 		starttime = StopMSTimer(-2)
 		do 
-		while((StopMSTimer(-2) - StartTime) < 2*1e6) 
+		while((StopMSTimer(-2) - StartTime) < 0.5*1e6) 
 						
 		// 2) Soft tapping
 		SetPassFilter(1, a = EFMFilters[%EFM][%A], b = EFMFilters[%EFM][%B], fast = EFMFilters[%EFM][%Fast], i = EFMFilters[%EFM][%i], q = EFMFilters[%EFM][%q])
@@ -419,12 +419,15 @@ Function PointScanIMSKPM_EFM(xpos, ypos, liftheight, numavg)
 		SetFeedbackLoop(3, "always",  "ZSensor", (currentz - liftheight * 1e-9) / GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0, name="OutputZ", arcZ=1) // note the integral gain of 10000
 		sleep/s 1
 			
-			td_wv((LockinString + "Amp"), calsoftd) //set the amplitude from the grab tune function
-			td_wv((LockinString + "Freq"), CalResFreq) //set the frequency to the resonant frequency
-			td_wv((LockinString + "PhaseOffset"), CalPhaseOffset)  // phase offset also comes from calibration panel
+		td_wv((LockinString + "Amp"), calsoftd) //set the amplitude from the grab tune function
+		td_wv((LockinString + "Freq"), CalResFreq) //set the frequency to the resonant frequency
+		td_wv((LockinString + "PhaseOffset"), CalPhaseOffset)  // phase offset also comes from calibration panel
 
 		td_wv("Output.C", 5) // turn on laser
 		td_xSetOutWave(0, "Event.2,Always", "Output.A", IMTrigger, interpval) // Output A goes to Trigger box
+		td_xSetInWave(1, "Event.2", "Phase", IMPhase, "", interpval)
+
+		SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","Ground","DDS")
 					
 		// 3) Set up Feedback Loop for FFtrEFM
 		startTime = StopMSTimer(-2)
@@ -464,6 +467,7 @@ Function PointScanIMSKPM_EFM(xpos, ypos, liftheight, numavg)
 		endif
 
 		Save/C/O/P = Path gagewave as name
+		IMPhaseAvg[j] = mean(IMPhase)
 	
 		DoUpdate
 	
@@ -473,9 +477,9 @@ Function PointScanIMSKPM_EFM(xpos, ypos, liftheight, numavg)
 
 	Make/D/N=3/O W_coef
 	W_coef[0] = {1e-5,-.15,.05}
-	FuncFit/NTHR=1 imskpm W_coef  IMWavesAvg /X=frequency_list /D 
+	FuncFit/NTHR=1 imskpm W_coef  IMPhaseAvg /X=frequency_list /D 
 	
-	DeletePoints/M=1 0,1, IMWaves
+	DeletePoints/M=1 0,1, IMPhase
 	Beep
 	
 	//setvfsin(0.01, 1) // lowers amplitude to turn off TTL signal
