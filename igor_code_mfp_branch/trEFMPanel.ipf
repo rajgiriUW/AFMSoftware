@@ -761,7 +761,9 @@ Function CreateParametersFile(PIXELCONFIG)
 	Make/O/T/N=(27) SaveWave 
 	SaveWave[0] = "[Parameters]"
 	SaveWave[1] = "trigger = " + num2str(PixelConfig[%trigger])
-	SaveWave[2] = "total_time = " + num2str(PixelConfig[%total_time])  
+	sprintf formatf, "%.7f", PixelConfig[%total_time]
+	//SaveWave[2] = "total_time = " + num2str(PixelConfig[%total_time])  
+	SaveWave[2] = "total_time = " + formatf
 
 	sprintf formatf, "%.0f", PixelConfig[%sample_rate]
 	SaveWave[3] = "sampling_rate = " + formatf  

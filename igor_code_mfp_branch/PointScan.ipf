@@ -230,6 +230,7 @@ Function PointScanFFtrEFM(xpos, ypos, liftheight,DigitizerAverages,DigitizerSamp
 	Wave CSACQUISITIONCONFIG = root:packages:GageCS:CSACQUISITIONCONFIG
 	Wave CSTRIGGERCONFIG = root:packages:GageCS:CSTRIGGERCONFIG
 	NVAR OneOrTwoChannels = root:packages:trEFM:ImageScan:OneorTwoChannels
+	NVAR DigitizerSampleRate = root:packages:trEFM:ImageScan:DigitizerSampleRate 
 	
 	CSACQUISITIONCONFIG[%SegmentCount] = DigitizerAverages
 	CSACQUISITIONCONFIG[%SegmentSize] = DigitizerSamples
@@ -372,6 +373,8 @@ Function PointScanFFtrEFM(xpos, ypos, liftheight,DigitizerAverages,DigitizerSamp
 		GageTransfer(2, ch2_wave)
 	endif
 
+	PixelConfig[%total_time] = dimsize(GageWave, 0) / DigitizerSampleRate
+	
 	//AnalyzePointScan(PIXELCONFIG, gagewave,shiftwave)
 	
 	// reset the dds settings.
