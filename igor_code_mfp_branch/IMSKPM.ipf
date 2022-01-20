@@ -13,7 +13,7 @@
 
 Window IMSKPM_Panel() : Panel
 	PauseUpdate; Silent 1		// building window...
-	NewPanel /W=(2094,222,2498,518)
+	NewPanel /W=(2114,629,2518,925)
 	ShowTools/A
 	SetDrawLayer UserBack
 	SetDrawEnv fillfgc= (56576,56576,56576)
@@ -54,6 +54,8 @@ Window IMSKPM_Panel() : Panel
 	Button button3,pos={26,191},size={92,35},proc=IMSKPMSingle_AMButton,title="IM-SKPM (AM) \rSingle Point"
 	SetVariable MeanCPD,pos={22,249},size={146,16},title="Mean CPD = ",fStyle=1
 	SetVariable MeanCPD,limits={20,80,0},value= root:packages:trEFM:PointScan:SKPM:MeanCPD,noedit= 2
+	CheckBox Use81150A,pos={17,143},size={77,14},title="Use 81150A"
+	CheckBox Use81150A,variable= root:packages:trEFM:PointScan:SKPM:Use81150,side= 1
 EndMacro
 
 
@@ -225,6 +227,7 @@ Function PointScanIMSKPM_AM(xpos, ypos, liftheight, numavg)
 //	Nvar numcycles = root:Packages:trEFM:WaveGenerator:numcycles
 	NVAR SKPM_voltage = root:packages:trEFM:PointScan:SKPM:ACVoltage // 7.47
 	variable current_freq =1
+	NVAR Use81150 = root:packages:trEFM:pointScan:SKPM:Use81150
 	
 	// For the time being, we will be recording 80000 points for 1.6 s
 	SetDataFolder root:packages:trEFM:PointScan:SKPM	
@@ -278,6 +281,9 @@ Function PointScanIMSKPM_AM(xpos, ypos, liftheight, numavg)
 
 		// 0) Set up WaveGenerator	
 		current_freq = Frequency_List[j]
+		if (use81150 != 0)
+			LoadSquareWave81150(skpm_voltage, current_freq, EOM=usehalfoffset, duty=dutycycle)	
+		endif
 		setvfsqu(skpm_voltage, current_freq, "wg", EOM=usehalfoffset, duty=dutycycle)	 
 //		LoadArbWave(current_freq, skpm_voltage, 0) // Cypher function gen
 //		LiftTo(liftheight, 0)
@@ -376,7 +382,10 @@ Function PointScanIMSKPM_AM(xpos, ypos, liftheight, numavg)
 	
 	//setvfsin(0.01, 1) // lowers amplitude to turn off TTL signal
 	//TurnOffAWG()
-	LoadArbWave(1, 0.25, 0)
+	//LoadArbWave(1, 0.25, 0)
+	if (use81150 != 0)
+		TurnOff81150()
+	endif
 	setvfsqu(0.05, 0.25, "wg")	
 	SetDataFolder root:packages:trEFM:PointScan:SKPM
 	
@@ -488,6 +497,7 @@ Function SingleFrequency_IMSKPMAM(xpos, ypos, liftheight, numavg, [interpval])
 	SetDataFolder root:packages:trEFM:PointScan:SKPM	
 	NVAR useHalfOffset = root:packages:trEFM:PointScan:SKPM:usehalfoffset
 	NVAR dutycycle = root:packages:trEFM:PointScan:SKPM:dutycycle
+	NVAR Use81150 = root:packages:trEFM:pointScan:SKPM:Use81150
 
 	Make/O/N=(80000) IM_CurrentFreq = NaN
 	Make/O/N=(80000) IMWaves = NaN

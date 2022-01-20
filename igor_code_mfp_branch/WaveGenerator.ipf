@@ -41,6 +41,73 @@ Function LoadTauWave(num, [amp])
 
 end
 
+Function LoadSquareWave81150(voltage, frequency, [EOM, duty])
+	variable voltage, frequency
+	variable EOM
+	variable duty
+	if (ParamIsDefault(EOM))
+		EOM = 0
+	endif
+	
+	if (ParamIsDefault(duty))
+		duty = 50
+	endif
+	
+	variable num
+	
+	Variable defaultRM, instr
+	String resourceName = "USB0::0x0957::0x4108::MY47C01225::INSTR" //81150 addresss
+	//String resourceName = "USB0::0x0957::0x2907::MY52500433::0::INSTR"
+	
+	viOpenDefaultRM(defaultRM)
+	viOpen(defaultRM, resourceName, 0, 0, instr)
+	
+	VISAWrite instr, "*RST\n"
+	VISAWrite instr, "FUNC:ARB:SRATE 100E6\n"
+	string funcstr = "APPL:PULS " + num2str(frequency) + ", " + num2str(voltage)
+	if (EOM == 0) // offset to half
+		funcstr = funcstr + ", " + num2str(voltage/2)
+	endif
+	funcstr = funcstr + "\n"
+	VISAWrite instr, funcstr
+	string dutystr
+	sprintf dutystr, "PULSe:DCYCle %g" duty
+	VISAWrite instr, dutystr
+//	string ampstr = "FUNC:ARB:PTP " + num2str(amp) + "\n"
+//	VISAWrite instr, "FUNC:ARB:PTP 5\n"
+//	VISAWrite instr, ampstr
+	
+//	VISAWrite instr, "MMEM:LOAD:DATA \"USB:\\tau"+ num2str(num) +".dat\"\n"
+//	VISAWrite instr, "FUNC:ARB \"USB:\\tau"+ num2str(num) +".dat\"\n"
+//	VISAWrite instr, "FUNC ARB\n"
+	
+//	VISAWrite instr, "BURS:MODE TRIG\n"
+//	VISAWrite instr, "TRIG:SOUR EXT\n"
+//	VISAWrite instr, "BURS:STAT ON\n"
+	
+	VISAWrite instr, "OUTP ON\n"
+
+	viClose(instr)
+	viClose(defaultRM)
+
+end
+
+function TurnOff81150()
+
+	Variable defaultRM, instr
+	String resourceName = "USB0::0x0957::0x4108::MY47C01225::INSTR" //81150 addresss
+	
+	viOpenDefaultRM(defaultRM)
+	viOpen(defaultRM, resourceName, 0, 0, instr)
+	
+	VISAWrite instr, "*RST\n"
+	VISAWrite instr, "OUTP OFF\n"
+	
+	viClose(instr)
+	viClose(defaultRM)
+	
+end
+
 Function LoadChirpWave(filename, [offset, amplitude, sampling_rate])
 	String filename // not include the .dat
 	variable offset
