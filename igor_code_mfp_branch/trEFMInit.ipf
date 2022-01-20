@@ -215,6 +215,7 @@ Function trEFMInit()
 	Variable/G numavg = 0 
 	Variable/G usehalfoffset = 0
 	Variable/G dutycycle = 50
+	Variable/G MeanCPD = 0
 	
 	// Single line stuff
 	Variable/G LineNumforVoltage = 0

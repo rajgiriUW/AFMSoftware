@@ -20,7 +20,7 @@ Window IMSKPM_Panel() : Panel
 	DrawRect 7,9,552,436
 	SetDrawEnv fsize= 10
 	DrawText 142,159,"min: 20, max: 80"
-	Button button1,pos={48,14},size={142,24},proc=IMSKPMAMButton,title="IM-SKPM (AM) Point Scan"
+	Button button1,pos={48,14},size={142,24},proc=IMSKPMAMButton,title="IM-SKPM (AM) Point Sweep"
 	SetVariable setvar1,pos={16,50},size={60,16},title="X"
 	SetVariable setvar1,limits={-inf,inf,0},value= root:packages:trEFM:gxpos
 	SetVariable setvar2,pos={16,80},size={60,16},title="Y"
@@ -33,9 +33,9 @@ Window IMSKPM_Panel() : Panel
 	SetVariable IMSKPMVoltage,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:ACVoltage
 	CheckBox UseOffset,pos={149,170},size={69,14},title="No Offset?"
 	CheckBox UseOffset,variable= root:packages:trEFM:PointScan:SKPM:usehalfoffset,side= 1
-	Button buttonFMIM,pos={19,211},size={165,33},proc=IMSKPMFMButton,title="IM-SKPM (FM) Point Scan (Slow!)"
+	Button buttonFMIM,pos={222,242},size={165,29},proc=IMSKPMFMButton,title="IM-SKPM (FM) Point Scan (Slow!)"
 	Button buttonFMIM,fColor=(52224,52224,52224)
-	Button buttonFMIM1,pos={11,256},size={167,28},proc=IM_FFtrEFMButton,title="IM-EFM Point Scan (in progress)"
+	Button buttonFMIM1,pos={221,194},size={167,28},proc=IM_FFtrEFMButton,title="IM-EFM Point Scan"
 	Button buttonFMIM1,fColor=(47872,47872,47872)
 	SetVariable DutyCycle,pos={135,127},size={86,16},title="Duty Cycle %"
 	SetVariable DutyCycle,limits={20,80,0},value= root:packages:trEFM:PointScan:SKPM:dutycycle
@@ -51,6 +51,9 @@ Window IMSKPM_Panel() : Panel
 	SetVariable scanwidthT,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scansizex
 	SetVariable scanheightT,pos={273,150},size={100,16},title="Height (µm)       "
 	SetVariable scanheightT,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scansizey
+	Button button3,pos={26,191},size={92,35},proc=IMSKPMSingle_AMButton,title="IM-SKPM (AM) \rSingle Point"
+	SetVariable MeanCPD,pos={22,249},size={146,16},title="Mean CPD = ",fStyle=1
+	SetVariable MeanCPD,limits={20,80,0},value= root:packages:trEFM:PointScan:SKPM:MeanCPD,noedit= 2
 EndMacro
 
 
@@ -66,6 +69,21 @@ Function IMSKPMAMButton(ctrlname) : ButtonControl
 	NVAR liftheight =  root:packages:trEFM:liftheight
 	NVAR numavg = root:packages:trEFM:PointScan:SKPM:numavg
 	PointScanIMSKPM_AM(xpos, ypos, liftheight, numavg)
+	SetDataFolder savDF
+	
+End
+
+Function IMSKPMSingle_AMButton(ctrlname) : ButtonControl
+
+	String ctrlname
+	String savDF = GetDataFolder(1)
+	SetDataFolder root:packages:trEFM:PointScan:SKPM
+	NVar  xpos =  root:packages:trEFM:gxpos
+	NVAR ypos =  root:packages:trEFM:gypos
+	NVAR liftheight =  root:packages:trEFM:liftheight
+	NVAR numavg = root:packages:trEFM:PointScan:SKPM:numavg
+	SingleFrequency_IMSKPMAM(xpos, ypos, liftheight, numavg)
+	
 	SetDataFolder savDF
 	
 End
@@ -214,6 +232,7 @@ Function PointScanIMSKPM_AM(xpos, ypos, liftheight, numavg)
 	Wave Frequency_List
 	NVAR useHalfOffset = root:packages:trEFM:PointScan:SKPM:usehalfoffset
 	NVAR dutycycle = root:packages:trEFM:PointScan:SKPM:dutycycle
+	NVAR MeanCPD = root:packages:trEFM:pointscan:SKPM:MeanCPD
 
 	// These two bits of code are for debugging/removing artifacts. 
 	// 	First line just reverses the frequencies
@@ -339,6 +358,8 @@ Function PointScanIMSKPM_AM(xpos, ypos, liftheight, numavg)
 	
 		Redimension/N=-1 outputIM
 		IMWavesAvg[j] = mean(outputIM)
+		
+		MeanCPD = mean(outputIM)
 	
 		DoUpdate
 	
@@ -354,7 +375,7 @@ Function PointScanIMSKPM_AM(xpos, ypos, liftheight, numavg)
 	Beep
 	
 	//setvfsin(0.01, 1) // lowers amplitude to turn off TTL signal
-	TurnOffAWG()
+	//TurnOffAWG()
 	LoadArbWave(1, 0.25, 0)
 	setvfsqu(0.05, 0.25, "wg")	
 	SetDataFolder root:packages:trEFM:PointScan:SKPM
@@ -545,13 +566,16 @@ Function SingleFrequency_IMSKPMAM(xpos, ypos, liftheight, numavg, [interpval])
 	Redimension/N=-1 outputIM
 	Print "Mean SPV is ", mean(outputIM)
 	
+	NVAR MeanCPD = root:packages:trEFM:PointScan:SKPM:MeanCPD
+	MeanCPD = mean(outputIM)
+	
 	DoUpdate
 	
 	DeletePoints/M=1 0,1, IMWaves
 	Beep
 	
 	//setvfsin(0.01, 1) // lowers amplitude to turn off TTL signal
-	TurnOffAWG()
+	//TurnOffAWG()
 	SetDataFolder root:packages:trEFM:PointScan:SKPM
 	
 	doscanfunc("stopengage")
