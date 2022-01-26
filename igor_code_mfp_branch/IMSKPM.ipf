@@ -283,8 +283,9 @@ Function PointScanIMSKPM_AM(xpos, ypos, liftheight, numavg)
 		current_freq = Frequency_List[j]
 		if (use81150 != 0)
 			LoadSquareWave81150(skpm_voltage, current_freq, EOM=usehalfoffset, duty=dutycycle)	
+		else
+			setvfsqu(skpm_voltage, current_freq, "wg", EOM=usehalfoffset, duty=dutycycle)	 
 		endif
-		setvfsqu(skpm_voltage, current_freq, "wg", EOM=usehalfoffset, duty=dutycycle)	 
 //		LoadArbWave(current_freq, skpm_voltage, 0) // Cypher function gen
 //		LiftTo(liftheight, 0)
 		do
@@ -404,40 +405,53 @@ End
 Function FrequencyLIst()
 
 	SetDataFolder root:packages:trEFM:PointScan:SKPM
-	Make/O/N=30 frequency_list
+	Make/O/N=26 frequency_list
 
-	frequency_list[0] = 1.8
-	frequency_list[1] = 2.5
-	frequency_list[2] = 3.7
-	frequency_list[3] = 5.6
+	frequency_list[0] = 1
+	frequency_list[1] = 2
+	frequency_list[2] = 3
+	frequency_list[3] = 5
 	frequency_list[4] = 10
-	frequency_list[5] = 18
-	frequency_list[6] =  37
-	frequency_list[7] =  56
+	frequency_list[5] = 20
+	frequency_list[6] =  30
+	frequency_list[7] =  50
 	frequency_list[8] = 100
-	frequency_list[9] = 178
-	frequency_list[10] = 366
-	frequency_list[11] = 562
+	frequency_list[9] = 200
+	frequency_list[10] = 300
+	frequency_list[11] = 500
 	frequency_list[12] = 1000
-	frequency_list[13] = 1778
-	frequency_list[14] = 3660
-	frequency_list[15] = 5623
+	frequency_list[13] = 2000
+	frequency_list[14] = 3000
+	frequency_list[15] = 5000
 	frequency_list[16] = 10000
-	frequency_list[17] = 17780
-	frequency_list[18] = 36600
-	frequency_list[19] = 56230
+	frequency_list[17] = 20000
+	frequency_list[18] = 30000
+	frequency_list[19] = 50000
 	frequency_list[20] = 100000
-	frequency_list[21] = 177800
-	frequency_list[22] = 366000
-	frequency_list[23] = 150
-	frequency_list[24] = 2000000
-	frequency_list[23] = 562300
+	frequency_list[21] = 200000
+	frequency_list[22] = 300000
+	frequency_list[23] = 500000
 	frequency_list[24] = 1000000
-	frequency_list[25] = 1778000
-	frequency_list[26] = 3660000
-	frequency_list[27] = 5623000
-	frequency_list[28] = 10000000
-	frequency_list[29] = 14900000
+	frequency_list[23] = 2000000
+	frequency_list[24] = 3000000
+	frequency_list[25] = 5000000
+//	frequency_list[26] = 7000000
+//	frequency_list[27] = 10000000
+//	frequency_list[28] = 20000000
+//	frequency_list[29] = 30000000
+//	frequency_list[30] = 50000000
+//	frequency_list[31] = 70000000
+//	frequency_list[32] = 100000000
+//	frequency_list[33] = 120000000
+	
+	// Linearly spaced using numpy.logspace
+	frequency_list[0,5] = {1.00000000e+00, 1.74752840e+00, 3.05385551e+00, 5.33669923e+00, 9.32603347e+00, 1.62975083e+01}
+	frequency_list[6,11] = {2.84803587e+01, 4.97702356e+01, 8.69749003e+01, 1.51991108e+02, 2.65608778e+02, 4.64158883e+02}
+	frequency_list[12,16] = {8.11130831e+02, 1.41747416e+03, 2.47707636e+03, 4.32876128e+03, 7.56463328e+03}
+	 frequency_list[17,21] = {1.32194115e+04, 2.31012970e+04, 4.03701726e+04, 7.05480231e+04, 1.23284674e+05}
+	 frequency_list[22,26] = {2.15443469e+05, 3.76493581e+05, 6.57933225e+05, 1.14975700e+06, 2.00923300e+06}
+//	 frequency_list[27,31] = {3.51119173e+06, 6.13590727e+06, 1.07226722e+07, 1.87381742e+07, 3.27454916e+07}
+//	 frequency_list[32,33] = {5.72236766e+07, 1.00000000e+08}
 
 end
 
