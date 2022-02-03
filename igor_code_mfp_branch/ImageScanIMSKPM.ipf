@@ -362,7 +362,7 @@ Function ImageScanIMSKPM_AM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlin
 		//ReadWaveZback is the drive wave for the z piezo		
 		ReadWaveZback[] = ReadwaveZ[scanpoints-1-p] - liftheight * 1e-9 / GV("ZLVDTSens")
 		ReadWaveZmean = Mean(ReadwaveZ) * ZLVDTSens
-		Topography[][i] = -(ReadwaveZ[p] * ZLVDTSens)//-ReadWaveZmean)
+		Topography[][i] = -(ReadwaveZ[p] * ZLVDTSens-ReadWaveZmean)
 		DoUpdate
 	
 		//****************************************************************************
@@ -422,7 +422,7 @@ Function ImageScanIMSKPM_AM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlin
 			
 			print "Line ", i, " Pixel ", j
 		
-//			PointScanIMSKPM_AM(Xupwave[j], Yupwave[j], liftheight, numavg)
+			PointScanIMSKPM_AM(Xupwave[j], Yupwave[j], liftheight, numavg)
 			Wave IMWavesAvg =  root:packages:trEFM:PointScan:SKPM:IMWavesAvg
 			Make/D/N=3/O W_coef
 			W_coef[0] = {1e-5,-.15,.05}
@@ -430,12 +430,13 @@ Function ImageScanIMSKPM_AM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlin
 			
 			IMTauImage[i][numpnts(ReadWaveZBack) - j - 1] = W_Coef[0]
 			IMSKPM_Matrix[i][numpnts(ReadWaveZBack) - j - 1][] = IMWavesAvg[r]
+			setvf(0.1, 1,"WG")
 			j += 1
 			
 		while (j <= numpnts(ReadWaveZBack))
 		
 		SetDataFolder root:Packages:trEFM:ImageScan:SKPM
-		setvf(0, ACFrequency,"WG")
+		setvf(0, 1,"WG")
 		print td_wv("Output.A", 0)
 
 		CheckInWaveTiming(IMTauImage)

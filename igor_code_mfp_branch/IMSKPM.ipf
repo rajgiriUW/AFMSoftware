@@ -253,7 +253,7 @@ Function PointScanIMSKPM_AM(xpos, ypos, liftheight, numavg)
 	variable j = 0
 	variable k = 0 
 
-	DoWindow/F IMSKPM
+	DoWindow/F IMSKPM1
 	if (V_flag == 0)
 		Display/K=1/N=IMSKPM IMWavesAvg vs Frequency_List
 		ModifyGraph log(bottom)=1
@@ -274,9 +274,18 @@ Function PointScanIMSKPM_AM(xpos, ypos, liftheight, numavg)
 
 		SetDataFolder root:packages:trEFM:PointScan:SKPM
 	
-		Make/O/N=(80000) IMWaves_CurrentFreq = NaN
-		Make/O/N=(80000) IM_Deflection = NaN
-	
+		if (current_freq > 1e9)
+			Make/O/N=(10000) IM_CurrentFreq = NaN
+			Make/O/N=(10000) IMWaves_CurrentFreq = NaN
+			Make/O/N=(10000) IM_Deflection = NaN	
+			Make/O/N=(10000) IMWaves = NaN
+		else
+			Make/O/N=(80000) IM_CurrentFreq = NaN
+			Make/O/N=(80000) IMWaves_CurrentFreq = NaN
+			Make/O/N=(80000) IM_Deflection = NaN
+			Make/O/N=(80000) IMWaves = NaN
+		endif
+		
 		k = 0
 
 		// 0) Set up WaveGenerator	
@@ -405,7 +414,7 @@ End
 Function FrequencyLIst()
 
 	SetDataFolder root:packages:trEFM:PointScan:SKPM
-	Make/O/N=26 frequency_list
+	Make/O/N=31 frequency_list
 
 	frequency_list[0] = 1
 	frequency_list[1] = 2
@@ -450,6 +459,7 @@ Function FrequencyLIst()
 	frequency_list[12,16] = {8.11130831e+02, 1.41747416e+03, 2.47707636e+03, 4.32876128e+03, 7.56463328e+03}
 	 frequency_list[17,21] = {1.32194115e+04, 2.31012970e+04, 4.03701726e+04, 7.05480231e+04, 1.23284674e+05}
 	 frequency_list[22,26] = {2.15443469e+05, 3.76493581e+05, 6.57933225e+05, 1.14975700e+06, 2.00923300e+06}
+	 frequency_list[27,31] = {3.51119173e+06, 6.13590727e+06, 1.07226722e+07, 1.27381742e+07, 1.47454916e+07}
 //	 frequency_list[27,31] = {3.51119173e+06, 6.13590727e+06, 1.07226722e+07, 1.87381742e+07, 3.27454916e+07}
 //	 frequency_list[32,33] = {5.72236766e+07, 1.00000000e+08}
 
