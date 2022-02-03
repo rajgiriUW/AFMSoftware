@@ -13,53 +13,85 @@
 
 Window IMSKPM_Panel() : Panel
 	PauseUpdate; Silent 1		// building window...
-	NewPanel /W=(2114,629,2518,925)
+	NewPanel /W=(2086,336,2496,664)
 	ShowTools/A
 	SetDrawLayer UserBack
 	SetDrawEnv fillfgc= (56576,56576,56576)
-	DrawRect 7,9,552,436
+	DrawRect 248,11,407,194
+	SetDrawEnv fillfgc= (56576,56576,56576)
+	DrawRect 6,10,240,325
+	SetDrawEnv fillfgc= (56576,56576,56576)
+	DrawRect 249,203,405,325
 	SetDrawEnv fsize= 10
-	DrawText 142,159,"min: 20, max: 80"
-	Button button1,pos={48,14},size={142,24},proc=IMSKPMAMButton,title="IM-SKPM (AM) Point Sweep"
-	SetVariable setvar1,pos={16,50},size={60,16},title="X"
+	DrawText 145,179,"min: 20, max: 80"
+	SetDrawEnv fname= "Calibri",fsize= 15,fstyle= 5
+	DrawText 67,30,"Single Point Sweep"
+	SetDrawEnv fname= "Calibri",fsize= 15,fstyle= 5
+	DrawText 299,32,"Image Scan"
+	SetDrawEnv fname= "Calibri",fsize= 15,fstyle= 5
+	DrawText 282,223,"Other Methods"
+	Button button1,pos={46,38},size={142,24},proc=IMSKPMAMButton,title="IM-SKPM (AM) Point Scan"
+	SetVariable setvar1,pos={17,75},size={60,16},title="X"
 	SetVariable setvar1,limits={-inf,inf,0},value= root:packages:trEFM:gxpos
-	SetVariable setvar2,pos={16,80},size={60,16},title="Y"
+	SetVariable setvar2,pos={15,99},size={60,16},title="Y"
 	SetVariable setvar2,limits={-inf,inf,0},value= root:packages:trEFM:gypos
-	SetVariable setvar3,pos={121,51},size={100,16},title="lift height (nm)"
+	SetVariable setvar3,pos={130,74},size={100,16},title="lift height (nm)"
 	SetVariable setvar3,limits={-inf,inf,0},value= root:packages:trEFM:liftheight
-	SetVariable setvar4,pos={100,79},size={120,16},title="Number of Averages"
+	SetVariable setvar4,pos={110,98},size={120,16},title="Number of Averages"
 	SetVariable setvar4,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:numavg
-	SetVariable IMSKPMVoltage,pos={80,103},size={139,16},title="Function Gen Voltage"
+	SetVariable IMSKPMVoltage,pos={92,122},size={139,16},title="Function Gen Voltage"
 	SetVariable IMSKPMVoltage,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:ACVoltage
-	CheckBox UseOffset,pos={149,170},size={69,14},title="No Offset?"
+	CheckBox UseOffset,pos={140,187},size={87,14},title="No DC Offset?"
 	CheckBox UseOffset,variable= root:packages:trEFM:PointScan:SKPM:usehalfoffset,side= 1
-	Button buttonFMIM,pos={222,242},size={165,29},proc=IMSKPMFMButton,title="IM-SKPM (FM) Point Scan (Slow!)"
+	Button buttonFMIM,pos={258,269},size={139,31},proc=IMSKPMFMButton,title="IM-SKPM (FM) Point Scan\r (Slow!)"
 	Button buttonFMIM,fColor=(52224,52224,52224)
-	Button buttonFMIM1,pos={221,194},size={167,28},proc=IM_FFtrEFMButton,title="IM-EFM Point Scan"
+	Button buttonFMIM1,pos={268,233},size={122,28},proc=IM_FFtrEFMButton,title="IM-EFM Point Scan"
 	Button buttonFMIM1,fColor=(47872,47872,47872)
-	SetVariable DutyCycle,pos={135,127},size={86,16},title="Duty Cycle %"
+	SetVariable DutyCycle,pos={144,148},size={86,16},title="Duty Cycle %"
 	SetVariable DutyCycle,limits={20,80,0},value= root:packages:trEFM:PointScan:SKPM:dutycycle
-	SetVariable scanpointsT,pos={272,51},size={100,16},title="Scan Points    "
+	SetVariable scanpointsT,pos={282,64},size={100,16},title="Scan Points    "
 	SetVariable scanpointsT,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scanpoints
-	SetVariable scanlinesT,pos={273,75},size={100,16},title="Scan Lines     "
+	SetVariable scanlinesT,pos={283,88},size={100,16},title="Scan Lines     "
 	SetVariable scanlinesT,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scanlines
-	SetVariable scanspeedT,pos={260,99},size={113,16},title="Scan Speed(um/s)"
+	SetVariable scanspeedT,pos={270,112},size={113,16},title="Scan Speed(um/s)"
 	SetVariable scanspeedT,fSize=10
 	SetVariable scanspeedT,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scanspeed
-	Button button2,pos={257,16},size={142,24},proc=IMSKPMAM_ImageScanButton,title="IM-SKPM (AM) Image Scan"
-	SetVariable scanwidthT,pos={273,125},size={100,16},title="Width (µm)        "
+	Button button2,pos={258,39},size={142,24},proc=IMSKPMAM_ImageScanButton,title="IM-SKPM (AM) Image Scan"
+	SetVariable scanwidthT,pos={283,138},size={100,16},title="Width (µm)        "
 	SetVariable scanwidthT,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scansizex
-	SetVariable scanheightT,pos={273,150},size={100,16},title="Height (µm)       "
+	SetVariable scanheightT,pos={283,163},size={100,16},title="Height (µm)       "
 	SetVariable scanheightT,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scansizey
-	Button button3,pos={26,191},size={92,35},proc=IMSKPMSingle_AMButton,title="IM-SKPM (AM) \rSingle Point"
-	SetVariable MeanCPD,pos={22,249},size={146,16},title="Mean CPD = ",fStyle=1
+	Button button3,pos={21,263},size={92,35},proc=IMSKPMSingle_AMButton,title="IM-SKPM (AM) \rSingle Frequency"
+	SetVariable MeanCPD,pos={46,219},size={146,16},title="Mean CPD = "
+	SetVariable MeanCPD,labelBack=(65280,48896,48896),fStyle=1
 	SetVariable MeanCPD,limits={20,80,0},value= root:packages:trEFM:PointScan:SKPM:MeanCPD,noedit= 2
-	CheckBox Use81150A,pos={17,143},size={77,14},title="Use 81150A"
+	CheckBox Use81150A,pos={25,170},size={77,14},title="Use 81150A"
 	CheckBox Use81150A,variable= root:packages:trEFM:PointScan:SKPM:Use81150,side= 1
+	Button FreqButton,pos={135,267},size={81,25},proc=IMFrequencyListButton,title="Frequency List"
+	Button button15,pos={19,125},size={57,19},proc=GetCurrentPositionButton,title="Current XY"
+	Button button15,help={"Fill the X,Y with the current stage position."}
 EndMacro
 
 
 /////////////////////////////////
+
+Function IMFrequencyListButton(ctrlname) : ButtonControl
+
+	String ctrlname
+	String savDF = GetDataFolder(1)
+	SetDataFolder root:packages:trEFM:PointScan:SKPM
+
+	Wave Frequency_list
+	if (!WaveExists(Frequency_List))
+		FrequencyList()
+		Wave Frequency_list
+	endif
+	
+	Edit Frequency_list
+	
+	SetDataFolder savDF
+	
+End
 
 Function IMSKPMAMButton(ctrlname) : ButtonControl
 
@@ -231,7 +263,7 @@ Function PointScanIMSKPM_AM(xpos, ypos, liftheight, numavg)
 	
 	// For the time being, we will be recording 80000 points for 1.6 s
 	SetDataFolder root:packages:trEFM:PointScan:SKPM	
-	FrequencyList()
+//	FrequencyList()
 	Wave Frequency_List
 	NVAR useHalfOffset = root:packages:trEFM:PointScan:SKPM:usehalfoffset
 	NVAR dutycycle = root:packages:trEFM:PointScan:SKPM:dutycycle
@@ -243,9 +275,15 @@ Function PointScanIMSKPM_AM(xpos, ypos, liftheight, numavg)
 //	Reverse Frequency_list
 //	Shuffle(Frequency_List)
 
+	// CurrentFreq = current CPD trace
+	// IMWaves_CurrentFreq = multiple CPD runs at the current frequency, then averaged together if # averages > 1
+	// Deflection = raw deflection, mostly used in EFM only
+	// IMWaves = 
+
 	Make/O/N=(80000) IM_CurrentFreq = NaN
-	
-	Make/O/N=(80000) IMWaves = NaN
+	Make/O/N=(80000) IMWaves_CurrentFreq = NaN
+	Make/O/N=(80000) IM_Deflection = NaN
+	Make/O/N=(80000) IMWaves_Matrix = NaN
 	Make/O/N=(numpnts(Frequency_List)) IMWavesAvg = NaN
 	
 	SetPassFilter(1, a = EFMFilters[%EFM][%A], b = EFMFilters[%EFM][%B], fast = EFMFilters[%EFM][%Fast], i = EFMFilters[%EFM][%i], q = EFMFilters[%EFM][%q])
@@ -274,6 +312,7 @@ Function PointScanIMSKPM_AM(xpos, ypos, liftheight, numavg)
 
 		SetDataFolder root:packages:trEFM:PointScan:SKPM
 	
+		// Future Proofing for imaging when want to cut sampling time down
 		if (current_freq > 1e9)
 			Make/O/N=(10000) IM_CurrentFreq = NaN
 			Make/O/N=(10000) IMWaves_CurrentFreq = NaN
@@ -370,7 +409,7 @@ Function PointScanIMSKPM_AM(xpos, ypos, liftheight, numavg)
 		DeletePoints/M=1 0,1, IMWaves_CurrentFreq
 	
 		MatrixOp/O outputIM = sumrows(IMWaves_CurrentFreq) / numcols(IMWaves_CurrentFreq)
-		Concatenate {outputIM}, IMWaves
+		Concatenate {outputIM}, IMWaves_Matrix
 	
 		Redimension/N=-1 outputIM
 		IMWavesAvg[j] = mean(outputIM)
@@ -387,7 +426,8 @@ Function PointScanIMSKPM_AM(xpos, ypos, liftheight, numavg)
 	W_coef[0] = {1e-5,-.15,.05}
 	FuncFit/NTHR=1 imskpm W_coef  IMWavesAvg /X=frequency_list /D 
 	
-	DeletePoints/M=1 0,1, IMWaves
+	DeletePoints/M=1 0,1, IMWaves_Matrix
+	NewImage/F IMWaves_Matrix
 	Beep
 	
 	//setvfsin(0.01, 1) // lowers amplitude to turn off TTL signal
