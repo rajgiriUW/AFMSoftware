@@ -264,7 +264,7 @@ Function PointScanIMSKPM_AM(xpos, ypos, liftheight, numavg)
 	// For the time being, we will be recording 80000 points for 1.6 s
 	SetDataFolder root:packages:trEFM:PointScan:SKPM	
 //	FrequencyList()
-	Wave Frequency_List
+	Wave Frequency_List = root:packages:trEFM:PointScan:SKPM:frequency_list
 	NVAR useHalfOffset = root:packages:trEFM:PointScan:SKPM:usehalfoffset
 	NVAR dutycycle = root:packages:trEFM:PointScan:SKPM:dutycycle
 	NVAR MeanCPD = root:packages:trEFM:pointscan:SKPM:MeanCPD
@@ -291,7 +291,7 @@ Function PointScanIMSKPM_AM(xpos, ypos, liftheight, numavg)
 	variable j = 0
 	variable k = 0 
 
-	DoWindow/F IMSKPM1
+	DoWindow/F IMSKPM0
 	if (V_flag == 0)
 		Display/K=1/N=IMSKPM IMWavesAvg vs Frequency_List
 		ModifyGraph log(bottom)=1
@@ -301,7 +301,7 @@ Function PointScanIMSKPM_AM(xpos, ypos, liftheight, numavg)
 		ModifyGraph mode=3,marker=16
 	endif
 	
-	DoWindow/F IM_CurrentFreq
+	DoWindow/F IM_CurrentFreq0
 	if (V_flag == 0)
 		Display/N=IM_CurrentFreq IM_CurrentFreq
 	endif
