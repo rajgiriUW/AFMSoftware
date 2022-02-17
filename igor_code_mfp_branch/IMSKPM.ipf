@@ -102,6 +102,13 @@ Function IMSKPMAMButton(ctrlname) : ButtonControl
 	NVAR ypos =  root:packages:trEFM:gypos
 	NVAR liftheight =  root:packages:trEFM:liftheight
 	NVAR numavg = root:packages:trEFM:PointScan:SKPM:numavg
+	
+	Wave Frequency_List = root:packages:trEFM:PointScan:SKPM:frequency_list
+	if (!WaveExists(Frequency_List))
+		FrequencyList()
+		Wave Frequency_list
+	endif
+	
 	PointScanIMSKPM_AM(xpos, ypos, liftheight, numavg)
 	SetDataFolder savDF
 	
@@ -179,7 +186,10 @@ Function IM_FFtrEFMButton(ctrlname) : ButtonControl
 	Nvar DigitizerTime, DigitizerSampleRate, DigitizerPercentPreTrig
 	DigitizerSamples = ceil(DigitizerSampleRate * DigitizerTime * 1e-3)
 	DigitizerPretrigger = ceil(DigitizerSamples * DigitizerPercentPreTrig / 100)
-
+	Wave PIXELCONFIG = root:packages:trEFM:FFtrEFMConfig:PIXELCONFIG
+	
+	PIXELCONFIG[%Total_Time] = DigitizerTime * 1e-3
+	PIXELCONFIG[%Trigger] = (1-DigitizerPercentPreTrig/100) * DigitizerTime * 1e-3
 	SetDataFolder root:Packages:trEFM
 	
 	NVAR liftheight =  root:packages:trEFM:liftheight
@@ -205,6 +215,12 @@ Function IM_FFtrEFMButton(ctrlname) : ButtonControl
 	
 	PixelConfig[%Trigger] = (1 - DigitizerPercentPreTrig/100) * DigitizerTime * 1e-3
 	PixelConfig[%Total_Time] = DigitizerTime * 1e-3
+
+	Wave Frequency_List = root:packages:trEFM:PointScan:SKPM:frequency_list	
+	if (!WaveExists(Frequency_List))
+		FrequencyList()
+		Wave Frequency_list
+	endif
 	
 	PointScanIMSKPM_EFM(gxpos, gypos, liftheight, numavg)
 	

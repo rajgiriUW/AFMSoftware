@@ -891,6 +891,11 @@ Function FFtrEFMPointScanButton(ctrlname) : ButtonControl
 	Nvar DigitizerTime, DigitizerSampleRate, DigitizerPercentPreTrig
 	DigitizerSamples = ceil(DigitizerSampleRate * DigitizerTime * 1e-3)
 	DigitizerPretrigger = ceil(DigitizerSamples * DigitizerPercentPreTrig / 100)
+	
+	Wave PIXELCONFIG = root:packages:trEFM:FFtrEFMConfig:PIXELCONFIG
+	
+	PIXELCONFIG[%Total_Time] = DigitizerTime * 1e-3
+	PIXELCONFIG[%Trigger] = (1-DigitizerPercentPreTrig/100) * DigitizerTime * 1e-3
 
 	SetDataFolder root:Packages:trEFM
 	
@@ -911,7 +916,7 @@ Function FFtrEFMPointScanButton(ctrlname) : ButtonControl
 	Wave PIXELCONFIG = root:packages:trEFM:FFtrEFMConfig:PIXELCONFIG
 	Make/O/N=(DigitizerSamples) timekeeper
 	Linspace2(0,PIXELCONFIG[%Total_Time],DigitizerSamples, timekeeper)
-	SetScale d,0,(DigitizerSamples),"s",timekeeper
+	SetScale x,0,(DigitizerSamples),"s",timekeeper
 	
 	PixelConfig[%Trigger] = (1 - DigitizerPercentPreTrig/100) * DigitizerTime * 1e-3
 	PixelConfig[%Total_Time] = DigitizerTime * 1e-3
