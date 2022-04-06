@@ -56,36 +56,32 @@ Function LoadSquareWave81150(voltage, frequency, [EOM, duty])
 	variable num
 	
 	Variable defaultRM, instr
-	String resourceName = "USB0::0x0957::0x4108::MY47C01225::INSTR" //81150 addresss
+//	String resourceName = "USB0::0x0957::0x4108::MY47C01225::INSTR" //81150 addresss
 	//String resourceName = "USB0::0x0957::0x2907::MY52500433::0::INSTR"
+	String resourceName = "USB0::0xF4EC::0x1101::SDG6XEBQ5R0541::INSTR" // Siglent One
 	
 	viOpenDefaultRM(defaultRM)
 	viOpen(defaultRM, resourceName, 0, 0, instr)
 	
-	VISAWrite instr, "*RST\n"
-	VISAWrite instr, "FUNC:ARB:SRATE 100E6\n"
-	string funcstr = "APPL:PULS " + num2str(frequency) + ", " + num2str(voltage)
+	VISAWrite instr, "*RST"
+	VISAWrite instr, "C1:OUTP OFF"
+	VISAWRite instr, "C1:BSWV WVTP,SQUARE"
+	VISAWRite instr, "C1:BSWV FRQ," + num2str(frequency) 
+	VISAWrite instr, "C1:BSWV AMP," + num2str(voltage)
+	
+	//VISAWrite instr, "FUNC:ARB:SRATE 100E6\n"
+
 	if (EOM == 0) // offset to half
-		funcstr = funcstr + ", " + num2str(voltage/2)
+
+		VISAWrite instr, "C1:BSWV OFST," + num2str(voltage/2)
 	endif
-	funcstr = funcstr + "\n"
-	VISAWrite instr, funcstr
+	//funcstr = funcstr + "\n"
+	//VISAWrite instr, funcstr
 	string dutystr
-	sprintf dutystr, "PULSe:DCYCle %g" duty
+
+	sprintf dutystr, "C1:BSWV DUTY,%g" duty
 	VISAWrite instr, dutystr
-//	string ampstr = "FUNC:ARB:PTP " + num2str(amp) + "\n"
-//	VISAWrite instr, "FUNC:ARB:PTP 5\n"
-//	VISAWrite instr, ampstr
-	
-//	VISAWrite instr, "MMEM:LOAD:DATA \"USB:\\tau"+ num2str(num) +".dat\"\n"
-//	VISAWrite instr, "FUNC:ARB \"USB:\\tau"+ num2str(num) +".dat\"\n"
-//	VISAWrite instr, "FUNC ARB\n"
-	
-//	VISAWrite instr, "BURS:MODE TRIG\n"
-//	VISAWrite instr, "TRIG:SOUR EXT\n"
-//	VISAWrite instr, "BURS:STAT ON\n"
-	
-	VISAWrite instr, "OUTP ON\n"
+	VISAWrite instr, "C1:OUTP ON"
 
 	viClose(instr)
 	viClose(defaultRM)
