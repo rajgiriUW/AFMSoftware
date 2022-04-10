@@ -23,3 +23,7 @@ I (Raj) am overwhelmingly the expert on this entire package.
 2) Open the Asylum AFM software and select a mode. We generally use the Standard Template mode, rather than pre-defined modes.
 3) Highlight all of the .IPFs in the sub-folder "MFP3D-branch" or "Cypher-branch" and drag into the Igor software window
 4) Hit "Compile" on the bottom left. A menu called "trEFM" should open at the top
+
+##### Documentation
+
+There is a lot of documentation of functions (but not that much in the way of a user guide) in the subfolder "sphinx_documentation" when you download the package, under ```_build/html```
