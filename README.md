@@ -2,7 +2,7 @@
 
 ### As used on the AFM in virtually 100% of the papers from the [Ginger Lab](http://depts.washington.edu/gingerlb/)
 
-#### For information, the primary code maintainer:
+### For information, the primary code maintainer:
 ```
 Rajiv Giridharagopal, Ph.D.
 University of Washington
@@ -17,7 +17,7 @@ This is the codebase for running the Asylum Research AFMs in our lab. This code 
 
 I (Raj) am overwhelmingly the expert and lead on this entire package.
 
-##### Installation
+### Installation
 
 1) Download this code to your computer
 2) Open the Asylum AFM software and select a mode. We generally use the Standard Template mode, rather than pre-defined modes.
@@ -26,7 +26,7 @@ I (Raj) am overwhelmingly the expert and lead on this entire package.
 
 This software involves a lot of references to Gage XOP, which is used to interface with a Dynamic Signals brand "Gage" Digitizer card used primarily by our lab in time-resolved electrostatic force microscopy work. It is similar, if more powerful and significantly more compant, than typical NI digitizers used in other labs. There is a repo for the C++ code, however it require the Igor Pro SDK to function. If you need more information, please contact me.
 
-##### Documentation
+### Documentation
 
 [Documentation](https://htmlpreview.github.io/?https://github.com/rajgiriUW/AFMSoftware/blob/master/sphinx_documentation/_build/html/index.html)
 Thanks to Linda Taing for all the hard work over the years.
@@ -36,13 +36,14 @@ There is a lot of documentation of functions (but not that much in the way of a 
 
 Please ask me any questions.
 
-##### Contributors
+### Contributors
 
 This AFM software was largely the brainchild of David Ginger and David Coffey from the early-00s. Since then, the code has been significantly rewritten in many ways, primarily to keep up with changes in the Asylum code as well as changes in Igor Pro.
 
 A brief list of past Ginger Lab members that have contributed significantly to this work (if anyone listed here wishes to be removed, please let me know):
 * David Ginger
 * David Coffey
+* Obadiah Reid
 * Liam Pingree
 * Guozheng Shao
 * David Moore
