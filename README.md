@@ -23,7 +23,7 @@ Again: **use at your own risk!!!**
 3) Highlight all of the .IPFs in the sub-folder "MFP3D-branch" or "Cypher-branch" and drag into the Igor software window
 4) Hit "Compile" on the bottom left. A menu called "trEFM" should open at the top
 
-This software involves a lot of references to Gage XOP, which is used to interface with a Dynamic Signals brand "Gage" Digitizer card used primarily by our lab in time-resolved electrostatic force microscopy work. It is similar, if more powerful and significantly more compant, than typical NI digitizers used in other labs. There is a repo for the C++ code, however it require the Igor Pro SDK to function. If you need more information, please contact me.
+This software involves a lot of references to Gage XOP, which is used to interface with a Dynamic Signals brand "Gage" Digitizer card used primarily by our lab in time-resolved electrostatic force microscopy work. It is similar, if more powerful and significantly more compact, than typical NI digitizers used in other labs. There is a repo for the C++ code; however, it require the Igor Pro SDK to function. If you need more information, please contact me.
 
 ### Documentation
 
