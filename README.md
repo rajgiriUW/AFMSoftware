@@ -8,10 +8,10 @@ Rajiv Giridharagopal, Ph.D.
 University of Washington
 Department of Chemistry
 E: rgiri@uw.edu
-
+```
 [(My personal site](http://www.rajgiri.net)
 [Ginger Lab](http://depts.washington.edu/gingerlb/)
-```
+
 
 This is the codebase for running the Asylum Research AFMs in our lab. This code is heavily-requested, but it is **provided completely without any guarantees of it working or any other functionality.** Indeed, you would have to do significant edits to have it run on your own systems, and it is built upon over 15 years of original legacy design. This will likely have many compile errors looking for a missing XOP or two, but contact me for specific workarounds. Most of those can be commented out.
 
