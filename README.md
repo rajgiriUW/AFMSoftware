@@ -1,6 +1,6 @@
 ## Igor Software for controlling Asylum Research AFMs (e.g. MFP3D and Cypher systems)
 
-### As used on the AFM in virtually 100% of the papers from the [Ginger Lab](http://depts.washington.edu/gingerlb/)
+### As used on the AFM in most of the papers from the [Ginger Lab](http://depts.washington.edu/gingerlb/)
 
 ### For information, the primary code maintainer:
 ```
