@@ -15,7 +15,7 @@ E: rgiri@uw.edu
 
 This is the codebase for running the Asylum Research AFMs in our lab. This code is heavily-requested, but it is provided completely without any guarantees of it working or any other functionality. Indeed, you would have to do significant edits to have it run on your own systems, and it is built upon over 15 years of original legacy design.
 
-I (Raj) am overwhelmingly the expert on this entire package.
+I (Raj) am overwhelmingly the expert and lead on this entire package.
 
 ##### Installation
 
@@ -41,10 +41,10 @@ Please ask me any questions.
 This AFM software was largely the brainchild of David Ginger and David Coffey from the early-00s. Since then, the code has been significantly rewritten in many ways, primarily to keep up with changes in the Asylum code as well as changes in Igor Pro.
 
 A brief list of past Ginger Lab members that have contributed significantly to this work (if anyone listed here wishes to be removed, please let me know):
-David Ginger
-David Coffey
-Liam Pingree
-Guozheng Shao
-David Moore
-Jeff Harrison
-David Moerman
+* David Ginger
+* David Coffey
+* Liam Pingree
+* Guozheng Shao
+* David Moore
+* Jeff Harrison
+* David Moerman
