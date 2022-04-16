@@ -39,7 +39,7 @@ Please ask me any questions.
 
 This AFM software was largely the brainchild of David Ginger and David Coffey from the early-00s. Since then, the code has been significantly rewritten in many ways, primarily to keep up with changes in the Asylum code as well as changes in Igor Pro.
 
-A brief list of past Ginger Lab members that have contributed significantly to this work (if anyone listed here wishes to be removed, please let me know):
+A brief list of past Ginger Lab members that have contributed significantly to this work aside from myself (if anyone listed here wishes to be removed, please let me know):
 * David Ginger
 * David Coffey
 * Obadiah Reid
