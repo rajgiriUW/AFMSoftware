@@ -472,9 +472,9 @@ Function PointScanIMSKPM_AM(xpos, ypos, liftheight, numavg)
 			endif
 			
 			if (use81150 != 0)
-				LoadSquareWave81150(skpm_voltage, 1e-4, EOM=usehalfoffset, duty=dutycycle)	
+				LoadSquareWave81150(100e-3, 1e-4, EOM=usehalfoffset, duty=dutycycle, offset=skpm_voltage)	
 			else
-				setvfsqu(skpm_voltage, 1e-4, "wg", EOM=usehalfoffset, duty=dutycycle)	 
+				setvfsqu(100e-3, 1e-4, "wg", EOM=usehalfoffset, duty=dutycycle)	 
 			endif			
 			
 			td_WV("Output.A", 0)

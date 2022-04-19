@@ -41,16 +41,21 @@ Function LoadTauWave(num, [amp])
 
 end
 
-Function LoadSquareWave81150(voltage, frequency, [EOM, duty])
+Function LoadSquareWave81150(voltage, frequency, [EOM, duty, offset])
 	variable voltage, frequency
 	variable EOM
 	variable duty
+	variable offset
 	if (ParamIsDefault(EOM))
 		EOM = 0
 	endif
 	
 	if (ParamIsDefault(duty))
 		duty = 50
+	endif
+	
+	if (ParamIsDefault(offset))
+		offset = voltage/2
 	endif
 	
 	variable num
@@ -67,13 +72,14 @@ Function LoadSquareWave81150(voltage, frequency, [EOM, duty])
 	VISAWrite instr, "C1:OUTP OFF"
 	VISAWRite instr, "C1:BSWV WVTP,SQUARE"
 	VISAWRite instr, "C1:BSWV FRQ," + num2str(frequency) 
-	VISAWrite instr, "C1:BSWV AMP," + num2str(voltage)
+	VISAWrite instr, "C1:BSWV AMP," + num2str(2*voltage)
+	VISAWrite instr, "	C1:OUTP LOAD,50"
 	
 	//VISAWrite instr, "FUNC:ARB:SRATE 100E6\n"
 
 	if (EOM == 0) // offset to half
 
-		VISAWrite instr, "C1:BSWV OFST," + num2str(voltage/2)
+		VISAWrite instr, "C1:BSWV OFST," + num2str(offset)
 	endif
 	//funcstr = funcstr + "\n"
 	//VISAWrite instr, funcstr
