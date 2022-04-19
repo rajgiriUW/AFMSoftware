@@ -13,23 +13,24 @@
 
 Window IMSKPM_Panel() : Panel
 	PauseUpdate; Silent 1		// building window...
-	NewPanel /W=(2086,336,2496,664)
+	NewPanel /W=(1090,361,1500,689)
 	ShowTools/A
 	SetDrawLayer UserBack
 	SetDrawEnv fillfgc= (56576,56576,56576)
 	DrawRect 248,11,407,194
 	SetDrawEnv fillfgc= (56576,56576,56576)
-	DrawRect 6,10,240,325
+	DrawRect 10,11,244,326
 	SetDrawEnv fillfgc= (56576,56576,56576)
 	DrawRect 249,203,405,325
 	SetDrawEnv fsize= 10
-	DrawText 145,179,"min: 20, max: 80"
+	DrawText 152,207,"min: 20, max: 80"
 	SetDrawEnv fname= "Calibri",fsize= 15,fstyle= 5
 	DrawText 67,30,"Single Point Sweep"
 	SetDrawEnv fname= "Calibri",fsize= 15,fstyle= 5
 	DrawText 299,32,"Image Scan"
 	SetDrawEnv fname= "Calibri",fsize= 15,fstyle= 5
 	DrawText 282,223,"Other Methods"
+	DrawRRect 114,136,240,227
 	Button button1,pos={46,38},size={142,24},proc=IMSKPMAMButton,title="IM-SKPM (AM) Point Scan"
 	SetVariable setvar1,pos={17,75},size={60,16},title="X"
 	SetVariable setvar1,limits={-inf,inf,0},value= root:packages:trEFM:gxpos
@@ -39,15 +40,15 @@ Window IMSKPM_Panel() : Panel
 	SetVariable setvar3,limits={-inf,inf,0},value= root:packages:trEFM:liftheight
 	SetVariable setvar4,pos={110,98},size={120,16},title="Number of Averages"
 	SetVariable setvar4,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:numavg
-	SetVariable IMSKPMVoltage,pos={92,122},size={139,16},title="Function Gen Voltage"
+	SetVariable IMSKPMVoltage,pos={119,158},size={115,16},title="Func Gen Voltage"
 	SetVariable IMSKPMVoltage,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:ACVoltage
-	CheckBox UseOffset,pos={140,187},size={87,14},title="No DC Offset?"
+	CheckBox UseOffset,pos={148,209},size={87,14},title="No DC Offset?"
 	CheckBox UseOffset,variable= root:packages:trEFM:PointScan:SKPM:usehalfoffset,side= 1
 	Button buttonFMIM,pos={258,269},size={139,31},proc=IMSKPMFMButton,title="IM-SKPM (FM) Point Scan\r (Slow!)"
 	Button buttonFMIM,fColor=(52224,52224,52224)
 	Button buttonFMIM1,pos={268,233},size={122,28},proc=IM_FFtrEFMButton,title="IM-EFM Point Scan"
 	Button buttonFMIM1,fColor=(47872,47872,47872)
-	SetVariable DutyCycle,pos={144,148},size={86,16},title="Duty Cycle %"
+	SetVariable DutyCycle,pos={148,178},size={86,16},title="Duty Cycle %"
 	SetVariable DutyCycle,limits={20,80,0},value= root:packages:trEFM:PointScan:SKPM:dutycycle
 	SetVariable scanpointsT,pos={282,64},size={100,16},title="Scan Points    "
 	SetVariable scanpointsT,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scanpoints
@@ -62,14 +63,16 @@ Window IMSKPM_Panel() : Panel
 	SetVariable scanheightT,pos={283,163},size={100,16},title="Height (µm)       "
 	SetVariable scanheightT,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scansizey
 	Button button3,pos={21,263},size={92,35},proc=IMSKPMSingle_AMButton,title="IM-SKPM (AM) \rSingle Frequency"
-	SetVariable MeanCPD,pos={46,219},size={146,16},title="Mean CPD = "
+	SetVariable MeanCPD,pos={53,234},size={146,16},title="Mean CPD = "
 	SetVariable MeanCPD,labelBack=(65280,48896,48896),fStyle=1
 	SetVariable MeanCPD,limits={20,80,0},value= root:packages:trEFM:PointScan:SKPM:MeanCPD,noedit= 2
-	CheckBox Use81150A,pos={25,170},size={77,14},title="Use 81150A"
+	CheckBox Use81150A,pos={161,140},size={72,14},title="Use Siglent"
 	CheckBox Use81150A,variable= root:packages:trEFM:PointScan:SKPM:Use81150,side= 1
-	Button FreqButton,pos={135,267},size={81,25},proc=IMFrequencyListButton,title="Frequency List"
+	Button FreqButton,pos={144,263},size={81,35},proc=IMFrequencyListButton,title="Edit Frequency \rList"
 	Button button15,pos={19,125},size={57,19},proc=GetCurrentPositionButton,title="Current XY"
 	Button button15,help={"Fill the X,Y with the current stage position."}
+	CheckBox DCInterleave,pos={120,117},size={111,14},title="DC step in between"
+	CheckBox DCInterleave,variable= root:packages:trEFM:PointScan:SKPM:DCInterleave,side= 1
 EndMacro
 
 
@@ -284,6 +287,7 @@ Function PointScanIMSKPM_AM(xpos, ypos, liftheight, numavg)
 	NVAR useHalfOffset = root:packages:trEFM:PointScan:SKPM:usehalfoffset
 	NVAR dutycycle = root:packages:trEFM:PointScan:SKPM:dutycycle
 	NVAR MeanCPD = root:packages:trEFM:pointscan:SKPM:MeanCPD
+	NVAR DCinterleave = 	root:packages:trEFM:PointScan:SKPM:DCInterleave
 
 	// These two bits of code are for debugging/removing artifacts. 
 	// 	First line just reverses the frequencies
@@ -306,6 +310,7 @@ Function PointScanIMSKPM_AM(xpos, ypos, liftheight, numavg)
 
 	variable j = 0
 	variable k = 0 
+	variable m = 0 // for DC interleave step
 
 	DoWindow/F IMSKPM0
 	if (V_flag == 0)
@@ -420,8 +425,10 @@ Function PointScanIMSKPM_AM(xpos, ypos, liftheight, numavg)
 			 k += 1 
 			 
 			DoUpdate 
+			
+
 		while (k < numavg)
-	
+
 		DeletePoints/M=1 0,1, IMWaves_CurrentFreq
 	
 		MatrixOp/O outputIM = sumrows(IMWaves_CurrentFreq) / numcols(IMWaves_CurrentFreq)
@@ -435,6 +442,57 @@ Function PointScanIMSKPM_AM(xpos, ypos, liftheight, numavg)
 		DoUpdate
 	
 		j += 1
+	
+		// DC Interleaved for samples with lots of halide migration
+		// Ugly copy-paste from above...
+		if (DCInterleave == 1)
+			if (use81150 != 0)
+				LoadSquareWave81150(skpm_voltage, 1e-4, EOM=usehalfoffset, duty=dutycycle)	
+			else
+				setvfsqu(skpm_voltage, 1e-4, "wg", EOM=usehalfoffset, duty=dutycycle)	 
+			endif			
+			
+			td_WV("Output.A", 0)
+			td_WV("Output.B", 0)
+
+			StopFeedbackLoop(4)
+			StopFeedbackLoop(3)
+			StopFeedbackLoop(5)
+	
+			SetCrosspoint ("Ground","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","OutB","DDS")
+			MoveXY(xpos, ypos) // Move to xy, keeping the tip raised away from the surface	
+			
+			LiftTo(liftheight, 0)  // sets Feedback Loop 3 to Z-position
+
+			SetCrosspoint ("FilterOut","Ground","ACDefl","Ground","Ground","Ground","Off","Off","Off","Defl","OutC","OutA","OutB","Ground","DDS","Ground")
+
+			td_wv("Output.A", 5) // turn on laser
+
+			td_WriteValue("DDSAmplitude0",EAmp)	
+			td_WriteValue("DDSFrequency0",EFreq)	
+			td_WriteValue("DDSPhaseOffset0",EPhase)
+
+			SetFeedbackLoop(4, "Always", "InputQ", 0, 0,  8000, 0, "Potential", 0)   // InputQ = $Lockin.0.Q , quadrature lockin output 
+			StopFeedbackLoop(3)
+			StopFeedbackLoop(5)
+
+			// 80000 points @ 50 kHz = 1.6 s @ interpval 1
+			interpval = round(5 / current_freq)
+			if (interpval < 1)
+				interpval = 1
+			endif
+			print "Interpval = ", interpval, " Frequency: ", current_Freq
+			td_xsetinwavepair(0, "Event.2", "Potential", IM_CurrentFreq, "Deflection", IM_Deflection, "", interpval)
+			td_WriteString("Event.2", "Once")
+	
+			CheckInWaveTiming(IM_CurrentFreq)
+			
+			td_StopInWaveBank(-1)
+			td_StopOutWaveBank(-1)
+			
+			print td_wv("Output.A", 0)
+			
+		endif
 	
 	while (j < numpnts(Frequency_List))
 
