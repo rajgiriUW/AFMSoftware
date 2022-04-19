@@ -91,7 +91,8 @@ end
 function TurnOff81150()
 
 	Variable defaultRM, instr
-	String resourceName = "USB0::0x0957::0x4108::MY47C01225::INSTR" //81150 addresss
+//	String resourceName = "USB0::0x0957::0x4108::MY47C01225::INSTR" //81150 addresss
+	String resourceName = "USB0::0xF4EC::0x1101::SDG6XEBQ5R0541::INSTR" // Siglent One
 	
 	viOpenDefaultRM(defaultRM)
 	viOpen(defaultRM, resourceName, 0, 0, instr)
