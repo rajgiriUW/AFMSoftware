@@ -305,6 +305,7 @@ Function PointScanIMSKPM_AM(xpos, ypos, liftheight, numavg)
 	Make/O/N=(80000) IM_Deflection = NaN
 	Make/O/N=(80000) IMWaves_Matrix = NaN
 	Make/O/N=(numpnts(Frequency_List)) IMWavesAvg = NaN
+	Make/O/N=(numpnts(Frequency_List)) IMDC = NaN
 	
 	SetPassFilter(1, a = EFMFilters[%EFM][%A], b = EFMFilters[%EFM][%B], fast = EFMFilters[%EFM][%Fast], i = EFMFilters[%EFM][%i], q = EFMFilters[%EFM][%q])
 
@@ -320,6 +321,19 @@ Function PointScanIMSKPM_AM(xpos, ypos, liftheight, numavg)
 		Label left "CPD (V)";DelayUpdate
 		Label bottom "Frequency (Hz)"
 		ModifyGraph mode=3,marker=16
+	endif
+	
+	if (DCInterleave == 1)
+		DoWindow IMDC
+		if (V_flag == 0)
+			Display/K=1/N=IMDC IMDC vs Frequency_List
+			ModifyGraph log(bottom)=1
+			ModifyGraph mirror=1,fStyle=1,fSize=22,axThick=3;DelayUpdate
+			Label left "CPD (V)";DelayUpdate
+			Label bottom "Frequency (Hz)"
+			ModifyGraph mode=3,marker=15
+			ModifyGraph rgb=(0,0,52224)
+		endif
 	endif
 	
 	DoWindow/F IM_CurrentFreq0
@@ -441,11 +455,22 @@ Function PointScanIMSKPM_AM(xpos, ypos, liftheight, numavg)
 	
 		DoUpdate
 	
-		j += 1
-	
 		// DC Interleaved for samples with lots of halide migration
 		// Ugly copy-paste from above...
 		if (DCInterleave == 1)
+			SetDataFolder root:packages:trEFM:PointScan:SKPM
+			if (current_freq > 1e9)
+				Make/O/N=(10000) IM_CurrentFreq = NaN
+				Make/O/N=(10000) IMWaves_CurrentFreq = NaN
+				Make/O/N=(10000) IM_Deflection = NaN	
+				Make/O/N=(10000) IMWaves = NaN
+			else
+				Make/O/N=(80000) IM_CurrentFreq = NaN
+				Make/O/N=(80000) IMWaves_CurrentFreq = NaN
+				Make/O/N=(80000) IM_Deflection = NaN
+				Make/O/N=(80000) IMWaves = NaN
+			endif
+			
 			if (use81150 != 0)
 				LoadSquareWave81150(skpm_voltage, 1e-4, EOM=usehalfoffset, duty=dutycycle)	
 			else
@@ -476,12 +501,7 @@ Function PointScanIMSKPM_AM(xpos, ypos, liftheight, numavg)
 			StopFeedbackLoop(3)
 			StopFeedbackLoop(5)
 
-			// 80000 points @ 50 kHz = 1.6 s @ interpval 1
-			interpval = round(5 / current_freq)
-			if (interpval < 1)
-				interpval = 1
-			endif
-			print "Interpval = ", interpval, " Frequency: ", current_Freq
+			print "DC step"
 			td_xsetinwavepair(0, "Event.2", "Potential", IM_CurrentFreq, "Deflection", IM_Deflection, "", interpval)
 			td_WriteString("Event.2", "Once")
 	
@@ -491,9 +511,15 @@ Function PointScanIMSKPM_AM(xpos, ypos, liftheight, numavg)
 			td_StopOutWaveBank(-1)
 			
 			print td_wv("Output.A", 0)
+
+			IMDC[j] = mean(IM_CurrentFreq)
 			
+			DoUpdate		
+
 		endif
-	
+
+		j += 1
+
 	while (j < numpnts(Frequency_List))
 
 	Make/D/N=3/O W_coef
