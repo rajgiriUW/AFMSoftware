@@ -149,23 +149,23 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 	endif
 	
 	
-	Make/O/N = (scanpoints, scanlines) Topography, CPDImage
+	Make/O/N = (scanpoints, scanlines) Topography, CPDImage, TopographyRaw
 
 	if (XFastEFM == 1 && YFastEFM == 0)
-		SetScale/I x, ScanFrameWork[0][0], ScanFramework[0][2], "um", Topography, CPDImage
+		SetScale/I x, ScanFrameWork[0][0], ScanFramework[0][2], "um", Topography, CPDImage, TopographyRaw
 		if(scanlines==1)
-			SetScale/I y, ypos, ypos, Topography, CPDImage
+			SetScale/I y, ypos, ypos, Topography, CPDImage, TopographyRaw
 		else
-			SetScale/I y, ScanFrameWork[0][1], ScanFramework[scanlines-1][1], Topography, CPDImage
+			SetScale/I y, ScanFrameWork[0][1], ScanFramework[scanlines-1][1], Topography, CPDImage, TopographyRaw
 		endif
 	
 
 	elseif (XFastEFM == 0 && YFastEFM == 1)
-		SetScale/I x, ScanFrameWork[0][2], ScanFramework[0][0], "um", Topography, CPDImage
+		SetScale/I x, ScanFrameWork[0][2], ScanFramework[0][0], "um", Topography, CPDImage, TopographyRaw
 		if(scanlines==1)
-			SetScale/I y, ypos, ypos, Topography, CPDImage
+			SetScale/I y, ypos, ypos, Topography, CPDImage, TopographyRaw
 		else
-			SetScale/I y, ScanFrameWork[0][1], ScanFramework[scanlines-1][1], Topography, CPDImage
+			SetScale/I y, ScanFrameWork[0][1], ScanFramework[scanlines-1][1], Topography, CPDImage, TopographyRaw
 		endif
 	
 	endif
@@ -462,7 +462,8 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 		//ReadWaveZback is the drive wave for the z piezo		
 		ReadWaveZback[] = ReadwaveZ[scanpoints-1-p] - liftheight * 1e-9 / GV("ZLVDTSens")
 		ReadWaveZmean = Mean(ReadwaveZ) * ZLVDTSens
-		Topography[][i] = -(ReadwaveZ[p] * ZLVDTSens)//-ReadWaveZmean)
+		Topography[][i] = -(ReadwaveZ[p] * ZLVDTSens-ReadWaveZmean)
+		TopographyRaw[][i] = -(ReadwaveZ[p] * ZLVDTSens)
 		DoUpdate
 	
 		//****************************************************************************
@@ -485,10 +486,13 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 		StopFeedbackLoop(2)		
 
 		// to keep tip from being stuck
-		SetFeedbackLoop(3, "always",  "ZSensor", ReadWaveZ[scanpoints-1]-500*1e-9/GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0, name="OutputZ") // note the integral gain of 10000
-		sleep/S 1
-		SetFeedbackLoop(3, "always",  "ZSensor", ReadWaveZ[scanpoints-1]-liftheight*1e-9/GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0, name="OutputZ", arcZ=1) // note the integral gain of 10000
-		sleep/s 1
+//		SetFeedbackLoop(3, "always",  "ZSensor", ReadWaveZ[scanpoints-1]-500*1e-9/GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0, name="OutputZ") // note the integral gain of 10000
+//		sleep/S 1
+//		SetFeedbackLoop(3, "always",  "ZSensor", ReadWaveZ[scanpoints-1]-liftheight*1e-9/GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0, name="OutputZ", arcZ=1) // note the integral gain of 10000
+//		sleep/s 1
+		
+		// UNcomment for Christian (Kai-Mei) samples
+		SetFeedbackLoop(3, "always",  "ZSensor", heightbefore/GV("ZLVDTSens")-liftheight*1e-9/GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0, name="OutputZ", arcZ=1) // note the integral gain of 10000
 		
 		heightafter = td_rv("Zsensor")*td_rv("ZLVDTSens")
 		print "The lift height is", (heightbefore-heightafter)*1e9, " nm"
@@ -655,6 +659,9 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 
 	td_StopInWaveBank(-1)
 	td_StopOutWaveBank(-1)
+	
+	Duplicate/O Topography, TopographyTempCheck
+	Duplicate/O TopographyRaw, Topography
 	
 	if (useLineNUm != 0)
 	

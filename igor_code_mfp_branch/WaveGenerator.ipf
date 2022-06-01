@@ -304,3 +304,35 @@ Function LoadTauBWave(num)
 	viClose(defaultRM)
 
 end
+
+Function LoadDCWave81150(offset)
+	variable offset
+	
+	Variable defaultRM, instr
+//	String resourceName = "USB0::0x0957::0x4108::MY47C01225::INSTR" //81150 addresss
+	//String resourceName = "USB0::0x0957::0x2907::MY52500433::0::INSTR"
+	String resourceName = "USB0::0xF4EC::0x1101::SDG6XEBQ5R0541::INSTR" // Siglent One
+	
+	viOpenDefaultRM(defaultRM)
+	viOpen(defaultRM, resourceName, 0, 0, instr)
+	
+	VISAWrite instr, "*RST"
+	VISAWrite instr, "C1:OUTP OFF"
+	VISAWRite instr, "C1:BSWV WVTP,DC"
+//	VISAWRite instr, "C1:BSWV FRQ," + num2str(frequency) 
+//	VISAWrite instr, "C1:BSWV AMP," + num2str(2*voltage)
+	VISAWrite instr, "	C1:OUTP LOAD,50"
+	
+	//VISAWrite instr, "FUNC:ARB:SRATE 100E6\n"
+
+	VISAWrite instr, "C1:BSWV OFST," + num2str(offset)
+
+	//funcstr = funcstr + "\n"
+	//VISAWrite instr, funcstr
+
+	VISAWrite instr, "C1:OUTP ON"
+
+	viClose(instr)
+	viClose(defaultRM)
+
+end
