@@ -10,6 +10,9 @@ Function LBICscan(xpos, ypos, scansizeX,scansizeY, scanlines, scanpoints)
 	SetDataFolder root:Packages:trEFM:ImageScan:LBIC
 	NVAR LIAsens
 	
+	NVAR LineNumforVoltage = root:packages:trEFM:PointScan:SKPM:LineNumforVoltage
+	NVAR PL_UseInterleaveVoltage =  root:packages:trEFM:ImageScan:LBIC:PL_UseInterleaveVoltage
+	
 	GetGlobals()  //getGlobals ensures all vars shared with asylum are current
 	
 	//global Variables	
@@ -78,24 +81,6 @@ Function LBICscan(xpos, ypos, scansizeX,scansizeY, scanlines, scanpoints)
 		while (i < scanlines)
 	
 	endif	
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	///uncomment to scan at 90 deg.
-	//ScanFramework[][0] = ypos - scansizey / 2 
-	//ScanFramework[][2] = ypos + scansizey / 2
-	//SlowScanDelta = scansizex / (scanlines - 1)
-	//FastscanDelta = scansizey/ (scanpoints - 1)
-	//i = 0
-	//do
-	//	if(scanlines > 1)
-	//		ScanFramework[i][1] = (xpos - scansizex / 2) + SlowScanDelta*i
-	//		ScanFramework[i][3] = (xpos - scansizeY / 2) + SlowScanDelta*i
-	//	else
-	//		ScanFramework[i][1] = xpos
-	//		ScanFramework[i][3] = xpos
-	//	endif
-	//	i += 1
-	//while (i < scanlines)
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	Make/O/N = (scanpoints, scanlines) LIBCurrent, LIBCurrentConverted
 	Make/O/N = (scanpoints) Distance
@@ -441,6 +426,8 @@ Function LBICInit()
 	
 	Variable/G root:packages:trEFM:ImageScan:LBIC:PLLineNum = 0
 	Variable/G root:packages:trEFM:ImageScan:LBIC:PL_UseLineNum = 0
+	
+	Variable/G root:packages:trEFM:ImageScan:LBIC:PLuseinterleavevoltage = 0
 
 End
 
@@ -450,11 +437,11 @@ End
 Window LBICPanel() : Panel
 	LBICInit()
 	PauseUpdate; Silent 1		// building window...
-	NewPanel /W=(633,68,859,484)
+	NewPanel /W=(2083,106,2311,548)
 	ShowTools/A
 	SetDrawLayer UserBack
 	SetDrawEnv fillfgc= (56576,56576,56576)
-	DrawRect 0,-0,225,414
+	DrawRect 0,-0,225,441
 	SetDrawEnv fstyle= 1
 	DrawText 57,144,"Scan center"
 	SetDrawEnv fstyle= 1
@@ -465,7 +452,7 @@ Window LBICPanel() : Panel
 	DrawLine 27,90,54,135
 	SetVariable setvar4,pos={37,253},size={126,16},title="Time Per Point (ms)"
 	SetVariable setvar4,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:TimePerPoint
-	Button button1,pos={44,369},size={100,20},proc=SaveLBICImageButton,title="Save Data"
+	Button button1,pos={44,396},size={100,20},proc=SaveLBICImageButton,title="Save Data"
 	SetVariable setvar5,pos={11,150},size={72,16},title="X (um)"
 	SetVariable setvar5,limits={-inf,inf,0},value= root:packages:trEFM:gxpos
 	SetVariable setvar6,pos={11,171},size={72,16},title="Y (um)"
@@ -473,12 +460,6 @@ Window LBICPanel() : Panel
 	Button button2,pos={89,147},size={90,22},proc=MoveHereButton,title="Move here"
 	Button button15,pos={89,169},size={90,22},proc=GetCurrentPositionButton,title="Get Current XY"
 	Button button15,help={"Fill the X,Y with the current stage position."}
-	SetVariable scanwidthT,pos={384,62},size={100,16},title="Width (µm)        "
-	SetVariable scanwidthT,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scansizex
-	SetVariable scanwidthT1,pos={384,62},size={100,16},title="Width (µm)        "
-	SetVariable scanwidthT1,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scansizex
-	SetVariable scanwidthT2,pos={384,62},size={100,16},title="Width (µm)        "
-	SetVariable scanwidthT2,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scansizex
 	SetVariable setvar8,pos={11,214},size={79,16},title="Width (µm)"
 	SetVariable setvar8,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scansizex
 	SetVariable setvar9,pos={11,234},size={79,16},title="Height (µm)"
@@ -497,7 +478,7 @@ Window LBICPanel() : Panel
 	SetVariable setvar3,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:LBIC:yCursorPosition
 	Button button5,pos={18,45},size={99,18},proc=GetCursorPosition,title="Get Cursor Pos"
 	Button button6,pos={18,65},size={99,27},proc=TransferPositionButton,title="Transfer position"
-	ValDisplay TimePerPLScan,pos={27,396},size={153,14},title="TimePerPLScan (s)"
+	ValDisplay TimePerPLScan,pos={18,418},size={153,14},title="TimePerPLScan (s)"
 	ValDisplay TimePerPLScan,frame=0,limits={0,0,0},barmisc={0,1000}
 	ValDisplay TimePerPLScan,value= #"root:packages:trEFM:ImageScan:LBIC:TimePerPL"
 	Button button8,pos={153,306},size={45,27},proc=PLXFast,title="0°!",fStyle=1
@@ -512,6 +493,10 @@ Window LBICPanel() : Panel
 	Button SetupLIA,fSize=14,fStyle=1,fColor=(0,15872,65280)
 	Button button16,pos={63,99},size={117,18},proc=GetMFPOffset,title="Grab Offset from ARC"
 	Button button16,help={"Fill the X,Y with the current stage position."}
+	CheckBox useinterleavevoltage,pos={153,369},size={16,14},proc=UseInterleave,title=""
+	CheckBox useinterleavevoltage,variable= root:packages:trEFM:ImageScan:LBIC:PLuseinterleavevoltage
+	SetVariable setvar04,pos={18,367},size={126,16},title="Interleaved Voltage"
+	SetVariable setvar04,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:VoltageatLine
 	ToolsGrid snap=1,visible=1
 EndMacro
 
@@ -523,6 +508,7 @@ Function LBICImageScanButton(ctrlname) : ButtonControl
 	SetDataFolder root:Packages:trEFM:ImageScan
 	Nvar scansizex, scansizey, scanlines, scanpoints
 	nvar TimePerPoint = root:packages:trEFM:PointScan:SKPM:timeperpoint
+	NVAR PLUseInterleaveVoltage =  root:packages:trEFM:ImageScan:LBIC:PLUseInterleaveVoltage
 	NVAR timeperPL = root:packages:trEFM:ImageScan:LBIC:TimePerPL
 	SetDataFolder root:Packages:trEFM
 	Nvar gxpos, gypos
@@ -535,9 +521,11 @@ Function LBICImageScanButton(ctrlname) : ButtonControl
 	DoUpdate
 	
 	//OpenShutterButton("")
-	
-	LBICscan(gxpos, gypos, scansizeX, scansizeY, scanlines, scanpoints)
-
+	if (PLUseInterleaveVoltage == 0)
+		LBICscan(gxpos, gypos, scansizeX, scansizeY, scanlines, scanpoints)
+	else
+		LBICscan_interleave(gxpos, gypos, scansizeX, scansizeY, scanlines, scanpoints)
+	endif
 	//CloseShutterButton("")
 	GetCurrentPosition()
 	SetDataFolder savDF
@@ -695,10 +683,10 @@ Function SetAWGForPL(ba): ButtonControl
 			sprintf string1 "FREQ %g" 400
 			writeGPIB(gWGDeviceAddress, string1)
 
-			sprintf string1, "VOLT %g" 2.5
+			sprintf string1, "VOLT %g" 5
 			writeGPIB(gWGDeviceAddress, string1)
 
-			writeGPIB(gWGDeviceAddress, "VOLT:OFFS 1.25")
+			writeGPIB(gWGDeviceAddress, "VOLT:OFFS 2.5")
 			GPIB2 interfaceclear	
 			
 			SetDataFolder SavedDataFolder
@@ -773,6 +761,24 @@ Function UseLineNum(cba) : CheckBoxControl
 			Variable checked = cba.checked
 			 PL_UseLineNum = checked
 			 UseLineNum = checked
+			break
+		case -1: // control being killed
+			break
+	endswitch
+
+	return 0
+End
+
+Function UseInterleave(cba) : CheckBoxControl
+	STRUCT WMCheckboxAction &cba
+
+	NVAR PL_UseInterleaveVoltage =  root:packages:trEFM:ImageScan:LBIC:PL_UseInterleaveVoltage
+
+	switch( cba.eventCode )
+		case 2: // mouse up
+			Variable checked = cba.checked
+			 PL_UseInterleaveVoltage = checked
+
 			break
 		case -1: // control being killed
 			break
@@ -1097,3 +1103,5 @@ Function ButtonProc(ba) : ButtonControl
 
 	return 0
 End
+
+

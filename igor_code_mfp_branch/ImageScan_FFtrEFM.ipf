@@ -212,30 +212,30 @@ Function ImageScanFFtrEFM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines
 	//Downinterpolation = ceil(scansizeX / (scanspeed * scanpoints * .00001))
 	
 
-	Make/O/N = (scanpoints, scanlines) Topography, ChargingRate, FrequencyOffset, Chi2Image
+	Make/O/N = (scanpoints, scanlines) Topography, ChargingRate, FrequencyOffset, Chi2Image, TopographyRaw
 	Chi2Image=0
 	
 	if (XFastEFM == 1 && YFastEFM == 0)
 	
-		SetScale/I x, ScanFrameWork[0][0], ScanFramework[0][2], "um", Topography, FrequencyOffset, ChargingRate, Chi2Image
+		SetScale/I x, ScanFrameWork[0][0], ScanFramework[0][2], "um", Topography, FrequencyOffset, ChargingRate, Chi2Image, TopographyRaw
 		if(scanlines==1)
-			SetScale/I y, ypos, ypos, Topography, FrequencyOffset, ChargingRate, Chi2Image
+			SetScale/I y, ypos, ypos, Topography, FrequencyOffset, ChargingRate, Chi2Image, TopographyRaw
 		else
-			SetScale/I y, ScanFrameWork[0][1], ScanFramework[scanlines-1][1], Topography, FrequencyOffset, ChargingRate,Chi2Image
+			SetScale/I y, ScanFrameWork[0][1], ScanFramework[scanlines-1][1], Topography, FrequencyOffset, ChargingRate,Chi2Image, TopographyRaw
 		endif
 	
 	elseif (XFastEFM == 0 && YFastEFM == 1)
 	
-		SetScale/I x, ScanFrameWork[0][2], ScanFramework[0][0], "um", Topography, FrequencyOffset, ChargingRate, Chi2Image
+		SetScale/I x, ScanFrameWork[0][2], ScanFramework[0][0], "um", Topography, FrequencyOffset, ChargingRate, Chi2Image, TopographyRaw
 		if(scanlines==1)
-			SetScale/I y, xpos, xpos, Topography, FrequencyOffset, ChargingRate, Chi2Image
+			SetScale/I y, xpos, xpos, Topography, FrequencyOffset, ChargingRate, Chi2Image, TopographyRaw
 		else
-			SetScale/I y, ScanFrameWork[0][1], ScanFramework[scanlines-1][1], Topography, FrequencyOffset, ChargingRate,Chi2Image
+			SetScale/I y, ScanFrameWork[0][1], ScanFramework[scanlines-1][1], Topography, FrequencyOffset, ChargingRate,Chi2Image, TopographyRaw
 		endif
 	
 	endif
 	
-	if(mod(scanpoints,32) != 0)									//Scan aborts if scanpoints is not divisible by 32 PC 4/29/14
+	if(mod(scanpoints,32) != 0)									
 			abort "Scan Points must be divisible by 32"
 	endif
 	
@@ -456,6 +456,9 @@ Function ImageScanFFtrEFM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines
 	td_wv(LockinString + "Freq",CalEngageFreq) //set the frequency to the resonant frequency
 	td_wv(LockinString + "FreqOffset",0)
 	
+	StopFeedbackLoop(3)
+	StopFeedbackLoop(4)
+	StopFeedbackLoop(5)
 	SetFeedbackLoop(2,"Always","Amplitude", Setpoint,-PGain,-IGain,-SGain,"Height",0)	
 	
 	Sleep/S 1.5
@@ -520,7 +523,8 @@ Function ImageScanFFtrEFM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines
 		//ReadWaveZback is the drive wave for the z piezo		
 		ReadWaveZback[] = ReadwaveZ[scanpoints-1-p] - liftheight * 1e-9 / GV("ZLVDTSens")
 		ReadWaveZmean = Mean(ReadwaveZ) * ZLVDTSens
-		Topography[][i] = -(ReadwaveZ[p] * ZLVDTSens)//-ReadWaveZmean)
+		Topography[][i] = -(ReadwaveZ[p] * ZLVDTSens-ReadWaveZmean)
+		TopographyRaw[][i] = -(ReadwaveZ[p] * ZLVDTSens)
 		DoUpdate
 	
 		//****************************************************************************
@@ -741,6 +745,9 @@ Function ImageScanFFtrEFM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines
 	if (error != 0)
 		print "there was some setinoutwave error during this program"
 	endif
+	
+	Duplicate/O Topography, TopographyTemp
+	Duplicate/O TopographyRaw, Topography
 	
 	DoUpdate		
 		
