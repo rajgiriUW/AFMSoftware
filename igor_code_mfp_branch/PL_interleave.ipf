@@ -181,6 +181,7 @@ Function LBICscan_interleave(xpos, ypos, scansizeX,scansizeY, scanlines, scanpoi
 	dowindow/f TopgraphyImage
 	if (V_flag==0)
 		Display/K=1/n=TopgraphyImage;Appendimage Topography
+		ModifyImage TopgraphyImage ctab= {*,*,VioletOrangeYellow,0}
 		SetAxis/A bottom
 		SetAxis/A left
 		Label bottom "Fast Scan(um)"
@@ -383,7 +384,7 @@ Function LBICscan_interleave(xpos, ypos, scansizeX,scansizeY, scanlines, scanpoi
 		CheckInWaveTiming(ReadWaveZInterleave)
 
 		td_wv("Output.C", 0)
-		SetFeedbackLoop(3, "always",  "ZSensor", ReadWaveZ[0]-500*1e-9/GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0, name="OutputZ", arcZ=1) // note the integral gain of 10000
+		SetFeedbackLoop(3, "always",  "ZSensor", ReadWaveZ[0]-2000*1e-9/GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0, name="OutputZ", arcZ=1) // note the integral gain of 10000
 
 		if (gWGDeviceAddress != 0)
 			SetVFSqu(5, ACFrequency,"WG")
