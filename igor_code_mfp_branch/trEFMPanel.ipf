@@ -812,6 +812,7 @@ Function SKPMImageScanButton(ctrlname) : ButtonControl
 	SetDataFolder root:Packages:trEFM
 	Nvar liftheight
 	Nvar gxpos, gypos
+	Nvar UseAM = root:packages:treFM:PointScan:SKPM:UseAM
 	
 	Nvar WavesCommitted
 	if(WavesCommitted == 0)
@@ -827,7 +828,11 @@ Function SKPMImageScanButton(ctrlname) : ButtonControl
 
 	//ImageScan(gxpos, gypos, liftheight, scansizeX,scansizeY, scanlines, scanpoints, scanspeed)
 
-	ImageScanSKPM(gxpos, gypos, liftheight, scansizeX, scansizeY, scanlines, scanpoints, scanspeed)
+	if (UseAM == 0)
+		ImageScanSKPM(gxpos, gypos, liftheight, scansizeX, scansizeY, scanlines, scanpoints, scanspeed)
+	else
+		ImageScanAMSKPM(gxpos, gypos, liftheight, scansizeX, scansizeY, scanlines, scanpoints, scanspeed)
+	endif
 	GetCurrentPosition()
 	SetDataFolder savDF
 	
@@ -1652,7 +1657,7 @@ EndMacro
 
 Window SKPMPanel() : Panel
 	PauseUpdate; Silent 1		// building window...
-	NewPanel /W=(982,457,1432,721)
+	NewPanel /W=(2037,443,2487,707)
 	ShowTools/A
 	SetDrawLayer UserBack
 	SetDrawEnv fillfgc= (56576,56576,56576)
@@ -1702,6 +1707,8 @@ Window SKPMPanel() : Panel
 	SetVariable setvar06,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:VoltageatLine2
 	Button button3,pos={332,115},size={100,20},proc=PSON_button,title="Turn on PS"
 	Button button4,pos={332,142},size={100,20},proc=PSOff_button,title="Turn off PS"
+	CheckBox UseAMMode,pos={333,180},size={69,14},proc=UseAMMode,title="AM mode?"
+	CheckBox UseAMMode,variable= root:packages:trEFM:PointScan:SKPM:UseAM
 	ToolsGrid snap=1,visible=1
 EndMacro
 

@@ -226,6 +226,8 @@ Function trEFMInit()
 	Variable/G LineNumforVoltage2 = 0
 	Variable/G VoltageatLine2 = 0
 	
+	Variable/G UseAM = 0 
+	
 	SetDataFolder root:Packages:trEFM:ForceCal
 	
 	// Calibration Variables

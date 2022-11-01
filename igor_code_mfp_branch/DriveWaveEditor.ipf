@@ -286,10 +286,10 @@ Function AppendCycles(numcycles, [interpval])
 		genlightwave = genlightwaveTemp
 		gendrivewave = gendrivewaveTemp
 		
-		Resample/UP=(interpval) gentipwave
-		Resample/UP=(interpval) gentriggerwave
-		Resample/UP=(interpval) genlightwave
-		Resample/UP=(interpval) gendrivewave
+//		Resample/UP=(interpval) gentipwave
+//		Resample/UP=(interpval) gentriggerwave
+//		Resample/UP=(interpval) genlightwave
+//		Resample/UP=(interpval) gendrivewave
 
 	else
 		Make/O/N = (800) gentipwave
@@ -318,18 +318,21 @@ Function AppendCycles(numcycles, [interpval])
 //		Duplicate/O gentipwave, gentipwavetemp
 		
 		Variable i = 0
-		for( i = 0; i < numcycles - 1; i += 1)
-			Concatenate/NP = 0 {gentipwaveTemp}, gentipwave
-			Concatenate/NP = 0 {gentriggerwaveTemp}, gentriggerwave
-			Concatenate/NP = 0 {genlightwaveTemp}, genlightwave
-			Concatenate/NP = 0 {gendrivewaveTemp}, gendrivewave
+		Variable j = 0
+		for( j = 0; j < interpval; j += 1)
+			for( i = 0; i < numcycles - 1; i += 1)
+				Concatenate/NP = 0 {gentipwaveTemp}, gentipwave
+				Concatenate/NP = 0 {gentriggerwaveTemp}, gentriggerwave
+				Concatenate/NP = 0 {genlightwaveTemp}, genlightwave
+				Concatenate/NP = 0 {gendrivewaveTemp}, gendrivewave
+			endfor
 		endfor
 	endif
 
-	Resample/UP=(interpval) gentipwave
-	Resample/UP=(interpval) gentriggerwave
-	Resample/UP=(interpval) genlightwave
-	Resample/UP=(interpval) gendrivewave
+//	Resample/UP=(interpval) gentipwave
+//	Resample/UP=(interpval) gentriggerwave
+//	Resample/UP=(interpval) genlightwave
+//	Resample/UP=(interpval) gendrivewave
 	
 	SetDataFolder savDF
 End

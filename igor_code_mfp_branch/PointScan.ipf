@@ -12,6 +12,7 @@ Function PointScantrEFM(xpos, ypos, liftheight)
 	Svar LockinString
 	NVAR ElecDrive, ElecAmp // if driving using the AWG on the substrate
 	NVAR ElecEFMDrive // if using the Electric Tune panel to drive the tip directly
+	
 			
 	Nvar XLVDTsens
 	Wave EFMFilters = root:packages:trEFM:EFMFilters
@@ -77,11 +78,11 @@ Function PointScantrEFM(xpos, ypos, liftheight)
 	NVAR Cutdrive = root:packages:trEFM:cutDrive
 	
 	// Get the waves ready to read/write when Event 2 is fired.
-
+	variable error = 0 
 	if (cutDrive == 0)
-		td_xSetInWave(2, "Event.2" , LockinString + "freqOffset", shiftwave, "", 1)
-		td_xSetOutWavePair(1, "Event.2,Always", "Output.A", genlightwave, "Output.C", gentriggerwave, 1)
-		td_xSetOutWave(0, "Event.2,Always", "Output.B", gentipwave, 1)
+		error +=	td_xSetInWave(2, "Event.2" , LockinString + "freqOffset", shiftwave, "", 1)
+		error +=	td_xSetOutWavePair(1, "Event.2,Always", "Output.A", genlightwave, "Output.C", gentriggerwave, 1)
+		error +=	td_xSetOutWave(0, "Event.2,Always", "Output.B", gentipwave, 1)
 	elseif (cutDrive == 1)
 		print "cut"
 		td_xSetInWave(2, "Event.2" , LockinString + "freqOffset", shiftwave, "", 1)
@@ -98,16 +99,22 @@ Function PointScantrEFM(xpos, ypos, liftheight)
 	
 	// Raise up to the specified lift height.
 	StopFeedbackLoop(2)
+	
+	variable heightbefore = td_rv("Zsensor")*td_rv("ZLVDTSens")
+	
 	//SetFeedbackLoop(3, "Always", "ZSensor", (currentz - liftheight * 1e-9) / GV("ZLVDTSens"), 0,  EFMFilters[%ZHeight][%IGain], 0, "Output.Z", 0)  
 	SetFeedbackLoop(3, "always",  "ZSensor",  (currentz - 100 * 1e-9)/GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0, name="OutputZ") // note the integral gain of 10000
 	sleep/S 1
 	SetFeedbackLoop(3, "always",  "ZSensor", (currentz - liftheight * 1e-9) / GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0, name="OutputZ", arcZ=1) // note the integral gain of 10000
 	sleep/s 1
-
+		
+	variable heightafter = td_rv("Zsensor")*td_rv("ZLVDTSens")
+	print "The lift height is", (heightbefore-heightafter)*1e9, " nm"
+	
 	startTime = StopMSTimer(-2)
 	do 
 	while((StopMSTimer(-2) - StartTime) < 300*1e3) 
-	readposition()
+	//readposition()
 	// Set the Cantilever to Resonance.
 	td_WV(LockinString + "Amp", calsoftd)
 	td_WV(LockinString + "freq", calresfreq)

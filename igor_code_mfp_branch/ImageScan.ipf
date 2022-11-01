@@ -519,14 +519,18 @@ Function ImageScantrEFM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 		error+= td_xsetoutwavepair(0,"Event.2,repeat", "Output.B", voltagewave,"Output.A", lightwave,-1*interpval)
 
 		//stop amplitude FBLoop and start height FB for retrace
+
+		variable heightbefore = td_rv("ZSensor")*td_rv("ZLVDTSens")
+
 		StopFeedbackLoop(2)		
-
 		// to keep tip from being stuck
-		SetFeedbackLoop(3, "always",  "ZSensor", ReadWaveZ[scanpoints-1]-500*1e-9/GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0, name="OutputZ") // note the integral gain of 10000
+		SetFeedbackLoop(3, "always",  "ZSensor", heightbefore/GV("ZLVDTSens")-500*1e-9/GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0, name="OutputZ") // note the integral gain of 10000
 		sleep/S 1
-		SetFeedbackLoop(3, "always",  "ZSensor", ReadWaveZ[scanpoints-1]-liftheight*1e-9/GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0, name="OutputZ", arcZ=1) // note the integral gain of 10000
+		SetFeedbackLoop(3, "always",  "ZSensor", ReadWaveZ[scanpoints-1]-liftheight*1e-9/GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0, name="OutputZ") // note the integral gain of 10000
 		sleep/s 1
-
+	
+		variable heightafter = td_rv("Zsensor")*td_rv("ZLVDTSens")
+		print "The lift height is", (heightbefore-heightafter)*1e9, " nm"
 		
 		NVAR Cutdrive = root:packages:trEFM:cutDrive
 

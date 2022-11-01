@@ -323,7 +323,7 @@ Function LoadChirp_Cypher()
 	NVAR ChirpCenter = root:packages:trEFM:TF:ChirpCenter
 	NVAR ChirpWidth = root:packages:trEFM:TF:ChirpWidth
 	
-	string cmd = "cmd.exe /K C:\Anaconda3\Scripts\activate.bat C:\Anaconda3 && cd C:\\AsylumResearch\\v16\\Ginger Code\\misc && python generate_chirp.py " + num2str(ChirpCenter) + " " + num2str(ChirpWidth) + " " + num2str(length) + " -s " + num2str(sampling_rate) + " && Exit"
+	string cmd = "cmd.exe /K C:\Anaconda3\Scripts\activate.bat C:\Anaconda3 && C:\Users\GingerLab\Documents\GingerCode_V14,V16_Cypher\misc && python generate_chirp.py " + num2str(ChirpCenter) + " " + num2str(ChirpWidth) + " " + num2str(length) + " -s " + num2str(sampling_rate) + " && Exit"
 //	string cmd = "cmd.exe /K cd E:\\Raj && python generate_chirp.py " + num2str(ChirpCenter) + " " + num2str(ChirpWidth) + " " + num2str(length) + " -s " + num2str(sampling_rate) + " && Exit"
 	ExecuteScriptText cmd
 	

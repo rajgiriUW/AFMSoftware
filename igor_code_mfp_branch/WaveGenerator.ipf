@@ -209,10 +209,14 @@ function testawg() // scratchspace for quick testing
 	
 end
 
-Function LoadArbWave(freq, amp, offset)
+Function LoadArbWave(freq, amp, offset, [polarity])
 	Variable freq, amp, offset
+	variable polarity
 	Variable num
 	Variable defaultRM, instr
+	if (paramisdefault(polarity))
+		polarity = 0 
+	endif
 	String resourceName = "USB0::0x0957::0x2907::MY52500433::0::INSTR"
 	
 	viOpenDefaultRM(defaultRM)
@@ -224,6 +228,12 @@ Function LoadArbWave(freq, amp, offset)
 	VISAWrite instr, "FREQ "+ num2str(freq)
 	VISAWrite instr, "VOLT " + num2str(amp)
 	VISAWrite instr, "VOLT:OFFS  " + num2str(offset)
+	
+	if (polarity == 0)
+		VISAWRITE instr, "OUTP:POL NORM"
+	else
+		VISAWRITE instr, "OUTP:POL INV"
+	endif
 	
 	VISAWrite instr, "OUTP ON\n"
 
