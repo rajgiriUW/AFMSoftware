@@ -132,6 +132,9 @@ function GetForceParms_Light(tipV)
 	// Gets Cantilever parameters, force/k/beta/etc
 	GetSurfaceCantileverParms()
 	
+	Wave FInalParms
+	FinalParms[17][0] = tipV
+	
 	doscanfunc("stopengage")
 	sleep/S 3
 	

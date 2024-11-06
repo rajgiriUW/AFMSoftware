@@ -28,7 +28,8 @@ Function InitBoardAndDeviceLIAAWG()
 	//GPIB board and devices that should need to be changed if equipment is changed
 	gBoardAddress=0 // if more then one board is available this value will have to be determined and set
 	String LIAModelNumber = "SR830"  //model num string for standford research sr830
-	String WGModelNumber = "33120A" //model num for agilent wave generator
+//	String WGModelNumber = "33120A" //model num for agilent wave generator
+	String WGModelNumber = "33210A" //model num for agilent wave generator
 	//END of hardcoded vars
 	
 	Variable errorcnt=0,i
@@ -438,23 +439,26 @@ function SetVF(voltage, frequency, whichDevice)
 					// the voltage will be zeroed when the square wave bursts.
 					voltage=.1
 					offset = .05 
-					WriteGPIB(whichDeviceAddress,"BM:INT:Rate .01")
-					WriteGPIB(whichDeviceAddress, "BM:NCYC 1")
-					WriteGPIB(whichDeviceAddress,"BM:Stat on")
-					WriteGPIB(whichDeviceAddress,"APPL:squ")			
+//					WriteGPIB(whichDeviceAddress,"BM:INT:Rate .01")
+//					WriteGPIB(whichDeviceAddress, "BM:NCYC 1")
+//					WriteGPIB(whichDeviceAddress,"BM:Stat on")
+//					WriteGPIB(whichDeviceAddress,"APPL:squ")			
+					WriteGPIB(whichDeviceAddress, "OUTPut OFF")
 				elseif (voltage>10)
 					voltage = 10
+				else
+					sprintf writtenstring1, "freq %g" frequency
+					sprintf writtenstring2, "volt %g" voltage
+					sprintf writtenstring3, "volt:offs %g" offset
+
+					WriteGPIB(whichDeviceAddress, "OUTP:LOAD Max")
+					WriteGPIB(whichDeviceAddress, writtenstring2)
+			
+					WriteGPIB(whichDeviceAddress,writtenstring1)
+					WriteGPIB(whichDeviceAddress, writtenstring3)
+					WriteGPIB(whichDeviceAddress, "OUTPut ON")
 				endif
 
-				sprintf writtenstring1, "freq %g" frequency
-				sprintf writtenstring2, "volt %g" voltage
-				sprintf writtenstring3, "volt:offs %g" offset
-
-				WriteGPIB(whichDeviceAddress, "OUTP:LOAD Max")
-				WriteGPIB(whichDeviceAddress, writtenstring2)
-			
-				WriteGPIB(whichDeviceAddress,writtenstring1)
-				WriteGPIB(whichDeviceAddress, writtenstring3)
 				GPIB2 interfaceclear		
 			endif
 		endif

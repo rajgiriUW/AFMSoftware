@@ -63,6 +63,19 @@ function PyPS_cypher(ibw_wave, parameters)
 	
 	SetDataFolder root:packages:trEFM:PointScan:FFtrEFM:
 	LoadWave/G/O/D/P=PointScan/N "pointscan.txt"
+	
+	try
+		LoadWave/J/O/D/P=PointScan/N=tfp "tfp.txt"
+		LoadWave/J/O/D/P=PointScan/N=shift "shift.txt"
+		wave tfp0, shift0
+		Variable/G tfp_value, shift_value
+		tfp_value = tfp0
+		shift_value = shift0
+		
+	catch
+		print("Error loading tfp")
+	endtry 
+	
 	Wave Wave0
 	Duplicate/O wave0, shiftwave // overwrites the existing wave in the FFtrEFM folder
 	

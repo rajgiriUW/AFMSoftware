@@ -7,7 +7,7 @@ Function phaseset(phase)
 	string command = "phaseset " + num2str(phase) + "\r"
 	
 	//VDT2 /P=COM3 baud=9600,databits=8,parity=0,stopbits=2,in=1,out=1
-	VDTOperationsPort2 COM4
+	VDTOperationsPort2 COM8
 	VDTWrite2 command
 	//VDTRead2/O=3 outstring
 	
@@ -20,11 +20,11 @@ Function phaseres(res)
 	string outstring
 	string command = "phaseres " + num2str(res) + "\r"
 	string echon = "echo 1\r"
-	VDT2 /P=COM4 baud=9600,databits=8,parity=0,stopbits=2,in=1,out=1
-	VDTOperationsPort2 COM4
+	VDT2 /P=COM8 baud=9600,databits=8,parity=0,stopbits=2,in=1,out=1
+	VDTOperationsPort2 COM8
 	VDTWrite2 command
 	VDTRead2/O=3 outstring
-	
+	VDTClosePort2 COM8
 	print outstring
 	
 End
@@ -37,12 +37,12 @@ Function freqset()
 	string outstring
 	string command = "freqset " + num2str(frequency) + "\r"
 	string echon = "echo 1\r"
-	VDT2 /P=COM3 baud=9600,databits=8,parity=0,stopbits=2,in=1,out=1
-	VDTOperationsPort2 COM3
+	VDT2 /P=COM8 baud=9600,databits=8,parity=0,stopbits=2,in=1,out=1
+	VDTOperationsPort2 COM8
 	VDTWrite2 echon
 	VDTWrite2 command
 	VDTRead2/O=3 outstring
-	
+	VDTClosePort2 COM8
 	print outstring
 	
 End
@@ -53,9 +53,9 @@ Function trigpol(polarity)
 	string command = "trigpol " + num2str(polarity) + "\r"
 	string echon = "echo 1\r"
 //	VDT2 /P=COM3 baud=9600,databits=8,parity=0,stopbits=2,in=1,out=1
-	VDTOperationsPort2 COM4
+	VDTOperationsPort2 COM8
 	VDTWrite2 command
 //	VDTRead2/O=3 outstring
-	
+	VDTClosePort2 COM8
 
 End

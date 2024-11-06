@@ -1855,6 +1855,7 @@ Function ForceCalButton(ctrlname) : ButtonControl
 	
 	GetFreeCantileverParms()
 	GetForceParms(setvoltage)
+//	GetForceParms_Light(setvoltage) // voltage constant, light turns on
 	
 	Edit FinalParms.ld
 end

@@ -48,7 +48,7 @@ Function PointScanIMSKPM_FM(xpos, ypos, liftheight, numavg)
 	
 	// For the time being, we will be recording 80000 points for 1.6 s
 	SetDataFolder root:packages:trEFM:PointScan:SKPM	
-	FrequencyList()
+	FrequencyList(0)
 	Wave Frequency_List
 	NVAR useHalfOffset = root:packages:trEFM:PointScan:SKPM:usehalfoffset 
 

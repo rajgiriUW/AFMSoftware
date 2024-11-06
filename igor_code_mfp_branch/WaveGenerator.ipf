@@ -182,11 +182,33 @@ Function LoadPulseWave(freq, amp, pulsewidth, offset)
 	VISAWrite instr, "BURS:STAT ON\n"
 	
 	VISAWrite instr, "OUTP ON\n"
-
+// OUTPut[1|2]:LOAD {<ohms>|INFinity|MINimum|MAXimum|DEFault}
+	VISAWrite instr, "OUTP:LOAD INF"
 	viClose(instr)
 	viClose(defaultRM)
 
 end
+
+Function PhaseShift(degrees)
+	variable degrees
+	Variable defaultRM, instr
+	String resourceName = "USB0::0x0957::0x2907::MY52500433::0::INSTR"
+	
+	viOpenDefaultRM(defaultRM)
+	viOpen(defaultRM, resourceName, 0, 0, instr)
+	VISAWrite instr, "BURS:STAT OFF\n"
+	VISAWrite instr, "SOUR:PHAS " + num2str(degrees) + "\n"
+	VISAWrite instr, "UNIT:ANGLE DEG"
+	VISAWrite instr, "BURS:PHAS " + num2str(degrees) + "\n"
+	
+	VISAWrite instr, "BURS:STAT ON\n"
+
+	viClose(instr)
+	viClose(defaultRM)
+
+
+end
+
 
 function testawg() // scratchspace for quick testing
 
@@ -228,6 +250,7 @@ Function LoadArbWave(freq, amp, offset, [polarity])
 	VISAWrite instr, "FREQ "+ num2str(freq)
 	VISAWrite instr, "VOLT " + num2str(amp)
 	VISAWrite instr, "VOLT:OFFS  " + num2str(offset)
+	VISAWrite instr, "PHAS 225"
 	
 	if (polarity == 0)
 		VISAWRITE instr, "OUTP:POL NORM"
@@ -331,7 +354,7 @@ Function LoadDCWave81150(offset)
 	VISAWRite instr, "C1:BSWV WVTP,DC"
 //	VISAWRite instr, "C1:BSWV FRQ," + num2str(frequency) 
 //	VISAWrite instr, "C1:BSWV AMP," + num2str(2*voltage)
-	VISAWrite instr, "	C1:OUTP LOAD,50"
+	VISAWrite instr, "C1:OUTP LOAD,50"
 	
 	//VISAWrite instr, "FUNC:ARB:SRATE 100E6\n"
 
@@ -345,4 +368,123 @@ Function LoadDCWave81150(offset)
 	viClose(instr)
 	viClose(defaultRM)
 
+end
+
+
+Function LoadChirpWaveMDB(filename, [offset, amplitude, sampling_rate, polarity, delay])
+	String filename // not include the .dat
+	variable offset
+	variable amplitude
+	string sampling_rate
+	variable polarity
+	variable delay
+	
+	if (paramisdefault(offset))
+		offset = 0
+	endif
+	
+	if (paramisdefault(amplitude))
+		amplitude = 2
+	endif
+	
+	if (paramisdefault(sampling_rate))
+		sampling_rate = "100E6"
+	endif
+	
+	if (paramisdefault(polarity))
+		polarity = 0
+	endif
+	
+	if (paramisdefault(delay))
+		delay = 0
+	endif
+
+	Variable defaultRM, instr
+	String resourceName = "USB0::0x0957::0x2907::MY52500433::0::INSTR"
+	
+	viOpenDefaultRM(defaultRM)
+	viOpen(defaultRM, resourceName, 0, 0, instr)
+	
+	VISAWrite instr, "*RST\n"
+	VISAWrite instr, "FUNC:ARB:SRATE " + sampling_rate +"\n"
+
+//	VISAWrite instr, "FUNC:ARB:SRATE 100E6\n"
+//	VISAWrite instr, "FUNC:ARB:SRATE 10E6\n"
+	VISAWrite instr, "FUNC:ARB:PTP "+num2str(amplitude)+"\n"
+	
+	VISAWrite instr, "MMEM:LOAD:DATA \"USB:\\"+filename +".dat\"\n"
+	VISAWrite instr, "FUNC:ARB \"USB:\\"+filename +".dat\"\n"
+	VISAWrite instr, "FUNC ARB\n"
+	
+	VISAWrite instr, "BURS:MODE TRIG\n"
+	VISAWrite instr, "TRIG:SOUR EXT\n"
+	VISAWrite instr, "BURS:STAT ON\n"
+	VISAWrite instr, "VOLT:OFFS " + num2str(offset) + "\n"
+	
+//TRIGger[1|2]:DELay {<seconds>|MIN
+	VISAWrite instr, "TRIG:DEL " + num2str(delay) + "\n"
+
+	if (polarity==0)
+		VISAWRITE instr, "OUTP:POL NORM"
+	else
+		VISAWRITE instr, "OUTP:POL INV"
+	endif
+	
+	VISAWrite instr, "OUTP ON\n"
+
+	viClose(instr)
+	viClose(defaultRM)
+
+end
+
+function delay_AWG(delay)
+	variable delay
+	
+	Variable defaultRM, instr
+	String resourceName = "USB0::0x0957::0x2907::MY52500433::0::INSTR"
+	
+	viOpenDefaultRM(defaultRM)
+	viOpen(defaultRM, resourceName, 0, 0, instr)
+	
+	VISAWrite instr, "TRIG:DEL " + num2str(delay) + "\n"
+	
+	viClose(instr)
+	viClose(defaultRM)
+
+end
+
+function vpefm(resolution, sweep_time)
+	variable resolution
+	variable sweep_time
+	variable sweep_counts = sweep_time/resolution
+	variable i
+	
+	for (i=0;i<sweep_counts;i+=1)
+		variable delay_time = i*resolution
+		delay_AWG(delay_time)
+		FFtrEFMPointScanButton("")
+		wave gagewave = root:packages:trEFM:PointScan:FFtrEFM:gagewave
+		string name = "pointscan_" + num2str(i) + ".ibw"
+		Save/C/O/P=PointScan/M="\r\n" gagewave as name
+		
+	endfor
+	
+end
+
+function vpefm_oldtrEFM(resolution, sweep_time)
+	variable resolution
+	variable sweep_time
+	variable sweep_counts = sweep_time/resolution
+	variable i
+	
+	for (i=0;i<sweep_counts;i+=1)
+		variable delay_time = i*resolution
+		delay_AWG(delay_time)
+		trEFMPointScanButton("")
+		wave shiftwaveavg = root:packages:trEFM:PointScan:trEFM:shiftwaveavg
+		string name = "pointscan_" + num2str(i) + ".ibw"
+		Save/C/O/P=PointScan/M="\r\n" shiftwaveavg as name
+		
+	endfor
+	
 end

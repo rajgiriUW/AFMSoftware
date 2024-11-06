@@ -429,7 +429,7 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 		error+= td_xSetOutWavePair(0,"Event.0", "$outputXLoop.Setpoint", Xdownwave,"$outputYLoop.Setpoint",Ydownwave ,-DownInterpolation)
 			if (error != 0)
 				print i, "error2", error
-			endif		
+			endif
 		SetCrosspoint ("Ground","In1","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutA","OutC","OutB","Ground","Ground","DDS")
 
 		SetPassFilter(1, q = ImagingFilterFreq, i = ImagingFilterFreq)
@@ -479,17 +479,17 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 		KPPgain = KPGain0[0]
 		KPIgain = KPGain0[1]
 		KPDgain = KPGain0[2]
-		print "KP Gains", KPIGain, KPPGain, KPDGain		 
+		print "KP Gains (PID)", KPPGain, KPIGain, KPDGain		 
 		heightbefore = td_rv("Zsensor")*td_rv("ZLVDTSens")
 		 
 		//stop amplitude FBLoop and 
-		StopFeedbackLoop(2)		
+		StopFeedbackLoop(2)
 
 		// to keep tip from being stuck
 		SetFeedbackLoop(3, "always",  "ZSensor", ReadWaveZ[scanpoints-1]-500*1e-9/GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0, name="OutputZ") // note the integral gain of 10000
 		sleep/S 1
 		SetFeedbackLoop(3, "always",  "ZSensor", ReadWaveZ[scanpoints-1]-liftheight*1e-9/GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0, name="OutputZ", arcZ=1) // note the integral gain of 10000
-		sleep/s 1
+		Sleep/s 1
 		
 		// UNcomment for Christian (Kai-Mei) samples
 //		SetFeedbackLoop(3, "always",  "ZSensor", heightbefore/GV("ZLVDTSens")-liftheight*1e-9/GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0, name="OutputZ", arcZ=1) // note the integral gain of 10000

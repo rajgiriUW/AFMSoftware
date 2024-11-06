@@ -37,7 +37,7 @@ Function Training_Collect()
 		FFtrEFMPointScanButton("") // pushes the point scan button
 
 		SetDataFolder root:Packages:trEFM:PointScan:FFtrEFM
-		Save/O/P = pathtemp gagewave as "wave_phase_" + num2str(i) + ".ibw"
+		Save/C/O/P = pathtemp gagewave as "wave_phase_" + num2str(i) + ".ibw"
 		Sleep/S 1		
 
 		i += 1

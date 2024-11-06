@@ -144,7 +144,7 @@ Function ImageScanIMSKPM_AM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlin
 	
 	endif
 	
-	FrequencyList()
+	FrequencyList(0)
 	Wave Frequency_List = root:packages:trEFM:PointScan:SKPM:Frequency_List
 		
 	Make/O/N = (scanpoints, scanlines) Topography, IMTauImage

@@ -766,10 +766,10 @@ Function SaveImageScan(name,type)
 
 
 	if(scanlines == 1)
-		setscale/I y, 0, ScanFramework[0][2]-ScanFrameWork[0][0], "um", ImageWave
+		setscale/I y, 0, (ScanFramework[0][2]-ScanFrameWork[0][0])*1e-6, "m", ImageWave
 	else
-		setscale/I x, 0, abs(ScanFramework[scanlines-1][2]-ScanFrameWork[0][0]), "um",ImageWave
-		setscale/I y, 0, abs(ScanFramework[scanlines-1][1]-ScanFrameWork[0][1]), "um",ImageWave
+		setscale/I x, 0, abs(ScanFramework[scanlines-1][2]-ScanFrameWork[0][0])*1e-6, "m",ImageWave
+		setscale/I y, 0, abs(ScanFramework[scanlines-1][1]-ScanFrameWork[0][1])*1e-6, "m",ImageWave
 	endif
 	
 	//Test function to save multiple layer waves as a single 3D AR Image wave.	

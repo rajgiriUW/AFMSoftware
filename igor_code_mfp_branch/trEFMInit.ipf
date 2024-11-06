@@ -173,9 +173,9 @@ Function trEFMInit()
 	InterpVal = 1
 	
 	// FF-trEFM
-	DigitizerTime = 1.6
+	DigitizerTime = 2
 	DigitizerSampleRate = 10e6
-	DigitizerPercentPreTrig = 60
+	DigitizerPercentPreTrig = 80
 	DigitizerAverages = 50
 	DigitizerSamples = ceil(DigitizerSampleRate * DigitizerTime * 1e-3)
 	DigitizerPretrigger = ceil(DigitizerSamples * DigitizerPercentPreTrig / 100)
@@ -218,6 +218,9 @@ Function trEFMInit()
 	Variable/G MeanCPD = 0
 	Variable/G Use81150 = 0
 	Variable/G DCInterleave = 0
+	Variable/G Intensityoffset = 0
+	Variable/G Intensity1 = 10
+	Variable/G do_toff_IMSKPM = 0
 	
 	// Single line stuff
 	Variable/G LineNumforVoltage = 0
