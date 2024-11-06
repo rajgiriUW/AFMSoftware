@@ -494,6 +494,13 @@ Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 	
 	i=0
 	do
+	
+		// ENODE stuff
+		error+= td_xsetoutwavepair(0,"Event.0,repeat", "Output.A", lightwave,"Output.B", voltagewave,-1)
+		loadarbwave(1000, 5, 2.5, polarity=0)	
+		Sleep/S 3
+		//
+	
 		starttime2 =StopMSTimer(-2) //Start timing the raised scan line
 		print "line ", i+1
 
@@ -509,17 +516,14 @@ Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 		td_StopInWaveBank(-1)
 		td_StopOutWaveBank(-1)
 		
-		error+= td_xSetInWave(0,"Event.0", "ZSensor", ReadWaveZ,"", Downinterpolation)// used during Trace to record height data		
-			if (error != 0)
-				print i, "error1", error
-			endif
-			
-		error+= td_xSetOutWavePair(0,"Event.0", "PIDSLoop.0.Setpoint", Xdownwave,"PIDSLoop.1.Setpoint",Ydownwave ,-DownInterpolation)
-		if (error != 0)
-			print i, "error2", error
-		endif
+//		error+= td_xSetInWave(0,"Event.0", "ZSensor", ReadWaveZ,"", Downinterpolation)// used during Trace to record height data		
+//		error+= td_xSetOutWavePair(0,"Event.0", "PIDSLoop.0.Setpoint", Xdownwave,"PIDSLoop.1.Setpoint",Ydownwave ,-DownInterpolation)
 
-
+		//ENODE Stuff
+		error+= td_xSetInWave(0,"Event.0", "ZSensor", ReadWaveZ,"", -UpInterpolation)// used during Trace to record height data		
+		error+= td_xSetOutWavePair(0,"Event.0", "PIDSLoop.0.Setpoint", Xdownwave,"PIDSLoop.1.Setpoint",Ydownwave ,-UpInterpolation)
+		//
+		
 		SetPassFilter(1,q = ImagingFilterFreq, i = ImagingFilterFreq)
 
 		td_wv(LockinString + "Amp",CalHardD) 
@@ -554,6 +558,11 @@ Function ImageScanGmode(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, 
 		//*****************************************************************************		
 		td_stopInWaveBank(-1)
 		td_stopOutWaveBank(-1)
+
+		//ENODE Stuff
+		loadpulsewave(100, 2, 0.003, 1)
+		Sleep/S 3
+		//
 
 		// Outputs three signals from the ARC. If CutDrive is active, then "trigger" is replaced by the drive signal to the shake pieze
 		//	Otherwise, the outputs are:
