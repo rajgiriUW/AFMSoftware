@@ -1530,7 +1530,7 @@ Window trEFMImagingPanel() : Panel
 	Button fitshiftwaveavg,pos={278,150},size={80,20},proc=FitShiftWaveAvgButton,title="Fit Point Scan"
 	Button pntscanbuttonT,pos={260,34},size={100,25},proc=trEFMPointScanButton,title="Point Scan"
 	Button imgscanbuttonT,pos={380,34},size={100,25},proc=trEFMImageScanButton,title="Image Scan"
-	SetVariable scanheightT,pos={384,82},size={100,16},title="Height (µm)       "
+	SetVariable scanheightT,pos={384,82},size={100,16},title="Height (ï¿½m)       "
 	SetVariable scanheightT,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scansizey
 	SetVariable scanpointsT,pos={384,102},size={100,16},title="Scan Points    "
 	SetVariable scanpointsT,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scanpoints
@@ -1549,11 +1549,11 @@ Window trEFMImagingPanel() : Panel
 	Button savebuttonT,help={"Save a previously acquired Image Scan."}
 	Button clearbuttonT,pos={510,37},size={40,20},proc=ClearImagesButton,title="Clear"
 	Button clearbuttonT,help={"Clear all collected data."}
-	SetVariable scanwidthT,pos={384,62},size={100,16},title="Width (µm)        "
+	SetVariable scanwidthT,pos={384,62},size={100,16},title="Width (ï¿½m)        "
 	SetVariable scanwidthT,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scansizex
 	Button pntscanbuttonT2,pos={262,34},size={100,25},disable=1,proc=FFtrEFMPointScanButton,title="Point Scan"
 	Button imgscanbuttonT2,pos={382,34},size={100,25},disable=1,proc=FFtrEFMImageScanButton,title="Image Scan"
-	SetVariable scanheightT2,pos={396,82},size={100,16},disable=1,title="Height (µm)       "
+	SetVariable scanheightT2,pos={396,82},size={100,16},disable=1,title="Height (ï¿½m)       "
 	SetVariable scanheightT2,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scansizey
 	SetVariable scanpointsT2,pos={396,102},size={100,16},disable=1,title="Scan Points    "
 	SetVariable scanpointsT2,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scanpoints
@@ -1563,13 +1563,13 @@ Window trEFMImagingPanel() : Panel
 	SetVariable scanspeedT2,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scanspeed
 	Button savebuttonT2,pos={434,188},size={99,33},disable=1,proc=SaveImageButton,title="Save"
 	Button clearbuttonT2,pos={510,37},size={40,20},disable=1,proc=ClearImagesButton,title="Clear"
-	SetVariable scanwidthT2,pos={396,62},size={100,16},disable=1,title="Width (µm)        "
+	SetVariable scanwidthT2,pos={396,62},size={100,16},disable=1,title="Width (ï¿½m)        "
 	SetVariable scanwidthT2,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scansizex
 	SetVariable cyclesT3,pos={529,50},size={85,16},disable=1,title="# of Cycles"
 	SetVariable cyclesT3,limits={-inf,inf,0},value= root:packages:trEFM:WaveGenerator:numcycles
 	Button pntscanbuttonT3,pos={521,70},size={100,25},disable=1,proc=trEFMPointScanButton,title="Point Scan"
 	Button imgscanbuttonT3,pos={654,228},size={100,25},disable=1,proc=trEFMImageScanButton,title="Image Scan"
-	SetVariable scanheightT3,pos={643,70},size={110,16},disable=1,title="Scan Height (µm)"
+	SetVariable scanheightT3,pos={643,70},size={110,16},disable=1,title="Scan Height (ï¿½m)"
 	SetVariable scanheightT3,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scansizey
 	SetVariable scanpointsT3,pos={653,90},size={100,16},disable=1,title="Scan Points"
 	SetVariable scanpointsT3,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scanpoints
@@ -1585,7 +1585,7 @@ Window trEFMImagingPanel() : Panel
 	SetVariable fitstopT3,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:fitstoptime
 	Button savebuttonT3,pos={654,208},size={50,20},disable=1,proc=SaveImageButton,title="SAVE"
 	Button clearbuttonT3,pos={703,208},size={50,20},disable=1,proc=ClearImagesButton,title="CLEAR"
-	SetVariable scanwidthT3,pos={643,50},size={110,16},disable=1,title="Scan Width (µm)"
+	SetVariable scanwidthT3,pos={643,50},size={110,16},disable=1,title="Scan Width (ï¿½m)"
 	SetVariable scanwidthT3,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:scansizex
 	SetVariable digipre,pos={266,102},size={90,16},disable=1,title="Pre-Trigger %"
 	SetVariable digipre,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:DigitizerPercentPreTrig
@@ -1618,7 +1618,7 @@ Window trEFMImagingPanel() : Panel
 	Button button16,help={"Fill the X,Y with the current stage position."}
 	SetVariable InterpVal,pos={255,85},size={113,16},title="Interpolation   "
 	SetVariable InterpVal,limits={1,500,1},value= root:packages:trEFM:interpval
-	Button whichFastbutton,pos={17,62},size={45,27},proc=trEFMXFast,title="0°!"
+	Button whichFastbutton,pos={17,62},size={45,27},proc=trEFMXFast,title="0ï¿½!"
 	Button whichFastbutton,fStyle=1,fColor=(52224,52224,52224)
 	SetVariable setvar03,pos={68,68},size={136,16},title="Single Line Number"
 	SetVariable setvar03,limits={-inf,inf,0},value= root:packages:trEFM:ImageScan:LineNum
@@ -2105,12 +2105,12 @@ Function trEFMXFast(ba): ButtonControl
 			if (XFastEFM == 0)
 				XFastEFM = 1
 				YFastEFM = 0
-				Button whichFastButton title="0°!"
+				Button whichFastButton title="0ï¿½!"
 				Button whichFastButton fColor=(52224,52224,52224)
 			elseif(XFastEFM == 1)
 				XFastEFM = 0
 				YFastEFM = 1
-				Button whichFastButton title="90°!"
+				Button whichFastButton title="90ï¿½!"
 				Button whichFastButton fColor=(65280,32768,32768)
 			endif
 			break
@@ -2121,7 +2121,7 @@ Function trEFMXFast(ba): ButtonControl
 End
 
 Function About()
-	print "Written by many members of the Ginger Lab from 2003 - 2020 but mostly Rajiv Giridharagopal." 
+	print "Written by many members of the Ginger Lab from 2003 - 2026 but mostly Rajiv Giridharagopal." 
 	print "Primary maintainer and developer is Rajiv Giridharagopal (rgiri@uw.edu)"
 	print "All rights reserved."
 end

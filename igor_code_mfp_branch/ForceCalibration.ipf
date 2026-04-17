@@ -52,6 +52,41 @@
 //   electrostatic force. Populates SurfParmsInit, SurfParmsFinal, and
 //   the differential/free-cantilever columns of FinalParms.
 //
+// GetForceParms(tipV)
+//   Top-level calibration entry point. Calls SetupForceCalibration, runs
+//   ForceCalibration at 0 V and tipV, rescales and trims the resulting
+//   amplitude/deflection/phase waves, then calls GetSurfaceCantileverParms
+//   to extract the final force parameters.
+//
+// GetForceParms_Light(tipV)
+//   Light-modulated variant of GetForceParms. Sweeps at tipV (dark) then
+//   at tipV with illumination, so the differential isolates the
+//   photo-induced force contribution.
+//
+// SetupForceCalibration([range])
+//   Initializes the frequency sweep window [resF-range, resF+range] Hz
+//   (default range = 2000 Hz) and stores the lift height for the sweep.
+//
+// ForceCalibration(tipV, [lighton, elecon])
+//   Performs a single driven frequency sweep at the given tip voltage.
+//   Acquires amplitude, phase, and deflection vs. frequency via Event.2
+//   wave banks. lighton=1 enables illumination; elecon=1 switches to the
+//   electrical-drive crosspoint for tip-driven measurements.
+//
+// FWHM(inwave)
+//   Returns Q = f0 / FWHM by locating the peak and the two half-power
+//   (1/sqrt(2)) crossing points of inwave.
+//
+// findAdrive(AmpVal, betaVal, resFval, driveFval, mass)
+//   Computes the drive force amplitude (in Newtons) from the observed
+//   tip amplitude and DDHO parameters using:
+//   F_drive = AmpVal * sqrt( ((w0^2-wd^2)*2*pi)^2 + 4*beta^2*(wd*2*pi)^2 ) * mass
+//
+// getForce(calAmp, calDef, DEFINVOLS, k)
+//   Returns the tip-sample force at resonance: F = -k * deflection(f0) * DEFINVOLS.
+//   Applies a light smoothing to the deflection wave before evaluating at the
+//   amplitude peak location.
+//
 // LiftToElec(liftHeight)
 //   Lifts the tip to liftHeight (nm) using amplitude feedback with the
 //   electrical crosspoint configuration for force-calibration measurements.
