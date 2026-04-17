@@ -15,6 +15,13 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 	variable/G freq_PGain
 	variable/G freq_IGain 
 	variable/G freq_DGain
+	
+	NVAR CPDVMin = CPDVMin
+	NVAR CPDVMax = CPDVMax
+	
+	NVAR SaveKeithley = SaveKeithley
+	NVAR SMUVoltage = SMUVoltage
+	NVAR SMUCurrentComp = SMUCurrentComp 
 
 	SetDataFolder root:Packages:trEFM:ImageScan:SKPM
 
@@ -45,7 +52,6 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 	NVAR UseLineNumforVoltage = root:packages:trEFM:PointScan:SKPM:UseLineNumforVoltage
 	NVAR LineNumforVoltage = root:packages:trEFM:PointScan:SKPM:LineNumforVoltage
 	NVAR VoltageatLine = root:packages:trEFM:PointScan:SKPM:VoltageatLine
-	
 	NVAR LineNumforVoltage2 = root:packages:trEFM:PointScan:SKPM:LineNumforVoltage2
 	NVAR VoltageatLine2 = root:packages:trEFM:PointScan:SKPM:VoltageatLine2
 	
@@ -96,7 +102,11 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 	Make/O/N = (scanlines, 4) ScanFramework
 	
 	// save time trace
-	Make/O/N=(scanlines) ScanTimes = Nan
+	Make/O/N=(scanlines+1) ScanTimes = Nan
+	ScanTimes[0] = 0 // 0 s
+
+	// Save Keithley values
+	Make/O/N=(scanlines+1, 3) SMUCurrents = NaN
 	
 	variable SlowScanDelta
 	variable FastscanDelta
@@ -150,6 +160,9 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 	
 	
 	Make/O/N = (scanpoints, scanlines) Topography, CPDImage, TopographyRaw
+	Topography = NaN
+	TopographyRaw = NaN
+	CPDImage = NaN
 
 	if (XFastEFM == 1 && YFastEFM == 0)
 		SetScale/I x, ScanFrameWork[0][0], ScanFramework[0][2], "um", Topography, CPDImage, TopographyRaw
@@ -204,6 +217,17 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 
 	GPIBsetup()
 	
+	if (SaveKeithley == 1)
+		SMUOECTSetup(voltage = SMUVoltage, currentcomp = SMUCurrentComp)
+		Wave DataValues = root:packages:trEFM:ImageScan:dataValues
+		SMURead()
+		SMUCurrents[0][0] = 0 // 0 s
+		SMUCurrents[0][1] = DataValues[1] // current
+		SMUCurrents[0][2] = DataValues[0] // voltage
+		
+		SetDataFolder root:packages:trEFM:ImageScan:SKPM
+	endif
+	
 	Variable lockinsens=GetLockinSens()
 	
 	SetLockinTimeC(LockinTimeConstant/1000) //the user specifies the Lockin time constant, and this call sets it, making sure 
@@ -227,6 +251,9 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 	endif
 	
 	Make/O/N=(scanpoints) CPDTrace, CPDTraceBefore
+	
+	SetScale/I x, 0, ScanSizeX * 1e-6, "m", CPDTrace
+	SetScale/I x, 0, ScanSizeX * 1e-6, "m", CPDTraceBefore
 	Variable pointsPerPixel = timeperpoint * samplerate * 1e-3
 	Variable pointsPerLine = pointsPerPixel * scanpoints
 	make/o/n=(pointsPerPixel) CPDWaveTemp
@@ -281,6 +308,13 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 		Display/K=1/n=CPDTraceWindow CPDTrace
 		appendtograph CPDTraceBefore
 		ModifyGraph rgb(CPDTraceBefore)=(0,0,0)
+	endif
+	
+	if (SaveKeithley == 1)
+		dowindow/F CurrentReadingsWindow
+		if (V_flag == 0)
+			Display/K=1/n=SMUCurrents SMUCurrents[*][1] vs SMUCurrents[*][0]
+		endif
 	endif
 	
 	if (scansizeY/scansizeX < .2)
@@ -401,11 +435,13 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 		if (UseLineNumForVoltage != 0)
 		
 			if (i == LineNumforVoltage)
-				PsSetting(VoltageatLine, current=0.7)
+				SMUOECTSetup(voltage = VoltageatLine, currentcomp = SMUCurrentComp)
+//				PsSetting(VoltageatLine, current=0.7)
 			endif
 			
 			if (i == LineNumforVoltage2)
-				PsSetting(VoltageatLine2, current=0.7)
+				SMUOECTSetup(voltage = VoltageatLine2, currentcomp = SMUCurrentComp)
+//				PsSetting(VoltageatLine2, current=0.7)
 			endif
 						
 		endif
@@ -459,6 +495,13 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 
 		Sleep/S .05
 		
+		if (SaveKeithley == 1)
+			SMURead()
+			SMUCurrents[i+1][2] = DataValues[0] //voltage
+			SMUCurrents[i+1][1] = DataValues[1]		// current	
+			SMUCurrents[i+1][0] =  (StopMSTimer(-2) -starttime2)*1e-6 + SMUCurrents[i][0] // time for this line + previous line
+		endif
+		
 		//ReadWaveZback is the drive wave for the z piezo		
 		ReadWaveZback[] = ReadwaveZ[scanpoints-1-p] - liftheight * 1e-9 / GV("ZLVDTSens")
 		ReadWaveZmean = Mean(ReadwaveZ) * ZLVDTSens
@@ -487,9 +530,9 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 
 		// to keep tip from being stuck
 		SetFeedbackLoop(3, "always",  "ZSensor", ReadWaveZ[scanpoints-1]-500*1e-9/GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0, name="OutputZ") // note the integral gain of 10000
-		sleep/S 1
+		sleep/S 0.5
 		SetFeedbackLoop(3, "always",  "ZSensor", ReadWaveZ[scanpoints-1]-liftheight*1e-9/GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0, name="OutputZ", arcZ=1) // note the integral gain of 10000
-		Sleep/s 1
+		Sleep/s 0.5
 		
 		// UNcomment for Christian (Kai-Mei) samples
 //		SetFeedbackLoop(3, "always",  "ZSensor", heightbefore/GV("ZLVDTSens")-liftheight*1e-9/GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0, name="OutputZ", arcZ=1) // note the integral gain of 10000
@@ -537,11 +580,13 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 			while (lk < pointsPerPixel)
 			
 			lastvoltage = mean(CPDWaveLastPoint)
-			if (lastvoltage > 6 || lastvoltage < -6)
+			if (lastvoltage > 1 || lastvoltage < -1)
 				lastvoltage = 0
 			endif	
 			printf "LastVoltage is %g\r", lastvoltage		
 			error += td_wv("Output.B", lastvoltage) //get the intial tip voltage close to where it was before
+		else
+			error += td_wv("Output.B", 0) //get the intial tip voltage close to where it was before
 		endif
 		
 		SetFeedbackLoop(5, "Always", LockinString+"theta", td_rv(LockinString+"theta"), freq_PGain, freq_IGain, freq_DGain, "Output.A", 0)
@@ -552,11 +597,11 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 			loadarbwave(ACFrequency, ACVoltage, 0)	
 		endif
 
-		sleep/S 1/4
+		sleep/S 0.2
 		
 		//auto set LIA phase on first line
 		if (i == 0)
-				td_wv("Output.B", 3) 
+				td_wv("Output.B", 1) 
 				setLockinTimeC(100/1000) //Tc100ms
 				sleep/S 1/4
 				setAutoPhase()
@@ -568,7 +613,7 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 		
 		sleep/S 1/4
 
-		SetFeedbackLoop(4, "always",  "Input.B", 0, KPPGain, KPIGain, KPDGain, "Output.B", 0) 
+		SetFeedbackLoop(4, "always",  "Input.B", 0, KPPGain, KPIGain, KPDGain, "Output.B", 0, outmax=CPDVMax, outmin=CPDVMin) 
 //		SetFeedbackLoop(4, "always",  "Input.B", 0, EFMFilters[%KP][%PGain], EFMFilters[%KP][%IGain], EFMFilters[%KP][%DGain], "Output.B", 0) 
 		sleep/S 1/4
 				
@@ -631,7 +676,7 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 				
 		endif 
 	
-		scantimes[i] = (StopMSTimer(-2) -starttime2)*1e-6
+		scantimes[i+1] = (StopMSTimer(-2) -starttime2)*1e-6
 		print "Time for last scan line (seconds) = ", scantimes[i], " ; Time remaining (in minutes): ", scantimes[i]*(scanlines-i-1) / 60
 		i += 1
 		
@@ -670,6 +715,10 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 		Label bottom "Scan Line (#)"
 	endif
 	
+	if (SaveKeithley == 1)
+		// SMUOff()
+	endif
+	
 	Beep
 	doscanfunc("stopengage")
 	setdatafolder savDF
@@ -687,6 +736,7 @@ Function PointScanSKPM(xpos, ypos, liftheight,dwelltime)
 	
 	SetDataFolder root:Packages:trEFM
 	Nvar pgain, sgain, igain, adcgain, setpoint, adcgain
+	NVAR gWGDeviceAddress = root:packages:trEFM:gWGDeviceAddress
 	NVAR XLVDTSens, YLVDTSens, ZLVDTSens, XLVDToffset, YLVDToffset, ZLVDToffset
 	NVAR xigain, yigain, zigain
 	Svar LockinString
@@ -696,6 +746,14 @@ Function PointScanSKPM(xpos, ypos, liftheight,dwelltime)
 	SetDataFolder root:Packages:trEFM:VoltageScan
 	Nvar calsoftd, calresfreq, calphaseoffset, calengagefreq, calhardd
 	ResetAll()
+
+	Newpath/O KPGains,"C:\Users\GingerLab\Documents\GingerCode_V14,V16_Cypher\misc"
+	LoadWave/O/G/P=KPGains/N=KPGain/Q "KPGains.txt"
+	Wave KPGain0
+	variable KPPgain = KPGain0[0]
+	variable KPIgain = KPGain0[1]
+	variable KPDgain = KPGain0[2]
+
 
 	SetDataFolder root:packages:trEFM:PointScan:SKPM
 	variable/G freq_PGain
@@ -711,7 +769,7 @@ Function PointScanSKPM(xpos, ypos, liftheight,dwelltime)
 	SetDataFolder root:Packages:trEFM:PointScan:SKPM
 	
 	////////////////////////// CALC INPUT/OUTPUT WAVES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-	Variable SKPMInterpolation = 2
+	Variable SKPMInterpolation = 1
 	Variable CPDWavePoints = dwelltime * (50000 / SKPMInterpolation)
 	CPDWavePoints = CPDWavePoints- mod(CPDWavePoints,32)
 
@@ -761,7 +819,12 @@ Function PointScanSKPM(xpos, ypos, liftheight,dwelltime)
 	setLockinSensitivity(LockinSensitivity) // 17 sets the sensitivity of the lockin to 1mv/na //20 is a good value
 	sendLockinString("FMOD0") //sets source to external 
 
-	Setvf(0, ACFrequency,"WG")
+	if (gWGDeviceAddress != 0)
+		Setvf(0, ACFrequency,"WG")
+	else
+		TurnOffAWG()
+	
+	endif
 	
 	SetCrosspoint ("Ground","In1","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutA","OutC","OutB","Ground","In0","DDS")
 	
@@ -779,8 +842,14 @@ Function PointScanSKPM(xpos, ypos, liftheight,dwelltime)
 	Variable resetFreqOffset = td_rv((LockinString + "FreqOffset"))
 	
 	// Read the data from output.b
-	td_xSetInWave(1,"Event.2", "Output.B", CPDwave, "", -2)
-
+	print td_xSetInWave(1,"Event.2, Always", "Output.B", CPDwave, "", -1)
+	// Load gains from file	 
+	LoadWave/O/G/P=KPGains/N=KPGain/Q "KPGains.txt"
+	KPPgain = KPGain0[0]
+	KPIgain = KPGain0[1]
+	KPDgain = KPGain0[2]
+	print "KP Gains (PID)", KPPGain, KPIGain, KPDGain	
+	
 	Variable currentz = td_rv("Zsensor")*td_rv("ZLVDTSens")
 	
 	//stop amplitude FBLoop and 
@@ -804,13 +873,13 @@ Function PointScanSKPM(xpos, ypos, liftheight,dwelltime)
 	sleep/s .5
 	print "Lift value (nm)", (currentz-heightafter)*1e9
 	
-
 	td_wv((LockinString + "Amp"), calsoftd) //set the amplitude from the grab tune function
 	td_wv((LockinString + "Freq"), CalResFreq) //set the frequency to the resonant frequency
 	td_wv((LockinString + "PhaseOffset"), CalPhaseOffset)  // phase offset also comes from calibration panel
 	
 	wavestats/Q CPDwave
-	td_writevalue("Output.B", V_avg) // set voltage
+//	td_writevalue("Output.B", V_avg) // set voltage
+	td_writevalue("Output.B", 0) // set voltage
 	
 	// Wait this extra time for frequency to stablize, but note we have already waited some anyway
 	startTime = StopMSTimer(-2)
@@ -818,7 +887,11 @@ Function PointScanSKPM(xpos, ypos, liftheight,dwelltime)
 	while((StopMSTimer(-2) - StartTime) < 10*1e3) 
 	
 	//Output a Sin wave with this voltage and frequency.
-	setvf(ACVoltage, ACFrequency,"WG")
+	if (gWGDeviceAddress != 0)
+		setvf(ACVoltage, ACFrequency,"WG")		
+	else
+		loadarbwave(ACFrequency, ACVoltage, 0)	
+	endif
 	
 	Sleep/S .2 
 	
@@ -836,14 +909,16 @@ Function PointScanSKPM(xpos, ypos, liftheight,dwelltime)
 	sleep/S 1/4
 		
 	//Keep Input.B at 0 by manipulating Output.B
-	SetFeedbackLoop(4, "always",  "Input.B", 0, EFMFilters[%KP][%PGain], EFMFilters[%KP][%IGain], EFMFilters[%KP][%DGain], "Output.B", 0) 
+	SetFeedbackLoop(4, "always",  "Input.B", 0, KPPGain, KPIGain, KPDGain, "Output.B", 0) 
+//	SetFeedbackLoop(4, "always",  "Input.B", 0, EFMFilters[%KP][%PGain], EFMFilters[%KP][%IGain], EFMFilters[%KP][%DGain], "Output.B", 0) 
 
 	Sleep/S .5
 
 	// fire event that starts the data collection
-	td_WriteString("Event.2", "Once")
-	
-//Abort
+	print td_WriteString("Event.2", "Once")
+//	print td_WriteString("Event.2", "Always")
+	DoUpdate
+Abort
 	
 	// Wait until data has been collected
 	CheckInWaveTiming(CPDwave)

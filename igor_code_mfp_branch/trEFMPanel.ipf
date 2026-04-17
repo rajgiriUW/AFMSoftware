@@ -1657,11 +1657,11 @@ EndMacro
 
 Window SKPMPanel() : Panel
 	PauseUpdate; Silent 1		// building window...
-	NewPanel /W=(2037,443,2487,707)
+	NewPanel /W=(2006,639,2461,904)
 	ShowTools/A
 	SetDrawLayer UserBack
 	SetDrawEnv fillfgc= (56576,56576,56576)
-	DrawRect 4,5,441,252
+	DrawRect 4,5,454,288
 	SetDrawEnv fstyle= 1
 	DrawText 11,26,"Function Generator"
 	SetDrawEnv fstyle= 1
@@ -1707,8 +1707,18 @@ Window SKPMPanel() : Panel
 	SetVariable setvar06,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:VoltageatLine2
 	Button button3,pos={332,115},size={100,20},proc=PSON_button,title="Turn on PS"
 	Button button4,pos={332,142},size={100,20},proc=PSOff_button,title="Turn off PS"
-	CheckBox UseAMMode,pos={333,180},size={69,14},proc=UseAMMode,title="AM mode?"
+	CheckBox UseAMMode,pos={333,180},size={69,14},title="AM mode?"
 	CheckBox UseAMMode,variable= root:packages:trEFM:PointScan:SKPM:UseAM
+	SetVariable CPDVMin,pos={8,198},size={136,16},title="CPD Vmin (V)"
+	SetVariable CPDVMin,limits={-10,0,0},value= root:packages:trEFM:PointScan:SKPM:CPDVmin
+	SetVariable CPDVMin1,pos={8,216},size={136,16},title="CPD Vmax (V)"
+	SetVariable CPDVMin1,limits={0,10,0},value= root:packages:trEFM:PointScan:SKPM:CPDVmax
+	CheckBox SaveKeithley,pos={153,207},size={120,14},title="Save Keithley Current"
+	CheckBox SaveKeithley,variable= root:packages:trEFM:PointScan:SKPM:SaveKeithley
+	SetVariable SMUVoltage,pos={152,225},size={91,16},title="SMU Voltage"
+	SetVariable SMUVoltage,limits={-22,22,0},value= root:packages:trEFM:PointScan:SKPM:SMUVoltage
+	SetVariable SMUCurrentLimit,pos={251,225},size={189,16},title="SMU Current Compliance (A)"
+	SetVariable SMUCurrentLimit,limits={0,1,0},value= root:packages:trEFM:PointScan:SKPM:SMUCurrentComp
 	ToolsGrid snap=1,visible=1
 EndMacro
 

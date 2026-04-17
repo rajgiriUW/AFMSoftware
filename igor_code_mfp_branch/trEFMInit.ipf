@@ -195,21 +195,29 @@ Function trEFMInit()
 	SetDataFolder root:Packages:trEFM:PointScan:SKPM
 	Variable/G LockinTimeConstant, LockinSensitivity, ACFrequency, ACVoltage, TimePerPoint, AppliedBias, BiasFreq
 
-	LockinTimeConstant = 1
-	LockinSensitivity = 14
+	LockinTimeConstant = 10
+	LockinSensitivity = 18
 	ACFrequency = 1000
-	ACVoltage = 1.5
-	TimePerPoint = 20
+	ACVoltage = 2
+	TimePerPoint = 40
 	AppliedBias = 0.05
 	BiasFreq = 2
 
 	Variable/G Freq_PGain, Freq_IGain, Freq_DGain
-	Freq_PGain = -0.01
+	Freq_PGain = -0.02	// -0.01 seems too low, Raj 2/11/2026
 	Freq_IGain = 0
 	Freq_DGain = 0
 	
 	Variable/G DwellTime
 	DwellTime = 5
+	
+	Variable/G CPDVmin = -9
+	Variable/G CPDVmax = 9
+	
+	// SMU Variables -- see KeithleySMU ipf
+	Variable/G SMUVoltage = 0
+	Variable/G SMUCurrentComp = 0.05 // A
+	Variable/G SaveKeithley = 0
 
 	// IM-SKPM variables
 	Variable/G numavg = 0 
@@ -228,6 +236,7 @@ Function trEFMInit()
 	Variable/G UseLineNumforVoltage = 0
 	Variable/G LineNumforVoltage2 = 0
 	Variable/G VoltageatLine2 = 0
+
 	
 	Variable/G UseAM = 0 
 	

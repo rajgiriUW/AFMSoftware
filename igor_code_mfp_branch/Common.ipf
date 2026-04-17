@@ -185,10 +185,11 @@ Function SetPassFilter(SetorReset, [x,y,z,a,b,fast,i,i1,q,q1])
 
 End
 
-Function SetFeedbackLoop(whichLoop,startWhen,maintainWhat,setpoint,pgain,igain,sgain,changeWhat,dgain, [name, arcZ])
+Function SetFeedbackLoop(whichLoop,startWhen,maintainWhat,setpoint,pgain,igain,sgain,changeWhat,dgain, [name, arcZ, outmax, outmin])
 	Variable whichLoop,setpoint,pgain,igain,sgain,dgain
 	string name
 	variable arcZ
+	variable outmax, outmin
 	String startWhen,maintainWhat,changeWhat
 
 	Struct ARFeedbackStruct FB
@@ -220,6 +221,15 @@ Function SetFeedbackLoop(whichLoop,startWhen,maintainWhat,setpoint,pgain,igain,s
 	if (!ParamIsDefault(arcZ))
 //		FB.DontSwapToBackPack = 1
 	endif
+	
+	if (!ParamIsDefault(Outmax))
+		FB.OutputMax = outmax
+	endif
+	
+	if (!ParamIsDefault(OutMin))
+		FB.OutputMin = outmin
+	endif	
+	
 
 	string error = ""
 	error +=	IR_WRitePIDSLoop(FB)
@@ -487,6 +497,36 @@ Function MoveXYZ(Xposition, Yposition,Zposition)
 End
 //////////////////////////////////////////////////////////////////////////////////////////
 
+Function ReadZ()
+//
+// Prints the current X, Y, and Z position to the console
+//
+	string SavedDataFolder = GetDataFolder(1)
+	SetDataFolder root:Packages:trEFM
+	Variable XLVDToffset, YLVDToffset, ZLVDToffset
+	Variable	XLVDTsens,YLVDTsens,ZLVDTsens
+	GetGlobals()  //ensures values from Asylum panel are current
+	
+	XLVDToffset = GV("XLVDToffset")
+	YLVDToffset = GV("YLVDToffset")
+ 	ZLVDToffset = GV("ZLVDToffset")
+ 	
+ 	XLVDTsens = GV("XLVDTSens")
+	YLVDTsens = GV("YLVDTSens")
+ 	ZLVDTsens = GV("ZLVDTSens")
+	variable aX ,aY, aZ//, a5
+
+	ax= (td_readvalue("XSensor")-XLVDToffset)*XLVDTSens*1e6 //read x position of end of line
+	ay=(td_readvalue("YSensor")-YLVDToffset)*yLVDTSens*1e6 //read y position of end of line
+	az= td_readvalue("ZSensor")*ZLVDTSens*1e6 //read z position of end of line
+	//print az
+
+	SetDataFolder SavedDataFolder	
+	return az
+	
+End
+//////////////////////////////////////////////////////////////////////////////////////	
+
 Function MoveXY(xpos, ypos)
 // Moves to the X,Y position while keeping the tip withdrawn away from the surface.
 	Variable xpos, ypos
@@ -642,9 +682,13 @@ function wavegeneratoroffset(amplitude,frequency,outputletter,event,bank)
 	
 end
 
-Function LiftTo(liftHeight,tipVoltage,[lighton])
-	Variable liftHeight, tipVoltage,lighton
+Function LiftTo(liftHeight,tipVoltage,[lighton, verbose])
+	Variable liftHeight, tipVoltage,lighton, verbose
 	SetDataFolder root:packages:trefm
+	
+	if (ParamIsDefault(verbose))
+		verbose = 0
+	endif
 
 	Wave EFMFilters
 	NVAR setpoint, pgain, sgain,igain
@@ -665,7 +709,10 @@ Function LiftTo(liftHeight,tipVoltage,[lighton])
 	SetFeedbackLoop(2, "Always", LockinString +"R", setpoint, -pgain, -igain, -sgain, "Output.Z", 0)
 	
 	Sleep/s 1
-//	readposition()
+	variable startZ, stopZ
+	if (verbose != 0)
+		startZ = readZ()
+	endif
 	
 	// Lift the tip to the desired lift height.
 	Variable z1= td_readvalue("ZSensor") * GV("ZLVDTSens")	
@@ -673,8 +720,12 @@ Function LiftTo(liftHeight,tipVoltage,[lighton])
 	SetFeedbackLoop(3, "always",  "ZSensor", (z1 - liftHeight * 1e-9) / GV("ZLVDTSens"), 0,  EFMFilters[%ZHeight][%IGain], 0, "Output.Z", 0)
 
 	Sleep/s 1
-//	readposition()
 
+	if (verbose != 0)
+		stopZ = readZ()
+		print "Lift height is ", -1*(stopZ - startZ)*1000, " nm"
+	endif
+	
 	td_wv("Output.B", tipVoltage)
 	if (!ParamIsDefault(lighton) )
 		td_wv("Output.A", 5)

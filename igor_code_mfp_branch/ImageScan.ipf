@@ -802,6 +802,12 @@ Function SaveImageScan(name,type)
 		Save/J/M="\r\n"/W ScanTimes as savename
 //		Save/C/O/J ScanTimes as savetime
 		
+		NVAR SaveKeithley = root:packages:trEFM:PointScan:SKPM:SaveKeithley
+		if (SaveKeithley == 1)
+			Wave SMUCurrents =  root:Packages:trEFM:ImageScan:SKPM:SMUCurrents
+			savename = name + "_currents.txt"
+			Save/J/M="\r\n"/W SMUCurrents as savename
+		endif
 	endif
 	
 		//give it the right number of points in X and Y
@@ -846,17 +852,17 @@ Function ClearImages()
 	SetDataFolder root:packages:trEFM:ImageScan:FFtrEFM
 	Wave/Z FrequencyOffset, ChargingRate, Topography
 		if ( WaveExists(FrequencyOffset) && WaveExists(ChargingRate) && WaveExists(Topography))
-		FrequencyOffset=0
-		ChargingRate=0
-		Topography=0
+		FrequencyOffset=NaN
+		ChargingRate=NaN
+		Topography=NaN
 	endif
 	
 	SetDataFolder root:packages:trEFM:ImageScan:SKPM
 	Wave/Z CPDImage,  Topography
 		if ( WaveExists(CPDImage) && WaveExists(Topography))
 		
-		CPDImage=0
-		Topography=0
+		CPDImage=NaN
+		Topography=NaN
 	endif
 	
 	SetDataFolder savDF
