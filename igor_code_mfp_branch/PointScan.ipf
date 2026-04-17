@@ -1,5 +1,21 @@
 #pragma rtGlobals=1		// Use modern global access method.
 
+// Single-point acquisition functions for three trEFM measurement modes.
+// All functions move to (xpos, ypos), lift to liftheight, fire Event.2 to
+// collect data, then re-engage the surface and call ResetAll().
+//
+// PointScantrEFM(xpos, ypos, liftheight)
+//   Lock-in based trEFM. Records freqOffset vs time into shiftwaveavg.
+//   Supports cutDrive and ElecEFMDrive tip configurations.
+//
+// PointScanFFtrEFM(xpos, ypos, liftheight, DigitizerAverages, DigitizerSamples, DigitizerPretrigger)
+//   Fast-frequency trEFM using the Gage digitizer. Raw waveform stored in
+//   gagewave; optional second channel in ch2_wave. No on-board averaging.
+//
+// PointScanRingDown(xpos, ypos, liftheight)
+//   Ring-down spectroscopy. Drives cantilever amplitude via gendrivewave and
+//   records amplitude (R) vs time into shiftwaveavg.
+
 Function PointScantrEFM(xpos, ypos, liftheight)
 
 	Variable  xpos, ypos, liftheight

@@ -1,5 +1,31 @@
 #pragma rtGlobals=1		// Use modern global access method.
 
+// 2D raster image scan functions for trEFM and Ring-Down modes, plus
+// supporting utilities for saving and clearing image data.
+// Each scan function prompts for optional raw data saving, then steps the
+// tip through a grid of (scanlines x scanpoints), calling the corresponding
+// PointScan function at each pixel and storing results in image waves.
+//
+// ImageScantrEFM(xpos, ypos, liftheight, scansizeX, scansizeY, scanlines,
+//                scanpoints, scanspeed, numavgsperpoint, xoryscan,
+//                fitstarttime, fitstoptime)
+//   Raster trEFM image. Calls PointScantrEFM per pixel. Fits charging rate
+//   and frequency offset within [fitstarttime, fitstoptime] and stores
+//   results in FrequencyOffset, ChargingRate, and Topography image waves.
+//
+// ImageScanRingDownEFM(xpos, ypos, liftheight, scansizeX, scansizeY,
+//                      scanlines, scanpoints, scanspeed, numavgsperpoint,
+//                      xoryscan, fitstarttime, fitstoptime)
+//   Raster Ring-Down image. Same grid logic as ImageScantrEFM but calls
+//   PointScanRingDown per pixel.
+//
+// SaveImageScan(name, type)
+//   Saves the current image waves to a named subfolder. type selects the
+//   mode (0 = trEFM, others for additional modes).
+//
+// ClearImages()
+//   Zeros FrequencyOffset, ChargingRate, and Topography in the trEFM
+//   ImageScan data folder.
 
 Function ImageScantrEFM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanpoints, scanspeed, numavgsperpoint, xoryscan, fitstarttime, fitstoptime)
 	Variable xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, scanpoints, scanspeed, numavgsperpoint,xoryscan, fitstarttime, fitstoptime

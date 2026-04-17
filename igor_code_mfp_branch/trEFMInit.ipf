@@ -6,7 +6,6 @@ Menu "trEFM"
 	"SKPM Panel", SKPMPanel()
 	"PL Panel", LBICPanel()
 	"TF Panel", TransferFuncPanel()
-	"IM-SKPM Panel", IMSKPM_Panel()
 	"Reset All" , ResetAll()
 	SubMenu "Gains"
 		"SKPM", SKPMGainsPanelCPD()
