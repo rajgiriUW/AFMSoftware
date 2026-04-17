@@ -1,5 +1,78 @@
 #pragma rtGlobals=1		// Use modern global access method.
 
+// Hardware control primitives shared across all acquisition modes.
+// These functions wrap ARC controller (td_*), lock-in, and stage commands
+// into higher-level operations used by PointScan, ImageScan, and SKPM.
+//
+// --- State / Reset ---
+//
+// ResetAll()
+//   Stops all feedback loops, zeros all DAC outputs, and restores the
+//   cantilever drive to engage settings. Called at the start and end of
+//   every point/image scan.
+//
+// --- Hardware Configuration ---
+//
+// SetCrosspoint(InA, InB, InFast, InAOffset, InBOffset, InFastOffset,
+//               OutXMod, OutYMod, OutZMod, FilterIn, BNCOut0, BNCOut1,
+//               BNCOut2, PogoOut, Chip, Shake)
+//   Writes the analog crosspoint switch matrix routing. Each argument
+//   names the signal assigned to that crosspoint slot.
+//
+// SetPassFilter(SetorReset, [x, y, z, a, b, fast, i, i1, q, q1])
+//   Sets or resets ARC pass-filter parameters. Optional keyword args
+//   target individual filter channels; omitted channels are unchanged.
+//
+// SetFeedbackLoop(whichLoop, startWhen, maintainWhat, setpoint, pgain,
+//                 igain, sgain, changeWhat, dgain, [name, arcZ, outmax, outmin])
+//   Configures and starts one ARC PID feedback loop. arcZ=1 routes
+//   output through the Z-height servo instead of a DAC channel directly.
+//
+// SetFeedbackLoop_v14 / SetFeedbackLoopCypher / SetFeedbackLoopCypher_old
+//   Variant implementations for firmware v14 and Cypher-series controllers.
+//
+// StopFeedbackLoop(whichLoop)
+//   Disables the specified ARC PID loop and zeros its output.
+//
+// StopFeedbackLoopCypher(whichLoop)
+//   Cypher-controller variant of StopFeedbackLoop.
+//
+// StartFeedbackLoop(whichLoop)
+//   Re-enables a previously stopped ARC PID loop without changing its
+//   parameters.
+//
+// --- Stage Motion ---
+//
+// ReadPosition()
+//   Reads the current XYZ stage position from LVDT sensors and stores
+//   the result in root:Packages:trEFM globals gxpos, gypos.
+//
+// ReadZ()
+//   Returns the current Z sensor value scaled to metres.
+//
+// MoveXYZ(Xposition, Yposition, Zposition)
+//   Moves the stage to an absolute XYZ position (in microns) and blocks
+//   until the move completes.
+//
+// MoveXY(xpos, ypos)
+//   Moves the stage to an XY position while holding Z constant.
+//
+// LiftTo(liftHeight, tipVoltage, [lighton, verbose])
+//   Lifts the tip to liftHeight (nm) above the surface using a two-step
+//   Z feedback approach, optionally applying tipVoltage and toggling light.
+//
+// --- Acquisition Utilities ---
+//
+// CheckInWaveTiming(whichWave, [whichDataPoint])
+//   Polls until the specified point in whichWave is no longer NaN,
+//   blocking the caller until the ARC in-wave bank has finished filling.
+//   Defaults to checking the last point; pass whichDataPoint to key on
+//   an earlier index.
+//
+// LightOnOff(onoff)
+//   Turns the illumination LED on (onoff=1) or off (onoff=0) via the
+//   configured DAC output channel.
+
 Function ResetAll()
 // This function stops any feedback loops,
 // wave banks, and resets all outputs to ground. 

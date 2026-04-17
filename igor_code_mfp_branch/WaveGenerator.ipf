@@ -1,9 +1,45 @@
 
 #pragma rtGlobals=3		// Use modern global access method and strict wave access.
 
-/// Note, look at the testawg() below for how to write directly from the computer (faster than USB, more prone to errors)
-
-// THese are mostly interface functions for the Agilent/Keysight 3500 (the new, nice AWG)
+// Waveform loading functions for the Agilent/Keysight 33500 AWG.
+// Each function builds a waveform in Igor and transfers it to the AWG
+// over USB/VISA. See testawg() for the direct-write alternative (faster
+// but more error-prone than the USB path used here).
+//
+// LoadTauWave(num, [amp])
+//   Loads a tau (exponential time-constant) waveform with num points.
+//   Optional amp overrides the default amplitude.
+//
+// LoadSquareWave81150(voltage, frequency, [EOM, duty, offset])
+//   Loads a square wave at the given voltage and frequency. EOM=1 routes
+//   through the electro-optic modulator path. duty sets the duty cycle
+//   (default 50%); offset adds a DC offset.
+//
+// LoadChirpWave(filename, [offset, amplitude, sampling_rate])
+//   Loads a chirp waveform from a .dat file (filename without extension).
+//   Optional offset, amplitude, and sampling_rate override file defaults.
+//
+// LoadPulseWave(freq, amp, pulsewidth, offset)
+//   Loads a pulse train for voltage-pulse experiments. Note: AWG output
+//   impedance defaults to 50 Ω — actual voltage is doubled without a
+//   50 Ω load. Typical call: LoadPulseWave(100, 2, 0.003, -0.5).
+//
+// PhaseShift(degrees)
+//   Applies a phase shift (in degrees) to the currently loaded AWG waveform.
+//
+// LoadArbWave(freq, amp, offset, [polarity])
+//   Loads an arbitrary waveform at the specified frequency, amplitude, and
+//   DC offset. polarity inverts the waveform when set to -1.
+//
+// LoadTauBWave(num)
+//   Loads the B-channel tau waveform with num points (companion to LoadTauWave).
+//
+// LoadDCWave81150(offset)
+//   Loads a constant DC waveform at the given offset voltage.
+//
+// LoadChirpWaveMDB(filename, [offset, amplitude, sampling_rate, polarity, delay])
+//   Extended chirp loader with additional polarity inversion and delay
+//   options. Used for MDB-format chirp files.
 
 Function LoadTauWave(num, [amp])
 	Variable num

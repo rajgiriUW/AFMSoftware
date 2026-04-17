@@ -1,5 +1,61 @@
 #pragma rtGlobals=3		// Use modern global access method and strict wave access.
 
+// Cantilever force calibration using the damped driven harmonic oscillator (DDHO) model.
+//
+// Physical model
+// --------------
+// An AFM cantilever behaves as a DDHO with amplitude response:
+//
+//   A(w) = A0 * w0^2 / sqrt( (w^2 - w0^2)^2 + (w * w0 / Q)^2 )
+//
+// where w0 = 2*pi*f0 is the resonant angular frequency, Q is the quality
+// factor, and A0 is a drive-amplitude prefactor. A noise-floor variant
+// adds a (w * w0 * noise)^2 term under the radical.
+//
+// Calibration procedure
+// ---------------------
+// 1. Thermal tune (free cantilever, no drive):
+//    GetFreeCantileverParms() reads the Asylum MFP3D thermal fit results —
+//    spring constant k, resonant frequency f0, Q, mass m = k / (2*pi*f0)^2,
+//    InVols, and AmpInVols — and stores them in FreeCantileverParms.
+//
+// 2. Driven frequency sweeps (cantilever near surface):
+//    GetSurfaceCantileverParms() performs sweeps at V=0 and V=tipV,
+//    fits the SHO model (amps) to each amplitude-vs-frequency curve, and
+//    extracts the resonance shift, Q change, peak amplitude, and drive force.
+//    Results are stored in SurfParmsInit and SurfParmsFinal.
+//
+// 3. Force extraction:
+//    The electrostatic force at each voltage is computed from the deflection
+//    signal and DEFINVOLS calibration: F = k * deflection (in meters).
+//    The differential (V=tipV minus V=0) isolates the electrostatic contribution.
+//
+// Functions
+// ---------
+//
+// amps(w0, w)
+//   Igor FitFunc. SHO amplitude: A*w0^2 / sqrt((w^2-w0^2)^2 + (w*w0/Q)^2).
+//   Coefficients: w0[0]=A, w0[1]=w0, w0[2]=Q.
+//
+// amps_n(w0, w)
+//   SHO + noise floor FitFunc. Adds (w*w0*noise)^2 under the radical.
+//   Coefficients: w0[0]=A, w0[1]=w0, w0[2]=Q, w0[3]=noise.
+//
+// GetFreeCantileverParms()
+//   Reads thermal-tune results from Asylum MasterVariablesWave and
+//   ThermalVariablesWave. Stores k, f0, Q, mass, InVols, AmpInVols, and
+//   DriveAmplitude into root:packages:trEFM:ForceCal:FreeCantileverParms.
+//
+// GetSurfaceCantileverParms()
+//   Fits amplitude curves collected at two tip voltages to the SHO model.
+//   Extracts resonance frequency, Q, beta (damping), drive force, and
+//   electrostatic force. Populates SurfParmsInit, SurfParmsFinal, and
+//   the differential/free-cantilever columns of FinalParms.
+//
+// LiftToElec(liftHeight)
+//   Lifts the tip to liftHeight (nm) using amplitude feedback with the
+//   electrical crosspoint configuration for force-calibration measurements.
+
 Function amps(w0,w) : FitFunc
 	Wave w0
 	Variable w
