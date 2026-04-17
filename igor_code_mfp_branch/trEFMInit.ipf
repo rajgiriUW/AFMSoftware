@@ -5,7 +5,6 @@ Menu "trEFM"
 	"trEFM Panel" , trEFMImagingPanel() // If this panel function is ever saved over, make sure to run trEFMInit() before the experiment
 	"SKPM Panel", SKPMPanel()
 	"PL Panel", LBICPanel()
-	"NLPC Panel", NLPC_Panel()
 	"TF Panel", TransferFuncPanel()
 	"IM-SKPM Panel", IMSKPM_Panel()
 	"Reset All" , ResetAll()
