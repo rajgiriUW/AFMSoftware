@@ -28,7 +28,7 @@ This software involves a lot of references to Gage XOP, which is used to interfa
 ### Documentation
 
 [Documentation](https://htmlpreview.github.io/?https://github.com/rajgiriUW/AFMSoftware/blob/master/sphinx_documentation/_build/html/index.html)
-Thanks to Linda Taing for all the hard work over the years.
+Thanks to Luka Taing for all the hard work over the years.
 
 There is a lot of documentation of functions (but not that much in the way of a user guide) in the subfolder "sphinx_documentation" when you download the package, under ```_build/html```
 
