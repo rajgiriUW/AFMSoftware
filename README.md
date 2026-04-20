@@ -10,7 +10,7 @@ Department of Chemistry
 E: rgiri@uw.edu
 ```
 
-This is the codebase for running the Asylum Research AFMs in our lab. This code is heavily-requested, but it is **provided completely without any guarantees of it working or any other functionality.** Indeed, you would have to do significant edits to have it run on your own systems, and it is built upon over 15 years of original legacy design. This will likely have many compile errors looking for a missing XOP or two, but contact me for specific workarounds. Most of those can be commented out.
+This is the codebase for running the Asylum Research AFMs in our lab. This code is heavily-requested, but it is **provided completely without any guarantees of it working or any other functionality.** Indeed, you would have to do significant edits to have it run on your own systems, and it is built upon over 20 years of original legacy design. This will likely have many compile errors looking for a missing XOP or two, but contact me for specific workarounds. Most of those can be commented out.
 
 I (Raj) am overwhelmingly the expert and lead on this entire package.
 
@@ -28,12 +28,14 @@ This software involves a lot of references to Gage XOP, which is used to interfa
 ### Documentation
 
 [Documentation](https://htmlpreview.github.io/?https://github.com/rajgiriUW/AFMSoftware/blob/master/sphinx_documentation/_build/html/index.html)
-Thanks to Linda Taing for all the hard work over the years.
+Thanks to Luka Taing for all the hard work over the years.
 
 There is a lot of documentation of functions (but not that much in the way of a user guide) in the subfolder "sphinx_documentation" when you download the package, under ```_build/html```
 
+<img width="1400" height="720" alt="image" src="https://github.com/user-attachments/assets/7c415cf7-72b5-4ae9-a6ab-d760182059f2" />
 
-Please ask me any questions.
+
+Please ask me any questions. Note that I actively used Claude to generate much of the documentation and the layout image above; as with any AI coding, it is subject to some errors. I didn't use AI to code any actual functionality though. 
 
 ### Contributors
 
