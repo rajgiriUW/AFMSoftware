@@ -1,0 +1,260 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PythonSupport.ipf &mdash; AFM Igor Code  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="trEFMInit.ipf" href="../panelsetup/trefminit.html" />
+    <link rel="prev" title="ForceMapSMU.ipf" href="forcemapsmu.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            AFM Igor Code
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guides:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../userguides/trefm_fftrefm_guide.html">trEFM and FF-trEFM Experimental Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../userguides/trefm_setup_guide.html">trEFM Igor Setup Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../userguides/panels_guide.html">Panel Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Calibration:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/voltagescan.html">VoltageScan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/calcurve.html">CalCurve.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/forcecalibration.html">ForceCalibration.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/eleccal.html">ElecCal.ipf</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Nonlocal Photocurrent:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nlpc/nlpc_panel.html">NLPC_Panel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nlpc/nplc_scan.html">NPLC_Scan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nlpc/nplc_utils.html">NPLC_Utils.ipf</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Imaging:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/gmodeimaging.html">GModeImaging.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/imagescan.html">ImageScan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/imagescan_fftrefm.html">ImageScan_FFtrEFM.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/skpm.html">SKPM.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/skpmgainspanel.html">SKPMGainsPanel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/skpm_am.html">SKPM_AM.ipf</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Point Scan:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../pointscan/gmodepointscan.html">GmodePointScan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pointscan/pointscan.html">PointScan.ipf</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Photoluminescence</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../pl/pl.html">PL.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pl/pl_interleave.html">PL_interleave.ipf</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Misc.</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../misc/useranalysis.html">UserAnalysis.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/redoanalysis.html">ReDoAnalysis.ipf</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Hardware Control:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="common.html">Common.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="drivewaveeditor.html">DriveWaveEditor.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wavegenerator.html">WaveGenerator.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpib.html">GPIB.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="triggerboxserial.html">TriggerBoxSerial.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shuttercontrolandpanel.html">ShutterControlAndPanel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gmode_triggers.html">GMode_Triggers.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utilityfunctions.html">UtilityFunctions.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="keithleysmu.html">KeithleySMU.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="forcemapsmu.html">ForceMapSMU.ipf</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">PythonSupport.ipf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pyps">PyPS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#parameters">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pyps-cypher">PyPS_cypher</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pyps-cypher-image">PyPS_cypher_image</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pyps-image">PyPS_image</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Parameters</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Panel Setup:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../panelsetup/trefminit.html">trEFMInit.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../panelsetup/trefmpanel.html">trEFMPanel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../panelsetup/transferfuncpanel.html">transferfuncpanel.ipf</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">IM-SKPM:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../imskpm/imskpm_am.html">IMSKPM_AM.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imskpm/imskpm_fm.html">IMSKPM_FM.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imskpm/imskpm_forcepanel.html">IMSKPM_ForcePanelSpoofMethod.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imskpm/imskpm_panel.html">IMSKPM_Panel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imskpm/imskpm_panel_old.html">IMSKPM_Panel_Old.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imskpm/imskpm_oldfunctions.html">IMSKPM_oldfunctions.ipf</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Heterodyne (Moku):</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../heterodyne/moku_het.html">Moku_Het.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../heterodyne/moku_skpm.html">Moku_SKPM.ipf</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">AFM Igor Code</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">PythonSupport.ipf</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/rst_files/hardwarecontrol/pythonsupport.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pythonsupport-ipf">
+<h1>PythonSupport.ipf<a class="headerlink" href="#pythonsupport-ipf" title="Link to this heading">¶</a></h1>
+<p>Bridge functions for calling external Python (ffta) analysis code from
+Igor Pro. Saves the current wave and parameter wave to disk as .ibw files,
+then shells out to the Python script and reloads the result.</p>
+<section id="pyps">
+<h2>PyPS<a class="headerlink" href="#pyps" title="Link to this heading">¶</a></h2>
+<p>Runs the Python point-scan analysis script on the specified wave.</p>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>ibw_wave: wave</dt><dd><p>Input data wave to analyse</p>
+</dd>
+<dt>parameters: wave</dt><dd><p>Parameter wave passed to the Python script</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="pyps-cypher">
+<h2>PyPS_cypher<a class="headerlink" href="#pyps-cypher" title="Link to this heading">¶</a></h2>
+<p>Cypher-controller variant of PyPS. Handles the Cypher data folder layout
+when locating and saving the input wave.</p>
+<section id="id1">
+<h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>ibw_wave: wave</dt><dd><p>Input data wave to analyse</p>
+</dd>
+<dt>parameters: wave</dt><dd><p>Parameter wave passed to the Python script</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="pyps-cypher-image">
+<h2>PyPS_cypher_image<a class="headerlink" href="#pyps-cypher-image" title="Link to this heading">¶</a></h2>
+<p>Cypher-controller variant for image-scan reanalysis. Iterates over all
+pixels in the named folder and calls the Python analysis on each.</p>
+<section id="id2">
+<h3>Parameters<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>folder: string</dt><dd><p>Igor data folder containing the image waves</p>
+</dd>
+<dt>ibw_name: string</dt><dd><p>Base wave name used for each pixel</p>
+</dd>
+<dt>parameters: wave</dt><dd><p>Parameter wave passed to the Python script</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="pyps-image">
+<h2>PyPS_image<a class="headerlink" href="#pyps-image" title="Link to this heading">¶</a></h2>
+<p>MFP3D variant for image-scan reanalysis. Iterates over all pixels in the
+named folder and calls the Python analysis on each.</p>
+<section id="id3">
+<h3>Parameters<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>folder: string</dt><dd><p>Igor data folder containing the image waves</p>
+</dd>
+<dt>ibw_name: string</dt><dd><p>Base wave name used for each pixel</p>
+</dd>
+<dt>parameters: wave</dt><dd><p>Parameter wave passed to the Python script</p>
+</dd>
+</dl>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="forcemapsmu.html" class="btn btn-neutral float-left" title="ForceMapSMU.ipf" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../panelsetup/trefminit.html" class="btn btn-neutral float-right" title="trEFMInit.ipf" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Ginger Lab.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

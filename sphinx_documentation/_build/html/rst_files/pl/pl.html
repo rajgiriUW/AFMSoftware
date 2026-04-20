@@ -1,119 +1,79 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PL.ipf &mdash; AFM Igor Code  documentation</title>
-  
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
 
   
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-
-  
-  
-  
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
-    
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="UserAnalysis.ipf" href="../misc/useranalysis.html" />
+    <link rel="next" title="PL_interleave.ipf" href="pl_interleave.html" />
     <link rel="prev" title="PointScan.ipf" href="../pointscan/pointscan.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> AFM Igor Code
           
-
-          
+          <a href="../../index.html" class="icon icon-home">
+            AFM Igor Code
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">User Guides:</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guides:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../userguides/trefm_fftrefm_guide.html">trEFM and FF-trEFM Experimental Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../userguides/trefm_setup_guide.html">trEFM Igor Setup Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../userguides/panels_guide.html">Panel Guide</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Calibration:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Calibration:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../calibration/voltagescan.html">VoltageScan.ipf</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../calibration/calcurve.html">CalCurve.ipf</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../calibration/forcecalibration.html">ForceCalibration.ipf</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../calibration/eleccal.html">ElecCal.ipf</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Nonlocal Photocurrent:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Nonlocal Photocurrent:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../nlpc/nlpc_panel.html">NLPC_Panel.ipf</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../nlpc/nplc_scan.html">NPLC_Scan.ipf</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../nlpc/nplc_utils.html">NPLC_Utils.ipf</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Imaging:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Imaging:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../imaging/gmodeimaging.html">GModeImaging.ipf</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../imaging/imagescan.html">ImageScan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/imagescan_fftrefm.html">ImageScan_FFtrEFM.ipf</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../imaging/skpm.html">SKPM.ipf</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../imaging/skpmgainspanel.html">SKPMGainsPanel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/skpm_am.html">SKPM_AM.ipf</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Point Scan:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Point Scan:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../pointscan/gmodepointscan.html">GmodePointScan.ipf</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pointscan/pointscan.html">PointScan.ipf</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Photoluminescence</span></p>
+<p class="caption" role="heading"><span class="caption-text">Photoluminescence</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">PL.ipf</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#lbicscan">LBICscan</a><ul>
@@ -181,14 +141,16 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="pl_interleave.html">PL_interleave.ipf</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Misc.</span></p>
+<p class="caption" role="heading"><span class="caption-text">Misc.</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../misc/useranalysis.html">UserAnalysis.ipf</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../misc/redoanalysis.html">ReDoAnalysis.ipf</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Hardware Control:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Hardware Control:</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/common.html">Common.ipf</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/drivewaveeditor.html">DriveWaveEditor.ipf</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/wavegenerator.html">WaveGenerator.ipf</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/gpib.html">GPIB.ipf</a></li>
@@ -196,84 +158,62 @@
 <li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/shuttercontrolandpanel.html">ShutterControlAndPanel.ipf</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/gmode_triggers.html">GMode_Triggers.ipf</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/utilityfunctions.html">UtilityFunctions.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/keithleysmu.html">KeithleySMU.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/forcemapsmu.html">ForceMapSMU.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardwarecontrol/pythonsupport.html">PythonSupport.ipf</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Panel Setup:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Panel Setup:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../panelsetup/trefminit.html">trEFMInit.ipf</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../panelsetup/trefmpanel.html">trEFMPanel.ipf</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../panelsetup/transferfuncpanel.html">transferfuncpanel.ipf</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">IM-SKPM:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../imskpm/imskpm_am.html">IMSKPM_AM.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imskpm/imskpm_fm.html">IMSKPM_FM.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imskpm/imskpm_forcepanel.html">IMSKPM_ForcePanelSpoofMethod.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imskpm/imskpm_panel.html">IMSKPM_Panel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imskpm/imskpm_panel_old.html">IMSKPM_Panel_Old.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imskpm/imskpm_oldfunctions.html">IMSKPM_oldfunctions.ipf</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Heterodyne (Moku):</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../heterodyne/moku_het.html">Moku_Het.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../heterodyne/moku_skpm.html">Moku_SKPM.ipf</a></li>
+</ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../index.html">AFM Igor Code</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-      <li>PL.ipf</li>
-    
-    
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">PL.ipf</li>
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="../../_sources/rst_files/pl/pl.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="pl-ipf">
-<h1>PL.ipf<a class="headerlink" href="#pl-ipf" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="lbicscan">
-<h2>LBICscan<a class="headerlink" href="#lbicscan" title="Permalink to this headline">¶</a></h2>
+             
+  <section id="pl-ipf">
+<h1>PL.ipf<a class="headerlink" href="#pl-ipf" title="Link to this heading">¶</a></h1>
+<section id="lbicscan">
+<h2>LBICscan<a class="headerlink" href="#lbicscan" title="Link to this heading">¶</a></h2>
 <p>function description</p>
-<div class="section" id="parameters">
-<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h3>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>xpos: variable</dt><dd><p>description</p>
 </dd>
@@ -288,13 +228,13 @@
 <dt>scanpoints: variable</dt><dd><p>description</p>
 </dd>
 </dl>
-</div>
-</div>
-<div class="section" id="plpointscan">
-<h2>PLpointscan<a class="headerlink" href="#plpointscan" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="plpointscan">
+<h2>PLpointscan<a class="headerlink" href="#plpointscan" title="Link to this heading">¶</a></h2>
 <p>function description</p>
-<div class="section" id="id1">
-<h3>Parameters<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<section id="id1">
+<h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>xpos: variable</dt><dd><p>description</p>
 </dd>
@@ -303,148 +243,148 @@
 <dt>scantime: variable</dt><dd><p>description</p>
 </dd>
 </dl>
-</div>
-</div>
-<div class="section" id="lbicinit">
-<h2>LBICInit<a class="headerlink" href="#lbicinit" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="lbicinit">
+<h2>LBICInit<a class="headerlink" href="#lbicinit" title="Link to this heading">¶</a></h2>
 <p>function description</p>
-</div>
-<div class="section" id="lbicimagescanbutton">
-<h2>LBICImageScanButton<a class="headerlink" href="#lbicimagescanbutton" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="lbicimagescanbutton">
+<h2>LBICImageScanButton<a class="headerlink" href="#lbicimagescanbutton" title="Link to this heading">¶</a></h2>
 <p>function description</p>
-<div class="section" id="id2">
-<h3>Parameters<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<section id="id2">
+<h3>Parameters<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>ctrlname: string</dt><dd><p>description</p>
 </dd>
 </dl>
-</div>
-</div>
-<div class="section" id="lbicimagescanbuttonsd">
-<h2>LBICImageScanButtonSD<a class="headerlink" href="#lbicimagescanbuttonsd" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="lbicimagescanbuttonsd">
+<h2>LBICImageScanButtonSD<a class="headerlink" href="#lbicimagescanbuttonsd" title="Link to this heading">¶</a></h2>
 <p>function description</p>
-<div class="section" id="id3">
-<h3>Parameters<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<section id="id3">
+<h3>Parameters<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>ctrlname: string</dt><dd><p>description</p>
 </dd>
 </dl>
-</div>
-</div>
-<div class="section" id="savelbicimagebutton">
-<h2>SaveLBICImageButton<a class="headerlink" href="#savelbicimagebutton" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="savelbicimagebutton">
+<h2>SaveLBICImageButton<a class="headerlink" href="#savelbicimagebutton" title="Link to this heading">¶</a></h2>
 <p>function description</p>
-<div class="section" id="id4">
-<h3>Parameters<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<section id="id4">
+<h3>Parameters<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>ctrlname: string</dt><dd><p>description</p>
 </dd>
 </dl>
-</div>
-</div>
-<div class="section" id="savelbicimagescan">
-<h2>SaveLBICImageScan<a class="headerlink" href="#savelbicimagescan" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="savelbicimagescan">
+<h2>SaveLBICImageScan<a class="headerlink" href="#savelbicimagescan" title="Link to this heading">¶</a></h2>
 <p>function description</p>
-<div class="section" id="id5">
-<h3>Parameters<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<section id="id5">
+<h3>Parameters<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>name: string</dt><dd><p>description</p>
 </dd>
 <dt>type: variable</dt><dd><p>description</p>
 </dd>
 </dl>
-</div>
-</div>
-<div class="section" id="clearlbicimagesbutton">
-<h2>ClearLBICImagesButton<a class="headerlink" href="#clearlbicimagesbutton" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="clearlbicimagesbutton">
+<h2>ClearLBICImagesButton<a class="headerlink" href="#clearlbicimagesbutton" title="Link to this heading">¶</a></h2>
 <p>function description</p>
-<div class="section" id="id6">
-<h3>Parameters<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<section id="id6">
+<h3>Parameters<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>ctrlname: string</dt><dd><p>description</p>
 </dd>
 </dl>
-</div>
-</div>
-<div class="section" id="clearlbicimages">
-<h2>ClearLBICImages<a class="headerlink" href="#clearlbicimages" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="clearlbicimages">
+<h2>ClearLBICImages<a class="headerlink" href="#clearlbicimages" title="Link to this heading">¶</a></h2>
 <p>function description</p>
-</div>
-<div class="section" id="setlockinforpl">
-<h2>SetLockInForPL<a class="headerlink" href="#setlockinforpl" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="setlockinforpl">
+<h2>SetLockInForPL<a class="headerlink" href="#setlockinforpl" title="Link to this heading">¶</a></h2>
 <p>function description</p>
-<div class="section" id="id7">
-<h3>Parameters<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<section id="id7">
+<h3>Parameters<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>ba: struct</dt><dd><p>description</p>
 </dd>
 </dl>
-</div>
-</div>
-<div class="section" id="setawgforpl">
-<h2>SetAWGForPL<a class="headerlink" href="#setawgforpl" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="setawgforpl">
+<h2>SetAWGForPL<a class="headerlink" href="#setawgforpl" title="Link to this heading">¶</a></h2>
 <p>function description</p>
-<div class="section" id="id8">
-<h3>Parameters<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<section id="id8">
+<h3>Parameters<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>ba: struct</dt><dd><p>description</p>
 </dd>
 </dl>
-</div>
-</div>
-<div class="section" id="getcursorposition">
-<h2>GetCursorPosition<a class="headerlink" href="#getcursorposition" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="getcursorposition">
+<h2>GetCursorPosition<a class="headerlink" href="#getcursorposition" title="Link to this heading">¶</a></h2>
 <p>function description</p>
-<div class="section" id="id9">
-<h3>Parameters<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<section id="id9">
+<h3>Parameters<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>ba: struct</dt><dd><p>description</p>
 </dd>
 </dl>
-</div>
-</div>
-<div class="section" id="plxfast">
-<h2>PLXFast<a class="headerlink" href="#plxfast" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="plxfast">
+<h2>PLXFast<a class="headerlink" href="#plxfast" title="Link to this heading">¶</a></h2>
 <p>function description</p>
-<div class="section" id="id10">
-<h3>Parameters<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
+<section id="id10">
+<h3>Parameters<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>ba: struct</dt><dd><p>description</p>
 </dd>
 </dl>
-</div>
-</div>
-<div class="section" id="uselinenum">
-<h2>UseLineNum<a class="headerlink" href="#uselinenum" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="uselinenum">
+<h2>UseLineNum<a class="headerlink" href="#uselinenum" title="Link to this heading">¶</a></h2>
 <p>function description</p>
-<div class="section" id="id11">
-<h3>Parameters<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
+<section id="id11">
+<h3>Parameters<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>cba: struct</dt><dd><p>description</p>
 </dd>
 </dl>
-</div>
-</div>
-<div class="section" id="transferposition">
-<h2>TransferPosition<a class="headerlink" href="#transferposition" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="transferposition">
+<h2>TransferPosition<a class="headerlink" href="#transferposition" title="Link to this heading">¶</a></h2>
 <p>function description</p>
-</div>
-<div class="section" id="transferpositionbutton">
-<h2>TransferPositionButton<a class="headerlink" href="#transferpositionbutton" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="transferpositionbutton">
+<h2>TransferPositionButton<a class="headerlink" href="#transferpositionbutton" title="Link to this heading">¶</a></h2>
 <p>function description</p>
-<div class="section" id="id12">
-<h3>Parameters<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
+<section id="id12">
+<h3>Parameters<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>ctrlname: string</dt><dd><p>description</p>
 </dd>
 </dl>
-</div>
-</div>
-<div class="section" id="lbicscanframedown">
-<h2>LBICscanFrameDown<a class="headerlink" href="#lbicscanframedown" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="lbicscanframedown">
+<h2>LBICscanFrameDown<a class="headerlink" href="#lbicscanframedown" title="Link to this heading">¶</a></h2>
 <p>function description</p>
-<div class="section" id="id13">
-<h3>Parameters<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
+<section id="id13">
+<h3>Parameters<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>xpos: variable</dt><dd><p>description</p>
 </dd>
@@ -459,75 +399,50 @@
 <dt>scanpoints: variable</dt><dd><p>description</p>
 </dd>
 </dl>
-</div>
-</div>
-<div class="section" id="buttonproc">
-<h2>ButtonProc<a class="headerlink" href="#buttonproc" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="buttonproc">
+<h2>ButtonProc<a class="headerlink" href="#buttonproc" title="Link to this heading">¶</a></h2>
 <p>function description</p>
-<div class="section" id="id14">
-<h3>Parameters<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
+<section id="id14">
+<h3>Parameters<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>ba: struct</dt><dd><p>description</p>
 </dd>
 </dl>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="../misc/useranalysis.html" class="btn btn-neutral float-right" title="UserAnalysis.ipf" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="../pointscan/pointscan.html" class="btn btn-neutral float-left" title="PointScan.ipf" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../pointscan/pointscan.html" class="btn btn-neutral float-left" title="PointScan.ipf" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pl_interleave.html" class="btn btn-neutral float-right" title="PL_interleave.ipf" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        
-        &copy; Copyright 2020, Ginger Lab
-
-    </p>
+    <p>&#169; Copyright 2020, Ginger Lab.</p>
   </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

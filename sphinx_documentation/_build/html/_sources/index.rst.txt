@@ -41,8 +41,10 @@ Welcome to AFM Igor Code documentation!
 
    rst_files/imaging/gmodeimaging
    rst_files/imaging/imagescan
+   rst_files/imaging/imagescan_fftrefm
    rst_files/imaging/skpm
    rst_files/imaging/skpmgainspanel
+   rst_files/imaging/skpm_am
 
 .. toctree::
    :maxdepth: 2
@@ -56,8 +58,9 @@ Welcome to AFM Igor Code documentation!
    :maxdepth: 2
    :caption: Photoluminescence
    :glob:
-   
+
    rst_files/pl/pl
+   rst_files/pl/pl_interleave
 
 .. toctree::
    :maxdepth: 2
@@ -72,6 +75,7 @@ Welcome to AFM Igor Code documentation!
    :caption: Hardware Control:
    :glob:
 
+   rst_files/hardwarecontrol/common
    rst_files/hardwarecontrol/drivewaveeditor
    rst_files/hardwarecontrol/wavegenerator
    rst_files/hardwarecontrol/gpib
@@ -79,12 +83,35 @@ Welcome to AFM Igor Code documentation!
    rst_files/hardwarecontrol/shuttercontrolandpanel
    rst_files/hardwarecontrol/gmode_triggers
    rst_files/hardwarecontrol/utilityfunctions
+   rst_files/hardwarecontrol/keithleysmu
+   rst_files/hardwarecontrol/forcemapsmu
+   rst_files/hardwarecontrol/pythonsupport
 
 .. toctree::
    :maxdepth: 2
    :caption: Panel Setup:
    :glob:
-   
+
    rst_files/panelsetup/trefminit
    rst_files/panelsetup/trefmpanel
    rst_files/panelsetup/transferfuncpanel
+
+.. toctree::
+   :maxdepth: 2
+   :caption: IM-SKPM:
+   :glob:
+
+   rst_files/imskpm/imskpm_am
+   rst_files/imskpm/imskpm_fm
+   rst_files/imskpm/imskpm_forcepanel
+   rst_files/imskpm/imskpm_panel
+   rst_files/imskpm/imskpm_panel_old
+   rst_files/imskpm/imskpm_oldfunctions
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Heterodyne (Moku):
+   :glob:
+
+   rst_files/heterodyne/moku_het
+   rst_files/heterodyne/moku_skpm

@@ -1,0 +1,551 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Common.ipf &mdash; AFM Igor Code  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="DriveWaveEditor.ipf" href="drivewaveeditor.html" />
+    <link rel="prev" title="ReDoAnalysis.ipf" href="../misc/redoanalysis.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            AFM Igor Code
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guides:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../userguides/trefm_fftrefm_guide.html">trEFM and FF-trEFM Experimental Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../userguides/trefm_setup_guide.html">trEFM Igor Setup Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../userguides/panels_guide.html">Panel Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Calibration:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/voltagescan.html">VoltageScan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/calcurve.html">CalCurve.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/forcecalibration.html">ForceCalibration.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/eleccal.html">ElecCal.ipf</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Nonlocal Photocurrent:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nlpc/nlpc_panel.html">NLPC_Panel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nlpc/nplc_scan.html">NPLC_Scan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nlpc/nplc_utils.html">NPLC_Utils.ipf</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Imaging:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/gmodeimaging.html">GModeImaging.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/imagescan.html">ImageScan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/imagescan_fftrefm.html">ImageScan_FFtrEFM.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/skpm.html">SKPM.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/skpmgainspanel.html">SKPMGainsPanel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/skpm_am.html">SKPM_AM.ipf</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Point Scan:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../pointscan/gmodepointscan.html">GmodePointScan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pointscan/pointscan.html">PointScan.ipf</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Photoluminescence</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../pl/pl.html">PL.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pl/pl_interleave.html">PL_interleave.ipf</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Misc.</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../misc/useranalysis.html">UserAnalysis.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/redoanalysis.html">ReDoAnalysis.ipf</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Hardware Control:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Common.ipf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#resetall">ResetAll</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#setcrosspoint">SetCrosspoint</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#parameters">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#setpassfilter">SetPassFilter</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#setfeedbackloop">SetFeedbackLoop</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#setfeedbackloop-v14">SetFeedbackLoop_v14</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#setfeedbackloopcypher">SetFeedbackLoopCypher</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#setfeedbackloopcypher-old">SetFeedbackLoopCypher_old</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#stopfeedbackloop">StopFeedbackLoop</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id6">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#stopfeedbackloopcypher">StopFeedbackLoopCypher</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id7">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#startfeedbackloop">StartFeedbackLoop</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id8">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#readposition">ReadPosition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#movexyz">MoveXYZ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id9">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#readz">ReadZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#movexy">MoveXY</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id10">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#checkinwavetiming">CheckInWaveTiming</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id11">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#lightonoff">LightOnOff</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id12">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#liftto">LiftTo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id13">Parameters</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="drivewaveeditor.html">DriveWaveEditor.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wavegenerator.html">WaveGenerator.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpib.html">GPIB.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="triggerboxserial.html">TriggerBoxSerial.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shuttercontrolandpanel.html">ShutterControlAndPanel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gmode_triggers.html">GMode_Triggers.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utilityfunctions.html">UtilityFunctions.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="keithleysmu.html">KeithleySMU.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="forcemapsmu.html">ForceMapSMU.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pythonsupport.html">PythonSupport.ipf</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Panel Setup:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../panelsetup/trefminit.html">trEFMInit.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../panelsetup/trefmpanel.html">trEFMPanel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../panelsetup/transferfuncpanel.html">transferfuncpanel.ipf</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">IM-SKPM:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../imskpm/imskpm_am.html">IMSKPM_AM.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imskpm/imskpm_fm.html">IMSKPM_FM.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imskpm/imskpm_forcepanel.html">IMSKPM_ForcePanelSpoofMethod.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imskpm/imskpm_panel.html">IMSKPM_Panel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imskpm/imskpm_panel_old.html">IMSKPM_Panel_Old.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imskpm/imskpm_oldfunctions.html">IMSKPM_oldfunctions.ipf</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Heterodyne (Moku):</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../heterodyne/moku_het.html">Moku_Het.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../heterodyne/moku_skpm.html">Moku_SKPM.ipf</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">AFM Igor Code</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Common.ipf</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/rst_files/hardwarecontrol/common.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="common-ipf">
+<h1>Common.ipf<a class="headerlink" href="#common-ipf" title="Link to this heading">¶</a></h1>
+<p>Hardware control primitives shared across all acquisition modes. Wraps ARC
+controller (<a href="#id14"><span class="problematic" id="id15">td_</span></a>*), lock-in, and stage commands into higher-level operations
+used by PointScan, ImageScan, and SKPM modules.</p>
+<section id="resetall">
+<h2>ResetAll<a class="headerlink" href="#resetall" title="Link to this heading">¶</a></h2>
+<p>Stops all feedback loops, zeros all DAC outputs, and restores cantilever
+drive to engage settings. Called at the start and end of every point/image
+scan.</p>
+</section>
+<section id="setcrosspoint">
+<h2>SetCrosspoint<a class="headerlink" href="#setcrosspoint" title="Link to this heading">¶</a></h2>
+<p>Writes the analog crosspoint switch matrix routing.</p>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>InA: variable</dt><dd><p>Signal assigned to InA crosspoint slot</p>
+</dd>
+<dt>InB: variable</dt><dd><p>Signal assigned to InB crosspoint slot</p>
+</dd>
+<dt>InFast: variable</dt><dd><p>Signal assigned to InFast crosspoint slot</p>
+</dd>
+<dt>InAOffset: variable</dt><dd><p>Offset for InA</p>
+</dd>
+<dt>InBOffset: variable</dt><dd><p>Offset for InB</p>
+</dd>
+<dt>InFastOffset: variable</dt><dd><p>Offset for InFast</p>
+</dd>
+<dt>OutXMod: variable</dt><dd><p>Output X modulation routing</p>
+</dd>
+<dt>OutYMod: variable</dt><dd><p>Output Y modulation routing</p>
+</dd>
+<dt>OutZMod: variable</dt><dd><p>Output Z modulation routing</p>
+</dd>
+<dt>FilterIn: variable</dt><dd><p>Filter input routing</p>
+</dd>
+<dt>BNCOut0: variable</dt><dd><p>BNC output 0 routing</p>
+</dd>
+<dt>BNCOut1: variable</dt><dd><p>BNC output 1 routing</p>
+</dd>
+<dt>BNCOut2: variable</dt><dd><p>BNC output 2 routing</p>
+</dd>
+<dt>PogoOut: variable</dt><dd><p>Pogo pin output routing</p>
+</dd>
+<dt>Chip: variable</dt><dd><p>Chip select</p>
+</dd>
+<dt>Shake: variable</dt><dd><p>Cantilever shake routing</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="setpassfilter">
+<h2>SetPassFilter<a class="headerlink" href="#setpassfilter" title="Link to this heading">¶</a></h2>
+<p>Sets or resets ARC pass-filter parameters. Omitted keyword arguments leave
+the corresponding channels unchanged.</p>
+<section id="id1">
+<h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>SetorReset: variable</dt><dd><p>1 to set filters, 0 to reset</p>
+</dd>
+<dt>x: variable <em>(optional)</em></dt><dd><p>X channel filter value</p>
+</dd>
+<dt>y: variable <em>(optional)</em></dt><dd><p>Y channel filter value</p>
+</dd>
+<dt>z: variable <em>(optional)</em></dt><dd><p>Z channel filter value</p>
+</dd>
+<dt>a: variable <em>(optional)</em></dt><dd><p>A channel filter value</p>
+</dd>
+<dt>b: variable <em>(optional)</em></dt><dd><p>B channel filter value</p>
+</dd>
+<dt>fast: variable <em>(optional)</em></dt><dd><p>Fast channel filter value</p>
+</dd>
+<dt>i: variable <em>(optional)</em></dt><dd><p>I channel filter value</p>
+</dd>
+<dt>i1: variable <em>(optional)</em></dt><dd><p>I1 channel filter value</p>
+</dd>
+<dt>q: variable <em>(optional)</em></dt><dd><p>Q channel filter value</p>
+</dd>
+<dt>q1: variable <em>(optional)</em></dt><dd><p>Q1 channel filter value</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="setfeedbackloop">
+<h2>SetFeedbackLoop<a class="headerlink" href="#setfeedbackloop" title="Link to this heading">¶</a></h2>
+<p>Configures and starts one ARC PID feedback loop.</p>
+<section id="id2">
+<h3>Parameters<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>whichLoop: variable</dt><dd><p>Loop index (0-based)</p>
+</dd>
+<dt>startWhen: variable</dt><dd><p>Condition code for loop start</p>
+</dd>
+<dt>maintainWhat: variable</dt><dd><p>Signal index to regulate</p>
+</dd>
+<dt>setpoint: variable</dt><dd><p>PID setpoint</p>
+</dd>
+<dt>pgain: variable</dt><dd><p>Proportional gain</p>
+</dd>
+<dt>igain: variable</dt><dd><p>Integral gain</p>
+</dd>
+<dt>sgain: variable</dt><dd><p>Sum gain</p>
+</dd>
+<dt>changeWhat: variable</dt><dd><p>Output signal index</p>
+</dd>
+<dt>dgain: variable</dt><dd><p>Derivative gain</p>
+</dd>
+<dt>name: string <em>(optional)</em></dt><dd><p>Loop name string</p>
+</dd>
+<dt>arcZ: variable <em>(optional)</em></dt><dd><p>1 to route output through Z-height servo</p>
+</dd>
+<dt>outmax: variable <em>(optional)</em></dt><dd><p>Output maximum clamp</p>
+</dd>
+<dt>outmin: variable <em>(optional)</em></dt><dd><p>Output minimum clamp</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="setfeedbackloop-v14">
+<h2>SetFeedbackLoop_v14<a class="headerlink" href="#setfeedbackloop-v14" title="Link to this heading">¶</a></h2>
+<p>Firmware v14 variant of SetFeedbackLoop.</p>
+<section id="id3">
+<h3>Parameters<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>whichLoop: variable</dt><dd><p>Loop index</p>
+</dd>
+<dt>startWhen: variable</dt><dd><p>Start condition code</p>
+</dd>
+<dt>maintainWhat: variable</dt><dd><p>Signal index to regulate</p>
+</dd>
+<dt>setpoint: variable</dt><dd><p>PID setpoint</p>
+</dd>
+<dt>pgain: variable</dt><dd><p>Proportional gain</p>
+</dd>
+<dt>igain: variable</dt><dd><p>Integral gain</p>
+</dd>
+<dt>sgain: variable</dt><dd><p>Sum gain</p>
+</dd>
+<dt>changeWhat: variable</dt><dd><p>Output signal index</p>
+</dd>
+<dt>dgain: variable</dt><dd><p>Derivative gain</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="setfeedbackloopcypher">
+<h2>SetFeedbackLoopCypher<a class="headerlink" href="#setfeedbackloopcypher" title="Link to this heading">¶</a></h2>
+<p>Cypher-controller variant of SetFeedbackLoop.</p>
+<section id="id4">
+<h3>Parameters<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>whichLoop: variable</dt><dd><p>Loop index</p>
+</dd>
+<dt>startWhen: variable</dt><dd><p>Start condition code</p>
+</dd>
+<dt>maintainWhat: variable</dt><dd><p>Signal index to regulate</p>
+</dd>
+<dt>setpoint: variable</dt><dd><p>PID setpoint</p>
+</dd>
+<dt>pgain: variable</dt><dd><p>Proportional gain</p>
+</dd>
+<dt>igain: variable</dt><dd><p>Integral gain</p>
+</dd>
+<dt>sgain: variable</dt><dd><p>Sum gain</p>
+</dd>
+<dt>changeWhat: variable</dt><dd><p>Output signal index</p>
+</dd>
+<dt>dgain: variable</dt><dd><p>Derivative gain</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="setfeedbackloopcypher-old">
+<h2>SetFeedbackLoopCypher_old<a class="headerlink" href="#setfeedbackloopcypher-old" title="Link to this heading">¶</a></h2>
+<p>Legacy Cypher-controller variant of SetFeedbackLoop.</p>
+<section id="id5">
+<h3>Parameters<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>whichLoop: variable</dt><dd><p>Loop index</p>
+</dd>
+<dt>startWhen: variable</dt><dd><p>Start condition code</p>
+</dd>
+<dt>maintainWhat: variable</dt><dd><p>Signal index to regulate</p>
+</dd>
+<dt>setpoint: variable</dt><dd><p>PID setpoint</p>
+</dd>
+<dt>pgain: variable</dt><dd><p>Proportional gain</p>
+</dd>
+<dt>igain: variable</dt><dd><p>Integral gain</p>
+</dd>
+<dt>sgain: variable</dt><dd><p>Sum gain</p>
+</dd>
+<dt>changeWhat: variable</dt><dd><p>Output signal index</p>
+</dd>
+<dt>dgain: variable</dt><dd><p>Derivative gain</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="stopfeedbackloop">
+<h2>StopFeedbackLoop<a class="headerlink" href="#stopfeedbackloop" title="Link to this heading">¶</a></h2>
+<p>Disables the specified ARC PID loop and zeros its output.</p>
+<section id="id6">
+<h3>Parameters<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>whichLoop: variable</dt><dd><p>Loop index to stop</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="stopfeedbackloopcypher">
+<h2>StopFeedbackLoopCypher<a class="headerlink" href="#stopfeedbackloopcypher" title="Link to this heading">¶</a></h2>
+<p>Cypher-controller variant of StopFeedbackLoop.</p>
+<section id="id7">
+<h3>Parameters<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>whichLoop: variable</dt><dd><p>Loop index to stop</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="startfeedbackloop">
+<h2>StartFeedbackLoop<a class="headerlink" href="#startfeedbackloop" title="Link to this heading">¶</a></h2>
+<p>Re-enables a previously stopped ARC PID loop without changing its parameters.</p>
+<section id="id8">
+<h3>Parameters<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>whichLoop: variable</dt><dd><p>Loop index to start</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="readposition">
+<h2>ReadPosition<a class="headerlink" href="#readposition" title="Link to this heading">¶</a></h2>
+<p>Reads the current XYZ stage position from LVDT sensors and stores the result
+in root:Packages:trEFM globals gxpos and gypos.</p>
+</section>
+<section id="movexyz">
+<h2>MoveXYZ<a class="headerlink" href="#movexyz" title="Link to this heading">¶</a></h2>
+<p>Moves the stage to the specified XYZ coordinates.</p>
+<section id="id9">
+<h3>Parameters<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Xposition: variable</dt><dd><p>Target X position in microns</p>
+</dd>
+<dt>Yposition: variable</dt><dd><p>Target Y position in microns</p>
+</dd>
+<dt>Zposition: variable</dt><dd><p>Target Z position in nanometers</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="readz">
+<h2>ReadZ<a class="headerlink" href="#readz" title="Link to this heading">¶</a></h2>
+<p>Reads the current Z-height from the LVDT sensor.</p>
+</section>
+<section id="movexy">
+<h2>MoveXY<a class="headerlink" href="#movexy" title="Link to this heading">¶</a></h2>
+<p>Moves the stage to the specified XY coordinates.</p>
+<section id="id10">
+<h3>Parameters<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>xpos: variable</dt><dd><p>Target X position in microns</p>
+</dd>
+<dt>ypos: variable</dt><dd><p>Target Y position in microns</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="checkinwavetiming">
+<h2>CheckInWaveTiming<a class="headerlink" href="#checkinwavetiming" title="Link to this heading">¶</a></h2>
+<p>Verifies that the timing of an input wave matches the expected digitizer
+sample interval.</p>
+<section id="id11">
+<h3>Parameters<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>whichWave: wave</dt><dd><p>Wave whose timing to check</p>
+</dd>
+<dt>whichDataPoint: variable <em>(optional)</em></dt><dd><p>Specific data point index to inspect</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="lightonoff">
+<h2>LightOnOff<a class="headerlink" href="#lightonoff" title="Link to this heading">¶</a></h2>
+<p>Turns the illumination source on or off.</p>
+<section id="id12">
+<h3>Parameters<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>onoff: variable</dt><dd><p>1 to turn light on, 0 to turn off</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="liftto">
+<h2>LiftTo<a class="headerlink" href="#liftto" title="Link to this heading">¶</a></h2>
+<p>Lifts the tip to the specified height and applies a tip voltage.</p>
+<section id="id13">
+<h3>Parameters<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>liftHeight: variable</dt><dd><p>Target lift height in nanometers</p>
+</dd>
+<dt>tipVoltage: variable</dt><dd><p>Voltage to apply to the tip in volts</p>
+</dd>
+<dt>lighton: variable <em>(optional)</em></dt><dd><p>1 to enable illumination during lift, 0 to disable</p>
+</dd>
+<dt>verbose: variable <em>(optional)</em></dt><dd><p>1 to print status messages</p>
+</dd>
+</dl>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../misc/redoanalysis.html" class="btn btn-neutral float-left" title="ReDoAnalysis.ipf" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="drivewaveeditor.html" class="btn btn-neutral float-right" title="DriveWaveEditor.ipf" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Ginger Lab.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

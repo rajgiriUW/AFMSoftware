@@ -1,0 +1,371 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KeithleySMU.ipf &mdash; AFM Igor Code  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="ForceMapSMU.ipf" href="forcemapsmu.html" />
+    <link rel="prev" title="UtilityFunctions.ipf" href="utilityfunctions.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            AFM Igor Code
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guides:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../userguides/trefm_fftrefm_guide.html">trEFM and FF-trEFM Experimental Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../userguides/trefm_setup_guide.html">trEFM Igor Setup Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../userguides/panels_guide.html">Panel Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Calibration:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/voltagescan.html">VoltageScan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/calcurve.html">CalCurve.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/forcecalibration.html">ForceCalibration.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calibration/eleccal.html">ElecCal.ipf</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Nonlocal Photocurrent:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nlpc/nlpc_panel.html">NLPC_Panel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nlpc/nplc_scan.html">NPLC_Scan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nlpc/nplc_utils.html">NPLC_Utils.ipf</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Imaging:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/gmodeimaging.html">GModeImaging.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/imagescan.html">ImageScan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/imagescan_fftrefm.html">ImageScan_FFtrEFM.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/skpm.html">SKPM.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/skpmgainspanel.html">SKPMGainsPanel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/skpm_am.html">SKPM_AM.ipf</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Point Scan:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../pointscan/gmodepointscan.html">GmodePointScan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pointscan/pointscan.html">PointScan.ipf</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Photoluminescence</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../pl/pl.html">PL.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pl/pl_interleave.html">PL_interleave.ipf</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Misc.</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../misc/useranalysis.html">UserAnalysis.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/redoanalysis.html">ReDoAnalysis.ipf</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Hardware Control:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="common.html">Common.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="drivewaveeditor.html">DriveWaveEditor.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wavegenerator.html">WaveGenerator.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gpib.html">GPIB.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="triggerboxserial.html">TriggerBoxSerial.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shuttercontrolandpanel.html">ShutterControlAndPanel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gmode_triggers.html">GMode_Triggers.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utilityfunctions.html">UtilityFunctions.ipf</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">KeithleySMU.ipf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#smucheck">SMUCheck</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#parameters">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#smuopen">SMUOpen</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#smumode">SMUMode</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#smuoectsetup">SMUOECTSetup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#smuclear">SMUClear</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#smuread">SMURead</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#return">Return</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#smuiv">SMUIV</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id6">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#smujv">SMUJV</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id7">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#smuvolt">SMUVolt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id8">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#smuoff">SMUOff</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="forcemapsmu.html">ForceMapSMU.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pythonsupport.html">PythonSupport.ipf</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Panel Setup:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../panelsetup/trefminit.html">trEFMInit.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../panelsetup/trefmpanel.html">trEFMPanel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../panelsetup/transferfuncpanel.html">transferfuncpanel.ipf</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">IM-SKPM:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../imskpm/imskpm_am.html">IMSKPM_AM.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imskpm/imskpm_fm.html">IMSKPM_FM.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imskpm/imskpm_forcepanel.html">IMSKPM_ForcePanelSpoofMethod.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imskpm/imskpm_panel.html">IMSKPM_Panel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imskpm/imskpm_panel_old.html">IMSKPM_Panel_Old.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imskpm/imskpm_oldfunctions.html">IMSKPM_oldfunctions.ipf</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Heterodyne (Moku):</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../heterodyne/moku_het.html">Moku_Het.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../heterodyne/moku_skpm.html">Moku_SKPM.ipf</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">AFM Igor Code</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">KeithleySMU.ipf</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/rst_files/hardwarecontrol/keithleysmu.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="keithleysmu-ipf">
+<h1>KeithleySMU.ipf<a class="headerlink" href="#keithleysmu-ipf" title="Link to this heading">¶</a></h1>
+<p>GPIB control functions for the Keithley source-measure unit (SMU). The
+Keithley must be in SCPI mode. By default all functions use GPIB board 1;
+pass <code class="docutils literal notranslate"><span class="pre">gpib_channel=0</span></code> if the Keithley shares the AFM GPIB bus.</p>
+<section id="smucheck">
+<h2>SMUCheck<a class="headerlink" href="#smucheck" title="Link to this heading">¶</a></h2>
+<p>Verifies communication with the Keithley SMU.</p>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>gpib_Channel: variable <em>(optional)</em></dt><dd><p>GPIB board number; defaults to 1</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="smuopen">
+<h2>SMUOpen<a class="headerlink" href="#smuopen" title="Link to this heading">¶</a></h2>
+<p>Opens the VISA session to the Keithley SMU.</p>
+<section id="id1">
+<h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>gpib_Channel: variable <em>(optional)</em></dt><dd><p>GPIB board number; defaults to 1</p>
+</dd>
+<dt>gpib_address: variable <em>(optional)</em></dt><dd><p>GPIB device address</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="smumode">
+<h2>SMUMode<a class="headerlink" href="#smumode" title="Link to this heading">¶</a></h2>
+<p>Sets the SMU operating mode (voltage source or current source).</p>
+<section id="id2">
+<h3>Parameters<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>mode: variable <em>(optional)</em></dt><dd><p>0 = voltage source, 1 = current source</p>
+</dd>
+<dt>gpib_Channel: variable <em>(optional)</em></dt><dd><p>GPIB board number</p>
+</dd>
+<dt>gpib_address: variable <em>(optional)</em></dt><dd><p>GPIB device address</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="smuoectsetup">
+<h2>SMUOECTSetup<a class="headerlink" href="#smuoectsetup" title="Link to this heading">¶</a></h2>
+<p>Configures the SMU for OECT (organic electrochemical transistor) measurements.</p>
+<section id="id3">
+<h3>Parameters<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>gpib_Channel: variable <em>(optional)</em></dt><dd><p>GPIB board number</p>
+</dd>
+<dt>voltage: variable <em>(optional)</em></dt><dd><p>Gate voltage in volts</p>
+</dd>
+<dt>currentcomp: variable <em>(optional)</em></dt><dd><p>Current compliance in amperes</p>
+</dd>
+<dt>gpib_address: variable <em>(optional)</em></dt><dd><p>GPIB device address</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="smuclear">
+<h2>SMUClear<a class="headerlink" href="#smuclear" title="Link to this heading">¶</a></h2>
+<p>Sends a device-clear command to the Keithley.</p>
+<section id="id4">
+<h3>Parameters<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>gpib_Channel: variable <em>(optional)</em></dt><dd><p>GPIB board number</p>
+</dd>
+<dt>gpib_address: variable <em>(optional)</em></dt><dd><p>GPIB device address</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="smuread">
+<h2>SMURead<a class="headerlink" href="#smuread" title="Link to this heading">¶</a></h2>
+<p>Reads the current measurement from the Keithley.</p>
+<section id="id5">
+<h3>Parameters<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>gpib_Channel: variable <em>(optional)</em></dt><dd><p>GPIB board number</p>
+</dd>
+<dt>gpib_address: variable <em>(optional)</em></dt><dd><p>GPIB device address</p>
+</dd>
+</dl>
+</section>
+<section id="return">
+<h3>Return<a class="headerlink" href="#return" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>current</dt><dd><p>Measured current in amperes</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="smuiv">
+<h2>SMUIV<a class="headerlink" href="#smuiv" title="Link to this heading">¶</a></h2>
+<p>Sweeps drain voltage and records drain current vs. gate voltage (I-V curve).</p>
+<section id="id6">
+<h3>Parameters<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>voltstart: variable</dt><dd><p>Starting drain voltage in volts</p>
+</dd>
+<dt>voltstop: variable</dt><dd><p>Ending drain voltage in volts</p>
+</dd>
+<dt>Vds: variable</dt><dd><p>Fixed drain-source bias during gate sweep</p>
+</dd>
+<dt>steps: variable</dt><dd><p>Number of voltage steps</p>
+</dd>
+<dt>delay: variable <em>(optional)</em></dt><dd><p>Settling delay in seconds between steps</p>
+</dd>
+<dt>gpib_address: variable <em>(optional)</em></dt><dd><p>GPIB device address</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="smujv">
+<h2>SMUJV<a class="headerlink" href="#smujv" title="Link to this heading">¶</a></h2>
+<p>Sweeps a single voltage rail and records the resulting J-V curve.</p>
+<section id="id7">
+<h3>Parameters<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>voltstart: variable</dt><dd><p>Starting voltage in volts</p>
+</dd>
+<dt>voltstop: variable</dt><dd><p>Ending voltage in volts</p>
+</dd>
+<dt>steps: variable</dt><dd><p>Number of voltage steps</p>
+</dd>
+<dt>delay: variable <em>(optional)</em></dt><dd><p>Settling delay in seconds between steps</p>
+</dd>
+<dt>currentcomp: variable <em>(optional)</em></dt><dd><p>Current compliance in amperes</p>
+</dd>
+<dt>gpib_address: variable <em>(optional)</em></dt><dd><p>GPIB device address</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="smuvolt">
+<h2>SMUVolt<a class="headerlink" href="#smuvolt" title="Link to this heading">¶</a></h2>
+<p>Sets the SMU output to a specified DC voltage.</p>
+<section id="id8">
+<h3>Parameters<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>voltage: variable</dt><dd><p>Output voltage in volts</p>
+</dd>
+<dt>currentcomp: variable <em>(optional)</em></dt><dd><p>Current compliance in amperes</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="smuoff">
+<h2>SMUOff<a class="headerlink" href="#smuoff" title="Link to this heading">¶</a></h2>
+<p>Turns off the SMU output.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="utilityfunctions.html" class="btn btn-neutral float-left" title="UtilityFunctions.ipf" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="forcemapsmu.html" class="btn btn-neutral float-right" title="ForceMapSMU.ipf" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Ginger Lab.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

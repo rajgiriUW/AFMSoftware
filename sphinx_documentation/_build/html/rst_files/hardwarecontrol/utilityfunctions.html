@@ -1,129 +1,91 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>UtilityFunctions.ipf &mdash; AFM Igor Code  documentation</title>
-  
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
 
   
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-
-  
-  
-  
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
-    
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="trEFMInit.ipf" href="../panelsetup/trefminit.html" />
+    <link rel="next" title="KeithleySMU.ipf" href="keithleysmu.html" />
     <link rel="prev" title="GMode_Triggers.ipf" href="gmode_triggers.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> AFM Igor Code
           
-
-          
+          <a href="../../index.html" class="icon icon-home">
+            AFM Igor Code
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">User Guides:</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guides:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../userguides/trefm_fftrefm_guide.html">trEFM and FF-trEFM Experimental Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../userguides/trefm_setup_guide.html">trEFM Igor Setup Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../userguides/panels_guide.html">Panel Guide</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Calibration:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Calibration:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../calibration/voltagescan.html">VoltageScan.ipf</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../calibration/calcurve.html">CalCurve.ipf</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../calibration/forcecalibration.html">ForceCalibration.ipf</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../calibration/eleccal.html">ElecCal.ipf</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Nonlocal Photocurrent:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Nonlocal Photocurrent:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../nlpc/nlpc_panel.html">NLPC_Panel.ipf</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../nlpc/nplc_scan.html">NPLC_Scan.ipf</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../nlpc/nplc_utils.html">NPLC_Utils.ipf</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Imaging:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Imaging:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../imaging/gmodeimaging.html">GModeImaging.ipf</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../imaging/imagescan.html">ImageScan.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/imagescan_fftrefm.html">ImageScan_FFtrEFM.ipf</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../imaging/skpm.html">SKPM.ipf</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../imaging/skpmgainspanel.html">SKPMGainsPanel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imaging/skpm_am.html">SKPM_AM.ipf</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Point Scan:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Point Scan:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../pointscan/gmodepointscan.html">GmodePointScan.ipf</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pointscan/pointscan.html">PointScan.ipf</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Photoluminescence</span></p>
+<p class="caption" role="heading"><span class="caption-text">Photoluminescence</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../pl/pl.html">PL.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pl/pl_interleave.html">PL_interleave.ipf</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Misc.</span></p>
+<p class="caption" role="heading"><span class="caption-text">Misc.</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../misc/useranalysis.html">UserAnalysis.ipf</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../misc/redoanalysis.html">ReDoAnalysis.ipf</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Hardware Control:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Hardware Control:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="common.html">Common.ipf</a></li>
 <li class="toctree-l1"><a class="reference internal" href="drivewaveeditor.html">DriveWaveEditor.ipf</a></li>
 <li class="toctree-l1"><a class="reference internal" href="wavegenerator.html">WaveGenerator.ipf</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gpib.html">GPIB.ipf</a></li>
@@ -187,88 +149,66 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="keithleysmu.html">KeithleySMU.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="forcemapsmu.html">ForceMapSMU.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pythonsupport.html">PythonSupport.ipf</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Panel Setup:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Panel Setup:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../panelsetup/trefminit.html">trEFMInit.ipf</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../panelsetup/trefmpanel.html">trEFMPanel.ipf</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../panelsetup/transferfuncpanel.html">transferfuncpanel.ipf</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">IM-SKPM:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../imskpm/imskpm_am.html">IMSKPM_AM.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imskpm/imskpm_fm.html">IMSKPM_FM.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imskpm/imskpm_forcepanel.html">IMSKPM_ForcePanelSpoofMethod.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imskpm/imskpm_panel.html">IMSKPM_Panel.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imskpm/imskpm_panel_old.html">IMSKPM_Panel_Old.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imskpm/imskpm_oldfunctions.html">IMSKPM_oldfunctions.ipf</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Heterodyne (Moku):</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../heterodyne/moku_het.html">Moku_Het.ipf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../heterodyne/moku_skpm.html">Moku_SKPM.ipf</a></li>
+</ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../index.html">AFM Igor Code</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-      <li>UtilityFunctions.ipf</li>
-    
-    
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">UtilityFunctions.ipf</li>
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="../../_sources/rst_files/hardwarecontrol/utilityfunctions.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="utilityfunctions-ipf">
-<h1>UtilityFunctions.ipf<a class="headerlink" href="#utilityfunctions-ipf" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="resetall">
-<h2>ResetAll<a class="headerlink" href="#resetall" title="Permalink to this headline">¶</a></h2>
+             
+  <section id="utilityfunctions-ipf">
+<h1>UtilityFunctions.ipf<a class="headerlink" href="#utilityfunctions-ipf" title="Link to this heading">¶</a></h1>
+<section id="resetall">
+<h2>ResetAll<a class="headerlink" href="#resetall" title="Link to this heading">¶</a></h2>
 <p>This function stops any feedback loops, wave banks, and resets all outputs to ground.</p>
-</div>
-<div class="section" id="setcrosspoint">
-<h2>SetCrossPoint<a class="headerlink" href="#setcrosspoint" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="setcrosspoint">
+<h2>SetCrossPoint<a class="headerlink" href="#setcrosspoint" title="Link to this heading">¶</a></h2>
 <p>Function takes the required input settings and writes the appropriate string and wave. Then it uses the Asylum functions to write them to the crosspoint switch. Typical outputs: OutC = trigger, OutA = light, OutB = voltage. Note that if you connect the trigger to the output you should connect the light straight to ARC.</p>
-<div class="section" id="parameters">
-<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h3>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>InA: string</dt><dd><p>description</p>
 </dd>
@@ -303,17 +243,17 @@
 <dt>Shake: string</dt><dd><p>description</p>
 </dd>
 </dl>
-</div>
-</div>
-<div class="section" id="setpassfilter">
-<h2>SetPassFilter<a class="headerlink" href="#setpassfilter" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="setpassfilter">
+<h2>SetPassFilter<a class="headerlink" href="#setpassfilter" title="Link to this heading">¶</a></h2>
 <p>Function sets the pass filter cutoff frequency on the input LPF to Asylum’s ADC
 The SetorReset parameter is 0 or 1, SetorReset==0 ignores ALL optional parms and resets to the globally stored values
 SetorReset==1 will set the Pass Filter for all optional parameters and leave unnamed channels alone
 EX: glSetPassFilter(0)  - will reset all pass filters to their stored values
 glSetPassFilter(1,a=2000,i=20000) - will set the a%PassFilter and i%PassFilter to the specified values and leave all other filters alone.</p>
-<div class="section" id="id1">
-<h3>Parameters<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<section id="id1">
+<h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>SetorReset: variable</dt><dd><p>description</p>
 </dd>
@@ -338,13 +278,13 @@ glSetPassFilter(1,a=2000,i=20000) - will set the a%PassFilter and i%PassFilter t
 <dt>q1: variable <em>(optional)</em></dt><dd><p>description</p>
 </dd>
 </dl>
-</div>
-</div>
-<div class="section" id="setfeedbackloop">
-<h2>SetFeedbackLoop<a class="headerlink" href="#setfeedbackloop" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="setfeedbackloop">
+<h2>SetFeedbackLoop<a class="headerlink" href="#setfeedbackloop" title="Link to this heading">¶</a></h2>
 <p>Sets up a PIDS feedback loop. This function will set changeWhat to the setpoint by adjusting the value of maintainWhat. The user also must select the gain settings to be used by the PID.</p>
-<div class="section" id="id2">
-<h3>Parameters<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<section id="id2">
+<h3>Parameters<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>whichLoop: variable</dt><dd><p>description</p>
 </dd>
@@ -365,20 +305,20 @@ glSetPassFilter(1,a=2000,i=20000) - will set the a%PassFilter and i%PassFilter t
 <dt>dgain: variable</dt><dd><p>description</p>
 </dd>
 </dl>
-</div>
-<div class="section" id="return">
-<h3>Return<a class="headerlink" href="#return" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="return">
+<h3>Return<a class="headerlink" href="#return" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>error</dt><dd><p>description</p>
 </dd>
 </dl>
-</div>
-</div>
-<div class="section" id="setfeedbackloopcypher">
-<h2>SetFeedbackLoopCypher<a class="headerlink" href="#setfeedbackloopcypher" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="setfeedbackloopcypher">
+<h2>SetFeedbackLoopCypher<a class="headerlink" href="#setfeedbackloopcypher" title="Link to this heading">¶</a></h2>
 <p>Sets up a PIDS feedback loop. This function will set changeWhat to the setpoint by adjusting the value of maintainWhat. The user also must select the gain settings to be used by the PID.</p>
-<div class="section" id="id3">
-<h3>Parameters<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<section id="id3">
+<h3>Parameters<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>whichLoop: variable</dt><dd><p>description</p>
 </dd>
@@ -399,60 +339,60 @@ glSetPassFilter(1,a=2000,i=20000) - will set the a%PassFilter and i%PassFilter t
 <dt>dgain: variable</dt><dd><p>description</p>
 </dd>
 </dl>
-</div>
-<div class="section" id="id4">
-<h3>Return<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="id4">
+<h3>Return<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>error</dt><dd><p>description</p>
 </dd>
 </dl>
-</div>
-</div>
-<div class="section" id="stopfeedbackloop">
-<h2>StopFeedbackLoop<a class="headerlink" href="#stopfeedbackloop" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="stopfeedbackloop">
+<h2>StopFeedbackLoop<a class="headerlink" href="#stopfeedbackloop" title="Link to this heading">¶</a></h2>
 <p>Given an integer number corresponding to one of the 5 feedback loops, this function stops the specified feedback loop.</p>
-<div class="section" id="id5">
-<h3>Parameters<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<section id="id5">
+<h3>Parameters<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>whichLoop: variable</dt><dd><p>description</p>
 </dd>
 </dl>
-</div>
-<div class="section" id="id6">
-<h3>Return<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="id6">
+<h3>Return<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>error</dt><dd><p>description</p>
 </dd>
 </dl>
-</div>
-</div>
-<div class="section" id="stopfeedbackloopcypher">
-<h2>StopFeedbackLoopCypher<a class="headerlink" href="#stopfeedbackloopcypher" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="stopfeedbackloopcypher">
+<h2>StopFeedbackLoopCypher<a class="headerlink" href="#stopfeedbackloopcypher" title="Link to this heading">¶</a></h2>
 <p>Given an integer number corresponding to one of the 5 feedback loops, this function stops the specified feedback loop.</p>
-<div class="section" id="id7">
-<h3>Parameters<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<section id="id7">
+<h3>Parameters<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>whichLoop: variable</dt><dd><p>description</p>
 </dd>
 </dl>
-</div>
-<div class="section" id="id8">
-<h3>Return<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="id8">
+<h3>Return<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>error</dt><dd><p>description</p>
 </dd>
 </dl>
-</div>
-</div>
-<div class="section" id="readposition">
-<h2>ReadPosition<a class="headerlink" href="#readposition" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="readposition">
+<h2>ReadPosition<a class="headerlink" href="#readposition" title="Link to this heading">¶</a></h2>
 <p>Prints the current X, Y, and Z position to the console</p>
-</div>
-<div class="section" id="movexyz">
-<h2>MoveXYZ<a class="headerlink" href="#movexyz" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="movexyz">
+<h2>MoveXYZ<a class="headerlink" href="#movexyz" title="Link to this heading">¶</a></h2>
 <p>a function that moves the xy stage to the desired position (given in microns)</p>
-<div class="section" id="id9">
-<h3>Parameters<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<section id="id9">
+<h3>Parameters<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>Xposition: variable</dt><dd><p>description</p>
 </dd>
@@ -461,51 +401,51 @@ glSetPassFilter(1,a=2000,i=20000) - will set the a%PassFilter and i%PassFilter t
 <dt>Zposition: variable</dt><dd><p>description</p>
 </dd>
 </dl>
-</div>
-</div>
-<div class="section" id="movexy">
-<h2>MoveXY<a class="headerlink" href="#movexy" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="movexy">
+<h2>MoveXY<a class="headerlink" href="#movexy" title="Link to this heading">¶</a></h2>
 <p>Moves to the X,Y position while keeping the tip withdrawn away from the surface.</p>
-<div class="section" id="id10">
-<h3>Parameters<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
+<section id="id10">
+<h3>Parameters<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>xpos: variable</dt><dd><p>description</p>
 </dd>
 <dt>ypos: variable</dt><dd><p>description</p>
 </dd>
 </dl>
-</div>
-</div>
-<div class="section" id="checkinwavetiming">
-<h2>CheckInWaveTiming<a class="headerlink" href="#checkinwavetiming" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="checkinwavetiming">
+<h2>CheckInWaveTiming<a class="headerlink" href="#checkinwavetiming" title="Link to this heading">¶</a></h2>
 <p>this function checks a specifiec data point in the named inWave and continues to run until that data point has a value. It is used to ensure that the function calling it runs until all required data has been collected. If whichDataPoint is specified then the function checks that, otherwise it checks the last data point
 NOTES: This fxn assumes the passed wave is currently set to NaN, whichDataPoint is the integer index to the data point you want to key on</p>
-<div class="section" id="id11">
-<h3>Parameters<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
+<section id="id11">
+<h3>Parameters<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>whichWave: wave</dt><dd><p>description</p>
 </dd>
 <dt>whichDataPoint: variable <em>(optional)</em></dt><dd><p>description</p>
 </dd>
 </dl>
-</div>
-</div>
-<div class="section" id="lightonoff">
-<h2>LightOnOff<a class="headerlink" href="#lightonoff" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="lightonoff">
+<h2>LightOnOff<a class="headerlink" href="#lightonoff" title="Link to this heading">¶</a></h2>
 <p>turns the LED on or off (1 or 0).</p>
-<div class="section" id="id12">
-<h3>Parameters<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
+<section id="id12">
+<h3>Parameters<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>onoff: variable</dt><dd><p>description</p>
 </dd>
 </dl>
-</div>
-</div>
-<div class="section" id="wavegenerator">
-<h2>wavegenerator<a class="headerlink" href="#wavegenerator" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="wavegenerator">
+<h2>wavegenerator<a class="headerlink" href="#wavegenerator" title="Link to this heading">¶</a></h2>
 <p>function description</p>
-<div class="section" id="id13">
-<h3>Parameters<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
+<section id="id13">
+<h3>Parameters<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>amplitude: variable</dt><dd><p>description</p>
 </dd>
@@ -518,13 +458,13 @@ NOTES: This fxn assumes the passed wave is currently set to NaN, whichDataPoint 
 <dt>bank: variable</dt><dd><p>description</p>
 </dd>
 </dl>
-</div>
-</div>
-<div class="section" id="wavegeneratoroffset">
-<h2>wavegeneratoroffset<a class="headerlink" href="#wavegeneratoroffset" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="wavegeneratoroffset">
+<h2>wavegeneratoroffset<a class="headerlink" href="#wavegeneratoroffset" title="Link to this heading">¶</a></h2>
 <p>function description</p>
-<div class="section" id="id14">
-<h3>Parameters<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
+<section id="id14">
+<h3>Parameters<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>amplitude: variable</dt><dd><p>description</p>
 </dd>
@@ -537,64 +477,39 @@ NOTES: This fxn assumes the passed wave is currently set to NaN, whichDataPoint 
 <dt>bank: variable</dt><dd><p>description</p>
 </dd>
 </dl>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="../panelsetup/trefminit.html" class="btn btn-neutral float-right" title="trEFMInit.ipf" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="gmode_triggers.html" class="btn btn-neutral float-left" title="GMode_Triggers.ipf" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="gmode_triggers.html" class="btn btn-neutral float-left" title="GMode_Triggers.ipf" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="keithleysmu.html" class="btn btn-neutral float-right" title="KeithleySMU.ipf" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        
-        &copy; Copyright 2020, Ginger Lab
-
-    </p>
+    <p>&#169; Copyright 2020, Ginger Lab.</p>
   </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>
