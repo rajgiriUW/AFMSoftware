@@ -218,6 +218,7 @@ Function trEFMInit()
 	Variable/G SMUVoltage = 0
 	Variable/G SMUCurrentComp = 0.05 // A
 	Variable/G SaveKeithley = 0
+	Variable/G VorI = 1 // 1 = default to current sourcing
 
 	// IM-SKPM variables
 	Variable/G numavg = 0 

@@ -1715,10 +1715,12 @@ Window SKPMPanel() : Panel
 	SetVariable CPDVMin1,limits={0,10,0},value= root:packages:trEFM:PointScan:SKPM:CPDVmax
 	CheckBox SaveKeithley,pos={153,207},size={120,14},title="Save Keithley Current"
 	CheckBox SaveKeithley,variable= root:packages:trEFM:PointScan:SKPM:SaveKeithley
-	SetVariable SMUVoltage,pos={152,225},size={91,16},title="SMU Voltage"
+	SetVariable SMUVoltage,pos={152,225},size={118,16},title="SMU Source"
 	SetVariable SMUVoltage,limits={-22,22,0},value= root:packages:trEFM:PointScan:SKPM:SMUVoltage
-	SetVariable SMUCurrentLimit,pos={251,225},size={189,16},title="SMU Current Compliance (A)"
-	SetVariable SMUCurrentLimit,limits={0,1,0},value= root:packages:trEFM:PointScan:SKPM:SMUCurrentComp
+	SetVariable SMUCurrentLimit,pos={287,225},size={153,16},title="SMU Compliance"
+	SetVariable SMUCurrentLimit,limits={0,30,0},value= root:packages:trEFM:PointScan:SKPM:SMUCurrentComp
+	CheckBox KeithleyVorI,pos={279,207},size={170,14},title="Vsource (unchecked) or Isource"
+	CheckBox KeithleyVorI,variable= root:packages:trEFM:PointScan:SKPM:VorI
 	ToolsGrid snap=1,visible=1
 EndMacro
 
