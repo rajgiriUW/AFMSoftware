@@ -1697,13 +1697,13 @@ Window SKPMPanel() : Panel
 	SetVariable setvar9,limits={-inf,inf,0},value= root:packages:trEFM:gWGDeviceAddress2
 	CheckBox singleline,pos={288,9},size={142,14},proc=UseLineNumforVoltage,title="Change Voltage Mid-Scan"
 	CheckBox singleline,variable= root:packages:trEFM:PointScan:SKPM:UseLineNumforVoltage
-	SetVariable setvar03,pos={296,27},size={136,16},title="Line # for Voltage"
+	SetVariable setvar03,pos={296,27},size={136,16},title="Line # for V or I 1"
 	SetVariable setvar03,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:LineNumforVoltage
-	SetVariable setvar04,pos={296,47},size={136,16},title="Voltage 1"
+	SetVariable setvar04,pos={296,47},size={136,16},title="Source Value 1"
 	SetVariable setvar04,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:VoltageatLine
-	SetVariable setvar05,pos={296,72},size={136,16},title="Line # for Voltage 2 "
+	SetVariable setvar05,pos={296,72},size={136,16},title="Line # for V or I 2 "
 	SetVariable setvar05,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:LineNumforVoltage2
-	SetVariable setvar06,pos={296,92},size={136,16},title="Voltage 1"
+	SetVariable setvar06,pos={296,92},size={136,16},title="Source Value 2"
 	SetVariable setvar06,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:VoltageatLine2
 	Button button3,pos={332,115},size={100,20},proc=PSON_button,title="Turn on PS"
 	Button button4,pos={332,142},size={100,20},proc=PSOff_button,title="Turn off PS"

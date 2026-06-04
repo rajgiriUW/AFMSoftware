@@ -69,6 +69,7 @@ Function trEFMInit()
 	Variable/G RingDownVoltage
 	Variable/G LightOn
 	String/G LockinString = "ARC.Lockin.0."
+	String/G LockinString2 = "ARC.Lockin.1."
 	String/G ImageFunctionString
 
 	// cut drive variables

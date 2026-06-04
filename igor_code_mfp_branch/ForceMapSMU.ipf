@@ -53,7 +53,7 @@ function FMapSMU2(voltage)
 	
 	SetDataFolder root:packages:trEFM:ImageScan
 
-	SMUSetup(voltage=voltage)
+	SMUSetup(sourceval=voltage)
 	SMURead()
 	
 	Wave DataValues = root:packages:trEFM:ImageScan:DataValues
@@ -90,7 +90,7 @@ function FMapSMU(voltage)
 	variable new_xsetpoint
 	variable new_ysetpoint
 	
-	SMUSetup(voltage=voltage)
+	SMUSetup(sourceval=voltage)
 	SMURead()
 	
 	Wave DataValues = root:packages:trEFM:ImageScan:DataValues

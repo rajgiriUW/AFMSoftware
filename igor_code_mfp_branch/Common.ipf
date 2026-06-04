@@ -708,7 +708,7 @@ Function LiftTo(liftHeight,tipVoltage,[lighton, verbose])
 	td_WV(LockinString + "PhaseOffset", calphaseoffset)
 	SetFeedbackLoop(2, "Always", LockinString +"R", setpoint, -pgain, -igain, -sgain, "Output.Z", 0)
 	
-	Sleep/s 1
+	Sleep/s 0.25
 	variable startZ, stopZ
 	if (verbose != 0)
 		startZ = readZ()
@@ -719,7 +719,7 @@ Function LiftTo(liftHeight,tipVoltage,[lighton, verbose])
 	StopFeedbackLoop(2)
 	SetFeedbackLoop(3, "always",  "ZSensor", (z1 - liftHeight * 1e-9) / GV("ZLVDTSens"), 0,  EFMFilters[%ZHeight][%IGain], 0, "Output.Z", 0)
 
-	Sleep/s 1
+	Sleep/s 0.25
 
 	if (verbose != 0)
 		stopZ = readZ()
