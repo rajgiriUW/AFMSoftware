@@ -1,11 +1,28 @@
 #pragma rtGlobals=3		// Use modern global access method and strict wave access.
 
+// Sets ETune variables
+function setETune(EAmp, EFreq, EPhase, EOffset)
+	variable EAmp, EFreq, EOffset, EPhase
+	
+	variable error = 0 
+	error += td_WriteValue("DDSAmplitude0",EAmp)	
+	error += td_WriteValue("DDSFrequency0",EFreq)	
+	error += td_WriteValue("DDSPhaseOffset0",EPhase)
+	error += td_WriteValue("DDSDCOffset0", EOffset)
+	
+	if (error > 0)
+		print "Error in ETune " + num2str(error)
+	endif
+	
+end
+
+
 // Moku-based AM-SKPM, to test out the coding functionality
-function MokuPS_AM(xpos, ypos, liftheight, [interpolation])
+function MokuPS(xpos, ypos, liftheight, [interpolation])
 // Moku hookups <---> ARC
 // Input 1 <--> Defl
 // Input 2 <--> BNCOut2 (DDS)
-// Output 1 <--> BNCIn2 (I, in-phase)
+// Output 1 <--> BNCIn2 (I, in-phase, this also works fine)
 // Output 2 <--> BNCIn1 (Q, quadrature, the signal we want)
 	variable xpos, ypos, liftheight, interpolation
 
@@ -68,16 +85,15 @@ function MokuPS_AM(xpos, ypos, liftheight, [interpolation])
 	LiftTo(liftheight, 0, verbose=1)
 
 	// Set up for AM-SKPM point scan
-	SetCrosspoint ("Ground","BNCIn1","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutA","OutB","DDS","Ground","DDS","Ground")
-	td_WriteValue("DDSAmplitude0",EAmp)	
-	td_WriteValue("DDSFrequency0",EFreq)	
-	td_WriteValue("DDSPhaseOffset0",EPhase)
-	td_WriteValue("DDSDCOffset0", EOffset)
+	SetCrosspoint ("Ground","BNCIn2","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutA","OutB","DDS","Ground","DDS","Ground")
+//	SetCrosspoint ("Ground","BNCIn1","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutA","OutB","DDS","Ground","Ground","DDS")
+
+	SetEtune(Eamp, EFreq, EPhase, EOffset)
 
 	error += td_xsetinwave(0, "Event.2, Always", "DDSDCOffset0", CPDvsTime, "", interpolation)
 	print error
 	
-	SetFeedbackLoop(4, "Always",  "Input.B", 0, 0,  1000, 0, "DDSDCOffset0", 0)   // InputQ = $Lockin.0.Q , quadrature lockin output 
+	SetFeedbackLoop(4, "Always",  "Input.B", 0, 0,  300, 0, "DDSDCOffset0", 0)   // InputQ = $Lockin.0.Q , quadrature lockin output 
 //	SetFeedbackLoop(5, "Always",  "Potential", td_rv("Potential"), 1,  0, 0, "Output.B", 0)   // InputQ = $Lockin.0.Q , quadrature lockin output 
 
 	variable startTime = StopMSTimer(-2)
@@ -93,10 +109,10 @@ function MokuPS_AM(xpos, ypos, liftheight, [interpolation])
 
 //	doscanfunc("StopEngage")
 	Beep	
-	
+	Display CPDvsTime
 end
 
-// Stub for conventional FM Point Scan
+// Stub for conventional FM Point Scan using LIA in place of SRS 830
 function MokuPSFM(xpos, ypos, liftheight, [interpolation])
 // Moku hookups <---> ARC
 // Input 1 <--> Defl
