@@ -700,6 +700,8 @@ Function LiftTo(liftHeight,tipVoltage,[lighton, verbose])
 	NVAR calengagefreq = root:packages:trEFM:VoltageScan:calengagefreq
 	NVAR calhardd = root:packages:trEFM:VoltageScan:calhardd
 	
+	StopFeedbackLoop(3) // to let you re-run 
+
 	SetCrosspoint("FilterOut", "Ground", "ACDefl", "Ground", "Ground", "Ground", "Off", "Off", "Off", "Defl", "Ground", "OutA", "OutB", "Ground", "OutB", "DDS")
 
 	// Find surface

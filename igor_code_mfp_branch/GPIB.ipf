@@ -19,7 +19,14 @@ Function InitBoardAndDeviceLIAAWG()
 	variable V_flag
 	// These variables are useful for NI-488.2 calls using the NI4882 command.
 	Variable/G gHasGPIB, gBoardAddress, gLIADeviceAddress, gWGDeviceAddress, gWGDeviceAddress2
-	
+	String/G AWGresource
+
+
+
+	// Hannah Contreras, Can uncomment the below if the above is throwing errors
+	AWGResource = "USB0::0x0957::0x1507::MY48001184::INSTR" 
+//	AWGresource = "USB0::0x0957::0x2907::MY52500433::0::INSTR"  
+
 	// These variables are useful for pre-NI-488.2 keywords and for the
 	// GPIB board and GPIB device calls.
 	Variable/G gBoardUnitDescriptor, gLIADeviceUnitDescriptor, gWGDeviceUnitDescriptor

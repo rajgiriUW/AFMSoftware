@@ -340,7 +340,7 @@ Function ImageScanAMSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines,
 //	SetFeedbackLoop(4, "Always", "Input.B", 0, KPPgain, KPIgain, KPDGain, "Output.B", 0)	
 	SetFeedbackLoop(3, "Always",  "ZSensor", ReadWaveZ[scanpoints-1] - liftheight * 1e-9 / GV("ZLVDTSens"), 0, EFMFilters[%ZHeight][%IGain],0, "Output.Z",0)
 	
-	Sleep/S 0.2
+	Sleep/S 0.1
 	//stop all FBLoops again now that they have been initialized
 	StopFeedbackLoop(3)
 	StopFeedbackLoop(4)
@@ -394,7 +394,7 @@ Function ImageScanAMSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines,
 	
 	SetFeedbackLoop(2, "Always", "Amplitude", Setpoint, -PGain, -IGain, -SGain, "Height", 0)	
 	
-	Sleep/S 1.5
+	Sleep/S 0.1
 	
 	//******************  FFFFFFFFFFFFFFFFFFFFFF *******************************//
 	//*********************************************************************//
@@ -545,7 +545,7 @@ Function ImageScanAMSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines,
 		
 //		SetFeedbackLoop(4, "always",  "Input.B", 0, KPPGain, KPIGain, KPDGain, "Output.B", 0) 
 //		SetFeedbackLoop(4, "always",  "Input.B", 0, EFMFilters[%KP][%PGain], EFMFilters[%KP][%IGain], EFMFilters[%KP][%DGain], "Output.B", 0) 
-		sleep/S 1/4
+		sleep/S 0.1
 				
 		//Fire retrace event here
 		error += td_WriteString("Event.2", "Once")
