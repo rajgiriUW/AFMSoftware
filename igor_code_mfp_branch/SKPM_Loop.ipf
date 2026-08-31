@@ -41,7 +41,7 @@ function FMSKPM_Loop(loops, [delx, dely])
 		gxpos = gxpos - delx
 		gypos = gypos - dely		
 		
-		//SKPMImageScanButton("")
+		SKPMImageScanButton("")
 		
 		if (i < 10)
 			numstring = "000"
@@ -60,7 +60,6 @@ function FMSKPM_Loop(loops, [delx, dely])
 		
 		savename = name + numstring + num2str(i) + "_current.txt"
 		if (SaveKeithley == 1)
-			savename = name + "_currents.txt"
 			Save/J/O/P=FMPath/M="\r\n"/W SMUCurrents as savename
 		endif
 		
@@ -103,7 +102,7 @@ Function SaveFMLoop(name)
 	//Test function to save multiple layer waves as a single 3D AR Image wave.	
 	//these are the lines I used to test this opit	
 
-	DataTypeList = "HeightTrace;CPDReTrace"
+	DataTypeList = "HeightTrace;UserIn0ReTrace"
 	ImageWave[][][0] = Topography[p][q]
 	ImageWave[][][1] = CPDImage[p][q]
 			
