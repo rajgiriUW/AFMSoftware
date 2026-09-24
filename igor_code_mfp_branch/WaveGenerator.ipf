@@ -51,7 +51,9 @@ Function LoadTauWave(num, [amp])
 	
 	Variable defaultRM, instr
 	String resourceName = "USB0::0x0957::0x2907::MY52500433::0::INSTR"
-	
+	SVAR AWGResource = root:packages:trEFM:AWGResource
+	resourceName = AWGResource
+		
 	viOpenDefaultRM(defaultRM)
 	viOpen(defaultRM, resourceName, 0, 0, instr)
 	
@@ -167,7 +169,9 @@ Function LoadChirpWave(filename, [offset, amplitude, sampling_rate])
 
 	Variable defaultRM, instr
 	String resourceName = "USB0::0x0957::0x2907::MY52500433::0::INSTR"
-	
+	SVAR AWGResource = root:packages:trEFM:AWGResource
+	resourceName = AWGResource
+		
 	viOpenDefaultRM(defaultRM)
 	viOpen(defaultRM, resourceName, 0, 0, instr)
 	
@@ -202,7 +206,9 @@ Function LoadPulseWave(freq, amp, pulsewidth, offset)
 	Variable freq, amp, pulsewidth, offset
 	Variable defaultRM, instr
 	String resourceName = "USB0::0x0957::0x2907::MY52500433::0::INSTR"
-	
+	SVAR AWGResource = root:packages:trEFM:AWGResource
+	resourceName = AWGResource
+		
 	viOpenDefaultRM(defaultRM)
 	viOpen(defaultRM, resourceName, 0, 0, instr)
 	
@@ -229,7 +235,9 @@ Function PhaseShift(degrees)
 	variable degrees
 	Variable defaultRM, instr
 	String resourceName = "USB0::0x0957::0x2907::MY52500433::0::INSTR"
-	
+	SVAR AWGResource = root:packages:trEFM:AWGResource
+	resourceName = AWGResource
+		
 	viOpenDefaultRM(defaultRM)
 	viOpen(defaultRM, resourceName, 0, 0, instr)
 	VISAWrite instr, "BURS:STAT OFF\n"
@@ -250,7 +258,9 @@ function testawg() // scratchspace for quick testing
 
 	Variable defaultRM, instr
 	String resourceName = "USB0::0x0957::0x2907::MY52500433::0::INSTR"
-	
+	SVAR AWGResource = root:packages:trEFM:AWGResource
+	resourceName = AWGResource
+		
 	viOpenDefaultRM(defaultRM)
 	viOpen(defaultRM, resourceName, 0, 0, instr)
 	
@@ -276,7 +286,9 @@ Function LoadArbWave(freq, amp, offset, [polarity])
 		polarity = 0 
 	endif
 	String resourceName = "USB0::0x0957::0x2907::MY52500433::0::INSTR"
-	
+	SVAR AWGResource = root:packages:trEFM:AWGResource
+	resourceName = AWGResource
+		
 	viOpenDefaultRM(defaultRM)
 	viOpen(defaultRM, resourceName, 0, 0, instr)
 	
@@ -305,6 +317,8 @@ function TurnOffAWG()
 
 	Variable defaultRM, instr
 	String resourceName = "USB0::0x0957::0x2907::MY52500433::0::INSTR"
+	SVAR AWGResource = root:packages:trEFM:AWGResource
+	resourceName = AWGResource
 	
 	viOpenDefaultRM(defaultRM)
 	viOpen(defaultRM, resourceName, 0, 0, instr)
@@ -321,6 +335,8 @@ function TurnOnAWG()
 
 	Variable defaultRM, instr
 	String resourceName = "USB0::0x0957::0x2907::MY52500433::0::INSTR"
+	SVAR AWGResource = root:packages:trEFM:AWGResource
+	resourceName = AWGResource
 	
 	viOpenDefaultRM(defaultRM)
 	viOpen(defaultRM, resourceName, 0, 0, instr)
@@ -337,7 +353,9 @@ function clearAWGError()
 
 	Variable defaultRM, instr
 	String resourceName = "USB0::0x0957::0x2907::MY52500433::0::INSTR"
-	
+	SVAR AWGResource = root:packages:trEFM:AWGResource
+	resourceName = AWGResource
+		
 	viOpenDefaultRM(defaultRM)
 	viOpen(defaultRM, resourceName, 0, 0, instr)
 	VISAWrite instr, "SYSTem:ERRor?"
@@ -351,7 +369,9 @@ Function LoadTauBWave(num)
 	
 	Variable defaultRM, instr
 	String resourceName = "USB0::0x0957::0x2907::MY52500433::0::INSTR"
-	
+	SVAR AWGResource = root:packages:trEFM:AWGResource
+	resourceName = AWGResource
+		
 	viOpenDefaultRM(defaultRM)
 	viOpen(defaultRM, resourceName, 0, 0, instr)
 	
@@ -437,7 +457,9 @@ Function LoadChirpWaveMDB(filename, [offset, amplitude, sampling_rate, polarity,
 
 	Variable defaultRM, instr
 	String resourceName = "USB0::0x0957::0x2907::MY52500433::0::INSTR"
-	
+	SVAR AWGResource = root:packages:trEFM:AWGResource
+	resourceName = AWGResource
+		
 	viOpenDefaultRM(defaultRM)
 	viOpen(defaultRM, resourceName, 0, 0, instr)
 	
@@ -478,7 +500,9 @@ function delay_AWG(delay)
 	
 	Variable defaultRM, instr
 	String resourceName = "USB0::0x0957::0x2907::MY52500433::0::INSTR"
-	
+	SVAR AWGResource = root:packages:trEFM:AWGResource
+	resourceName = AWGResource
+		
 	viOpenDefaultRM(defaultRM)
 	viOpen(defaultRM, resourceName, 0, 0, instr)
 	

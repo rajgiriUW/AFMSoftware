@@ -64,29 +64,35 @@ function SMUMode([mode, gpib_Channel, gpib_address])
 	if (ParamIsDefault(mode))
 		mode = "VOLT"
 	endif
-    if (ParamIsDefault(gpib_address))
-    	gpib_address = 24
-    endif
-	
-    	Variable defaultRM, instr
+	If(ParamIsDefault(gpib_channel))
+     		gpib_channel = 1
+	endif
+	if (ParamIsDefault(gpib_address))
+    		gpib_address = 24
+	endif
+	Variable defaultRM, instr
+ 	Variable status
+ 	String VariableRead
+ 	
     	SMUOpen()
-    	Variable status
-	String variableRead 
 
     	status = viOpenDefaultRM(defaultRM)
 	String resourceName = "GPIB" + num2str(gpib_Channel) + "::" +num2str(gpib_address)+"::INSTR"
      	status = viOpen(defaultRM, resourceName, 0, 0, instr)
-    
-    	string modestr =  ":SOUR:FUNC:MODE " + mode
+
+    	string modestr =  ":SOUR:FUNC " + mode
      	VISAWrite instr, modestr// Select current source mode
       
 end
 
-function SMUOECTSetup([gpib_Channel, voltage, currentcomp, gpib_address])
+function SMUSetup([gpib_Channel, sourceval, complianceval, gpib_address, VorI])
 	// Setups up for default OECT Settings
 	// Note that readings of 9.91e37 are NaN
-	variable gpib_channel, voltage, currentcomp, gpib_address
+	variable gpib_channel, sourceval, complianceval, gpib_address
+	variable VorI // voltage or current, 0 = voltage (default) 1 = current 
 
+	string sourcestr // source string
+	string compliancestr //compliance string
 	SetDataFolder root:packages:trEFM:ImageScan
 	
 	if(ParamIsDefault(gpib_channel))
@@ -95,12 +101,27 @@ function SMUOECTSetup([gpib_Channel, voltage, currentcomp, gpib_address])
     if (ParamIsDefault(gpib_address))
     	gpib_address = 24
     endif
-	if(ParamIsDefault(voltage))
-		voltage = 0
+	if(ParamIsDefault(sourceval))
+		sourceval = 0
 	endif
-	
-	if(ParamIsDefault(currentcomp))
-		currentcomp = 50e-3
+	if(ParamIsDefault(complianceval))
+		complianceval = 50e-3
+	endif
+	if (ParamIsDefault(VorI))
+		VorI = 0
+	endif
+
+	// Change write string to match 
+	if (VorI == 0)
+		sourcestr = "VOLT"
+		compliancestr = "CURR"
+		SMUMode(mode="VOLT")
+		
+	elseif (VorI == 1)
+		sourcestr = "CURR"
+		compliancestr = "VOLT"
+		SMUMode(mode="CURR")
+		
 	endif
 	
 	Make/D/O/N=(3) dataValues // data buffer
@@ -117,13 +138,20 @@ function SMUOECTSetup([gpib_Channel, voltage, currentcomp, gpib_address])
 //	SMUMode() //Voltage Mode
 	VISAWrite instr, ":OUTP OFF"
 	
-	string voltagestr = ":SOUR:VOLT:LEV " + num2str(voltage)
-	string currentprot = ":SENS:CURR:PROT " + num2str(currentcomp)
-	string currentrng = ":SENS:CURR:RANG " + num2str(currentcomp)
+	//string voltagestr = ":SOUR:VOLT:LEV " + num2str(sourceval)
+	//string currentprot = ":SENS:CURR:PROT " + num2str(complianceval)
+	//string currentrng = ":SENS:CURR:RANG " + num2str(complianceval)
+
+	string voltagestr = ":SOUR:" + sourcestr + ":LEV " + num2str(sourceval)
+	string currentprot = ":SENS:" + compliancestr + ":PROT " + num2str(complianceval)
+	string currentrng = ":SENS:" + compliancestr + ":RANG " + num2str(complianceval)
+	string sensstr  = ":SENS:FUNC " + "'" + compliancestr + "'"
+	
+	
 	VISAWrite instr, voltagestr
-	VISAWrite instr, currentprot
-	VISAWrite instr, ":SENS:FUNC 'CURR'"
+	VISAWrite instr, sensstr
 	VISAWrite instr, currentrng
+	VISAWrite instr, currentprot
 	VISAWrite instr, ":FORM:ELEM VOLT, CURR, TIME" // Set to remove the resistance, and status
 	// Note time is in seconds since the last *RST was sent
 
@@ -197,6 +225,7 @@ function SMURead([gpib_Channel, gpib_address])
 
 end
 
+// For OECTs (3-terminal)
 function SMUIV(voltstart, voltstop, Vds, steps, [delay, gpib_address])
 	variable voltstart, voltstop, Vds, steps, delay, gpib_address
 	if (ParamIsDefault(delay))
@@ -205,7 +234,7 @@ function SMUIV(voltstart, voltstop, Vds, steps, [delay, gpib_address])
 	if (ParamIsDefault(gpib_address))
     		gpib_address = 24
 	endif
-	SMUOECTSetup(voltage=Vds, gpib_address=gpib_address)
+	SMUSetup(sourceval=Vds, gpib_address=gpib_address)
 	SetDataFOlder root:packages:trEFM:ImageScan
 	Make/O/N=(steps) voltages
 	Make/O/N=(steps) currents
@@ -229,6 +258,7 @@ function SMUIV(voltstart, voltstop, Vds, steps, [delay, gpib_address])
 
 end
 
+// For Solar Cells (2-terminal)
 function SMUJV(voltstart, voltstop, steps, [delay, currentcomp, gpib_address])
 // To match typical JV Curves upstairs that are from -2 to +1.2 V in 0.1 V increments
 // Use this command: 
@@ -247,7 +277,7 @@ function SMUJV(voltstart, voltstop, steps, [delay, currentcomp, gpib_address])
 	if (ParamIsDefault(gpib_address))
     		gpib_address = 24
 	endif
-	SMUOECTSetup(voltage=voltstart, currentcomp=currentcomp)
+	SMUSetup(sourceval=voltstart, complianceval=currentcomp)
 	SetDataFOlder root:packages:trEFM:ImageScan
 	Make/O/N=(steps) voltages
 	Make/O/N=(steps) currents

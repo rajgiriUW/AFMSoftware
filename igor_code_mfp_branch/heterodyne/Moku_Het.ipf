@@ -1,6 +1,6 @@
 #pragma rtGlobals=3		// Use modern global access method and strict wave access.
 
-function Moku_HK(xpos, ypos, liftheight, [wACvoltage, interpolation])
+function Moku_HK(xpos, ypos, liftheight, wACvoltage, [interpolation])
 // Heterodyne SKPM
 // Send frequency to AC wAC signal such wAC - w0 = w1
 // w0 = first resonance
@@ -87,7 +87,7 @@ function Moku_HK(xpos, ypos, liftheight, [wACvoltage, interpolation])
 //	SetFeedbackLoop(3, "always",  "ZSensor", (z1 - liftheight * 1e-9) / GV("ZLVDTSens"), 0, EFMFilters[%ZHeight][%IGain], 0, "Output.Z", 0)	
 
 	// Set up for FM-SKPM point scan
-	SetCrosspoint ("Ground","BNCIn1","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutA","OutB","Ground","BNCIn2","DDS")
+	SetCrosspoint ("Ground","BNCIn1","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutC","OutB","OutA","Ground","BNCIn2","DDS")
 
 	// Apply AC at w1 to the Chip
 //	loadarbwaveSiglent(secondmode + firstmode, wACvoltage, wACvoltage / 2)

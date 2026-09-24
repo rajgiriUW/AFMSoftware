@@ -15,6 +15,14 @@ Function ImageScanAMSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines,
 	variable/G freq_PGain
 	variable/G freq_IGain 
 	variable/G freq_DGain
+	
+	NVAR CPDVMin = CPDVMin
+	NVAR CPDVMax = CPDVMax
+	
+	NVAR SaveKeithley = SaveKeithley
+	NVAR SMUVoltage = SMUVoltage
+	NVAR SMUCurrentComp = SMUCurrentComp 
+	NVAR VorI = VorI // 0 = voltage source, 1 = current source
 
 	SetDataFolder root:Packages:trEFM:ImageScan:SKPM
 
@@ -105,6 +113,10 @@ Function ImageScanAMSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines,
 	
 	// save time trace
 	Make/O/N=(scanlines) ScanTimes = Nan
+	ScanTimes[0] = 0 // 0 s
+
+	// Save Keithley values
+	Make/O/N=(scanlines+1, 3) SMUCurrents = NaN
 	
 	variable SlowScanDelta
 	variable FastscanDelta
@@ -213,6 +225,17 @@ Function ImageScanAMSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines,
 	// vars that do change are initialized below
 	//***********************************************************************
 
+	if (SaveKeithley == 1)
+		SMUSetup(sourceval = SMUVoltage, complianceval = SMUCurrentComp, VorI = VorI)
+		Wave DataValues = root:packages:trEFM:ImageScan:dataValues
+		SMURead()
+		SMUCurrents[0][0] = 0 // 0 s
+		SMUCurrents[0][1] = DataValues[1] // current
+		SMUCurrents[0][2] = DataValues[0] // voltage
+		
+		SetDataFolder root:packages:trEFM:ImageScan:SKPM
+	endif
+	
 
 	Make/O/N=(scanpoints) CPDTrace, CPDTraceBefore
 	Variable pointsPerPixel = timeperpoint * samplerate * 1e-3
@@ -271,6 +294,13 @@ Function ImageScanAMSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines,
 		appendtograph CPDTraceBefore
 		ModifyGraph rgb(CPDTraceBefore)=(0,0,0)
 	endif
+
+	if (SaveKeithley == 1)
+		dowindow/F CurrentReadingsWindow
+		if (V_flag == 0)
+			Display/K=1/n=SMUCurrents SMUCurrents[*][1] vs SMUCurrents[*][0]
+		endif
+	endif
 	
 	if (scansizeY/scansizeX < .2)
 		ModifyGraph/W=TopographyImage height = {Aspect, 1}
@@ -310,7 +340,7 @@ Function ImageScanAMSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines,
 //	SetFeedbackLoop(4, "Always", "Input.B", 0, KPPgain, KPIgain, KPDGain, "Output.B", 0)	
 	SetFeedbackLoop(3, "Always",  "ZSensor", ReadWaveZ[scanpoints-1] - liftheight * 1e-9 / GV("ZLVDTSens"), 0, EFMFilters[%ZHeight][%IGain],0, "Output.Z",0)
 	
-	Sleep/S 0.2
+	Sleep/S 0.1
 	//stop all FBLoops again now that they have been initialized
 	StopFeedbackLoop(3)
 	StopFeedbackLoop(4)
@@ -364,7 +394,7 @@ Function ImageScanAMSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines,
 	
 	SetFeedbackLoop(2, "Always", "Amplitude", Setpoint, -PGain, -IGain, -SGain, "Height", 0)	
 	
-	Sleep/S 1.5
+	Sleep/S 0.1
 	
 	//******************  FFFFFFFFFFFFFFFFFFFFFF *******************************//
 	//*********************************************************************//
@@ -384,11 +414,13 @@ Function ImageScanAMSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines,
 		if (UseLineNumForVoltage != 0)
 		
 			if (i == LineNumforVoltage)
-				PsSetting(VoltageatLine, current=0.7)
+				SMUSetup(sourceval = VoltageatLine, complianceval = SMUCurrentComp, VorI = VorI)
+//				PsSetting(VoltageatLine, current=0.7)
 			endif
 			
 			if (i == LineNumforVoltage2)
-				PsSetting(VoltageatLine2, current=0.7)
+				SMUSetup(sourceval = VoltageatLine2, complianceval = SMUCurrentComp, VorI = VorI)
+//				PsSetting(VoltageatLine2, current=0.7)
 			endif
 						
 		endif
@@ -430,6 +462,13 @@ Function ImageScanAMSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines,
 		CheckInWaveTiming(ReadWaveZ) // Waits until the topography trace has been fully collected.
 
 		Sleep/S .05
+
+		if (SaveKeithley == 1)
+			SMURead()
+			SMUCurrents[i+1][2] = DataValues[0] //voltage
+			SMUCurrents[i+1][1] = DataValues[1]		// current	
+			SMUCurrents[i+1][0] =  (StopMSTimer(-2) -starttime2)*1e-6 + SMUCurrents[i][0] // time for this line + previous line
+		endif
 		
 		//ReadWaveZback is the drive wave for the z piezo		
 		ReadWaveZback[] = ReadwaveZ[scanpoints-1-p] - liftheight * 1e-9 / GV("ZLVDTSens")
@@ -454,9 +493,9 @@ Function ImageScanAMSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines,
 
 		// to keep tip from being stuck
 		SetFeedbackLoop(3, "always",  "ZSensor", ReadWaveZ[scanpoints-1]-500*1e-9/GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0, name="OutputZ") // note the integral gain of 10000
-		sleep/S 0.5
+		sleep/S 0.25
 		SetFeedbackLoop(3, "always",  "ZSensor", ReadWaveZ[scanpoints-1]-liftheight*1e-9/GV("ZLVDTSens"),0,EFMFilters[%ZHeight][%IGain],0, "Output.Z",0, name="OutputZ", arcZ=1) // note the integral gain of 10000
-		sleep/s 0.5
+		sleep/s 0.25
 		
 		heightafter = td_rv("Zsensor")*td_rv("ZLVDTSens")
 		print "The lift height is", (heightbefore-heightafter)*1e9, " nm"
@@ -483,7 +522,7 @@ Function ImageScanAMSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines,
 
 		td_WriteValue("DDSPhaseOffset0",EPhase)
 		
-		SetFeedbackLoop(4, "always", LockinString + "q", 0, 0, PotentialIGain*1000, 0, "Potential", 0)
+		SetFeedbackLoop(4, "always", LockinString + "q", 0, 0, PotentialIGain*1000, 0, "Potential", 0,  outmax=CPDVMax, outmin=CPDVMin)
 
 		// Use a decent initialization for feedback loop, second line onwards
 		lastvoltage = 0
@@ -506,7 +545,7 @@ Function ImageScanAMSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines,
 		
 //		SetFeedbackLoop(4, "always",  "Input.B", 0, KPPGain, KPIGain, KPDGain, "Output.B", 0) 
 //		SetFeedbackLoop(4, "always",  "Input.B", 0, EFMFilters[%KP][%PGain], EFMFilters[%KP][%IGain], EFMFilters[%KP][%DGain], "Output.B", 0) 
-		sleep/S 1/4
+		sleep/S 0.1
 				
 		//Fire retrace event here
 		error += td_WriteString("Event.2", "Once")

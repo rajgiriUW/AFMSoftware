@@ -67,6 +67,7 @@ Function trEFMInit()
 	Variable/G RingDownVoltage
 	Variable/G LightOn
 	String/G LockinString = "ARC.Lockin.0."
+	String/G LockinString2 = "ARC.Lockin.1."
 	String/G ImageFunctionString
 
 	// cut drive variables
@@ -216,6 +217,7 @@ Function trEFMInit()
 	Variable/G SMUVoltage = 0
 	Variable/G SMUCurrentComp = 0.05 // A
 	Variable/G SaveKeithley = 0
+	Variable/G VorI = 1 // 1 = default to current sourcing
 
 	// IM-SKPM variables
 	Variable/G numavg = 0 

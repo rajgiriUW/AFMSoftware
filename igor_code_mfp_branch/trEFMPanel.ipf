@@ -1713,13 +1713,13 @@ Window SKPMPanel() : Panel
 	SetVariable setvar9,limits={-inf,inf,0},value= root:packages:trEFM:gWGDeviceAddress2
 	CheckBox singleline,pos={288,9},size={142,14},proc=UseLineNumforVoltage,title="Change Voltage Mid-Scan"
 	CheckBox singleline,variable= root:packages:trEFM:PointScan:SKPM:UseLineNumforVoltage
-	SetVariable setvar03,pos={296,27},size={136,16},title="Line # for Voltage"
+	SetVariable setvar03,pos={296,27},size={136,16},title="Line # for V or I 1"
 	SetVariable setvar03,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:LineNumforVoltage
-	SetVariable setvar04,pos={296,47},size={136,16},title="Voltage 1"
+	SetVariable setvar04,pos={296,47},size={136,16},title="Source Value 1"
 	SetVariable setvar04,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:VoltageatLine
-	SetVariable setvar05,pos={296,72},size={136,16},title="Line # for Voltage 2 "
+	SetVariable setvar05,pos={296,72},size={136,16},title="Line # for V or I 2 "
 	SetVariable setvar05,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:LineNumforVoltage2
-	SetVariable setvar06,pos={296,92},size={136,16},title="Voltage 1"
+	SetVariable setvar06,pos={296,92},size={136,16},title="Source Value 2"
 	SetVariable setvar06,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:VoltageatLine2
 	Button button3,pos={332,115},size={100,20},proc=PSON_button,title="Turn on PS"
 	Button button4,pos={332,142},size={100,20},proc=PSOff_button,title="Turn off PS"
@@ -1731,10 +1731,12 @@ Window SKPMPanel() : Panel
 	SetVariable CPDVMin1,limits={0,10,0},value= root:packages:trEFM:PointScan:SKPM:CPDVmax
 	CheckBox SaveKeithley,pos={153,207},size={120,14},title="Save Keithley Current"
 	CheckBox SaveKeithley,variable= root:packages:trEFM:PointScan:SKPM:SaveKeithley
-	SetVariable SMUVoltage,pos={152,225},size={91,16},title="SMU Voltage"
+	SetVariable SMUVoltage,pos={152,225},size={118,16},title="SMU Source"
 	SetVariable SMUVoltage,limits={-22,22,0},value= root:packages:trEFM:PointScan:SKPM:SMUVoltage
-	SetVariable SMUCurrentLimit,pos={251,225},size={189,16},title="SMU Current Compliance (A)"
-	SetVariable SMUCurrentLimit,limits={0,1,0},value= root:packages:trEFM:PointScan:SKPM:SMUCurrentComp
+	SetVariable SMUCurrentLimit,pos={287,225},size={153,16},title="SMU Compliance"
+	SetVariable SMUCurrentLimit,limits={0,30,0},value= root:packages:trEFM:PointScan:SKPM:SMUCurrentComp
+	CheckBox KeithleyVorI,pos={279,207},size={170,14},title="Vsource (unchecked) or Isource"
+	CheckBox KeithleyVorI,variable= root:packages:trEFM:PointScan:SKPM:VorI
 	ToolsGrid snap=1,visible=1
 EndMacro
 

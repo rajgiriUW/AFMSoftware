@@ -53,6 +53,16 @@ Function TFPanelInit()
 	Variable/G CreateNewChirp = 1
 	Variable/G secondmode
 	
+	SetDataFolder root:packages:trEFM:VoltageScan
+	Variable/G calhardd2
+	
+	SVAR Lockinstring2 = root:packages:trefm:lockinstring2
+	calhardd2 = td_rv(Lockinstring2 + "Amp")
+	if (calhardd2 == 0)
+		print "Set to Dual frequency mode to get both frequencies before continuing"
+	endif
+	
+	setdatafolder root:packages:trEFM:TF
 end
 
 Function PopMenuProcTF(ctrlName,popNum,popStr) : PopupMenuControl

@@ -59,6 +59,7 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 	NVAR SaveKeithley = SaveKeithley
 	NVAR SMUVoltage = SMUVoltage
 	NVAR SMUCurrentComp = SMUCurrentComp 
+	NVAR VorI = VorI // 0 = voltage source, 1 = current source
 
 	SetDataFolder root:Packages:trEFM:ImageScan:SKPM
 
@@ -143,7 +144,7 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 	ScanTimes[0] = 0 // 0 s
 
 	// Save Keithley values
-	Make/O/N=(scanlines+1, 3) SMUCurrents = NaN
+	Make/O/N=(scanlines+1, 6) SMUCurrents = NaN
 	
 	variable SlowScanDelta
 	variable FastscanDelta
@@ -255,7 +256,7 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 	GPIBsetup()
 	
 	if (SaveKeithley == 1)
-		SMUOECTSetup(voltage = SMUVoltage, currentcomp = SMUCurrentComp)
+		SMUSetup(sourceval = SMUVoltage, complianceval = SMUCurrentComp, VorI = VorI)
 		Wave DataValues = root:packages:trEFM:ImageScan:dataValues
 		SMURead()
 		SMUCurrents[0][0] = 0 // 0 s
@@ -472,15 +473,22 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 		if (UseLineNumForVoltage != 0)
 		
 			if (i == LineNumforVoltage)
-				SMUOECTSetup(voltage = VoltageatLine, currentcomp = SMUCurrentComp)
+				SMUSetup(sourceval = VoltageatLine, complianceval = SMUCurrentComp, VorI = VorI)
 //				PsSetting(VoltageatLine, current=0.7)
 			endif
 			
 			if (i == LineNumforVoltage2)
-				SMUOECTSetup(voltage = VoltageatLine2, currentcomp = SMUCurrentComp)
+				SMUSetup(sourceval = VoltageatLine2, complianceval = SMUCurrentComp, VorI = VorI)
 //				PsSetting(VoltageatLine2, current=0.7)
 			endif
 						
+		endif
+		
+		if (SaveKeithley == 1)
+			SMURead()
+			SMUCurrents[i+1][2] = DataValues[0] //voltage
+			SMUCurrents[i+1][1] = DataValues[1]		// current	
+			SMUCurrents[i+1][0] =  (StopMSTimer(-2) -starttime2)*1e-6 + SMUCurrents[i][0] // time for this line + previous line
 		endif
 		
 		// these are the actual 1D drive waves for the tip movement
@@ -532,11 +540,12 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 
 		Sleep/S .05
 		
+		
 		if (SaveKeithley == 1)
 			SMURead()
-			SMUCurrents[i+1][2] = DataValues[0] //voltage
-			SMUCurrents[i+1][1] = DataValues[1]		// current	
-			SMUCurrents[i+1][0] =  (StopMSTimer(-2) -starttime2)*1e-6 + SMUCurrents[i][0] // time for this line + previous line
+			SMUCurrents[i+1][3] = DataValues[0] //voltage
+			SMUCurrents[i+1][4] = DataValues[1]		// current	
+			SMUCurrents[i+1][5] =  (StopMSTimer(-2) -starttime2)*1e-6 + SMUCurrents[i][0] // time for this line + previous line
 		endif
 		
 		//ReadWaveZback is the drive wave for the z piezo		

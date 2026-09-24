@@ -1,11 +1,28 @@
 #pragma rtGlobals=3		// Use modern global access method and strict wave access.
 
+// Sets ETune variables
+function setETune(EAmp, EFreq, EPhase, EOffset)
+	variable EAmp, EFreq, EOffset, EPhase
+	
+	variable error = 0 
+	error += td_WriteValue("DDSAmplitude0",EAmp)	
+	error += td_WriteValue("DDSFrequency0",EFreq)	
+	error += td_WriteValue("DDSPhaseOffset0",EPhase)
+	error += td_WriteValue("DDSDCOffset0", EOffset)
+	
+	if (error > 0)
+		print "Error in ETune " + num2str(error)
+	endif
+	
+end
+
+
 // Moku-based AM-SKPM, to test out the coding functionality
-function MokuPS_AM(xpos, ypos, liftheight, [interpolation])
+function MokuPS(xpos, ypos, liftheight, [interpolation])
 // Moku hookups <---> ARC
 // Input 1 <--> Defl
 // Input 2 <--> BNCOut2 (DDS)
-// Output 1 <--> BNCIn2 (I, in-phase)
+// Output 1 <--> BNCIn2 (I, in-phase, this also works fine)
 // Output 2 <--> BNCIn1 (Q, quadrature, the signal we want)
 	variable xpos, ypos, liftheight, interpolation
 
@@ -68,16 +85,15 @@ function MokuPS_AM(xpos, ypos, liftheight, [interpolation])
 	LiftTo(liftheight, 0, verbose=1)
 
 	// Set up for AM-SKPM point scan
-	SetCrosspoint ("Ground","BNCIn1","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutA","OutB","DDS","Ground","DDS","Ground")
-	td_WriteValue("DDSAmplitude0",EAmp)	
-	td_WriteValue("DDSFrequency0",EFreq)	
-	td_WriteValue("DDSPhaseOffset0",EPhase)
-	td_WriteValue("DDSDCOffset0", EOffset)
+	SetCrosspoint ("Ground","BNCIn2","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutA","OutB","DDS","Ground","DDS","Ground")
+//	SetCrosspoint ("Ground","BNCIn1","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutA","OutB","DDS","Ground","Ground","DDS")
+
+	SetEtune(Eamp, EFreq, EPhase, EOffset)
 
 	error += td_xsetinwave(0, "Event.2, Always", "DDSDCOffset0", CPDvsTime, "", interpolation)
 	print error
 	
-	SetFeedbackLoop(4, "Always",  "Input.B", 0, 0,  1000, 0, "DDSDCOffset0", 0)   // InputQ = $Lockin.0.Q , quadrature lockin output 
+	SetFeedbackLoop(4, "Always",  "Input.B", 0, 0,  300, 0, "DDSDCOffset0", 0)   // InputQ = $Lockin.0.Q , quadrature lockin output 
 //	SetFeedbackLoop(5, "Always",  "Potential", td_rv("Potential"), 1,  0, 0, "Output.B", 0)   // InputQ = $Lockin.0.Q , quadrature lockin output 
 
 	variable startTime = StopMSTimer(-2)
@@ -93,10 +109,10 @@ function MokuPS_AM(xpos, ypos, liftheight, [interpolation])
 
 //	doscanfunc("StopEngage")
 	Beep	
-	
+	Display CPDvsTime
 end
 
-// Stub for conventional FM Point Scan
+// Stub for conventional FM Point Scan using LIA in place of SRS 830
 function MokuPSFM(xpos, ypos, liftheight, [interpolation])
 // Moku hookups <---> ARC
 // Input 1 <--> Defl
@@ -310,110 +326,5 @@ function MokuPSFM_ARC(xpos, ypos, liftheight, [interpolation])
 end
 
 
-function tunecurve(resfreq)
 
-	variable resfreq 
-
-	// We find the secondmode manually already
-	NVAR secondmode = root:packages:trEFM:TF:secondmode
-	NVAR liftheight = root:packages:trEFM:liftheight
-	// But now we want to actually tune
-	String savDF = GetDataFolder(1)
-	SetDataFolder root:Packages:trEFM
-	GetGlobals()
-	NVAR pgain, igain, sgain, setpoint
-	Svar LockinString
-	SetDataFolder root:Packages:trEFM:VoltageScan
-	Variable/G calresfreq, calengagefreq, calhardd, calsoftd, calphaseoffset
-	
-	// Set up Frequency, resonance +/- 5 kHz
-	variable fH, fL
-	fL = resfreq - 5000
-	fH = resfreq + 5000
-	variable dFreq = 10// can change to speed up
-	variable pts = (fH-fL)/dFreq - mod( (fH-fL)/dFreq, 32)
-	make/n=(pts)/O calAmps, calPhase, calDef, calFreqs
-	calAmps = nan
-	calPhase = nan
-	calDef = nan
-	calFreqs = (p*dFreq +fL )
-	
-	calhardd = td_rv(LockinString+"Amp")
-	calengagefreq = td_rv(LockinString +"Freq")
-	calphaseoffset = td_rv(LockinString +"PhaseOffset")
-	
-	Liftto(liftheight, 0)
-
-	// Set up acquisition. Record Amp/Phase/Def, write Frequency range to DDS
-	td_StopInWaveBank(-1)
-	td_StopOutWaveBank(-1)
-
-	SetCrosspoint("FilterOut", "Ground", "ACDefl", "Ground", "Ground", "Ground", "Off", "Off", "Off", "Defl", "Ground", "OutA", "OutB", "Ground", "OutB", "DDS")
-	variable error = 0
-	error += td_xSetInWave(0, "Event.2", "Phase", calPhase, "", 100)
-	error += td_xSetInWavePair(1, "Event.2","Amplitude", calAmps, "Deflection", calDef, "", 100)
-	error +=	td_xSetOutWave(2, "Event.2", "DDSFrequency0", calFreqs, -100)
-
-	td_writestring("Event.2","Once")
-	CheckInWaveTiming(CalAmps)
-	setscale/I x, calfreqs[0], calfreqs[numpnts(calfreqs)-1], calamps
-	Sleep/S 1
-	
-	td_StopInWaveBank(-1)
-	td_StopOutWaveBank(-1)
-	
-	doscanfunc("StopEngage")
-	SetDataFolder savDF
-
-end
-
-function w1w2_tune([iterations])
-	variable iterations // the more loops through, the more accurate the tune curve ends up particularly for second mode
-	if (ParamIsDefault(iterations))
-		iterations = 1
-	endif
-	
-	variable i = 0
-	variable j = 0
-
-	SetDataFolder root:packages:trEFM:VoltageScan
-
-	NVAR secondmode = root:packages:trEFM:TF:secondmode
-	NVAR firstmode = root:packages:trEFM:VoltageScan:calresfreq
-
-	if (numtype(firstmode) == 2)
-		Abort "Grab Tune before running this"
-	endif
-	
-	if (secondmode == 0) // not done yet, calculate based on beam physics 
-		secondmode = 6.43 * firstmode
-	elseif (numtype(secondmode) == 2)
-		secondmode = 6.43 * firstmode
-	endif
-	
-	Make/O/N=2 modes = {firstmode, secondmode}
-	Make/O/N=2 realmodes = {firstmode, secondmode}
-	Wave CalAmps = root:packages:treFM:VoltageScan:CalAmps
-
-	do
-		i =0
-		print "Tune Curve", j+1, " of ", iterations
-		do
-			Tunecurve(modes[i])
-			WaveStats/Q CalAmps
-			RealModes[i] = V_maxloc
-
-			i += 1
-	
-		while (i < 2)
-		firstmode = Realmodes[0]
-		secondmode = Realmodes[1]
-		
-		j += 1
-	while (j < iterations)
-	
-	print "Modes measured are", Realmodes[0]/1000, "kHz and", RealModes[1]/1000, "kHz"
-	print "Difference sideband =", Realmodes[1] - RealModes[0], "kHz"
-	print "Sum sideband =", Realmodes[1] + RealModes[0], "kHz"
-end
 
