@@ -63,6 +63,13 @@ function FMSKPM_Loop(loops, [delx, dely])
 			Save/J/O/P=FMPath/M="\r\n"/W SMUCurrents as savename
 		endif
 		
+		// Save JV curve
+		SMUJV(-1.2,0.2,14,delay=0.1)
+		savename = name + numstring + num2str(i) + "_JVcurve.txt"
+		Wave currents = root:packages:trEFM:ImageScan:currents
+		Wave voltages = root:packages:trEFM:ImageScan:voltages
+		Save/J/W/U={0,0,1,0}/P=FMPath voltages, currents as savename
+		
 		i += 1
 	while ( i < loops)
 	

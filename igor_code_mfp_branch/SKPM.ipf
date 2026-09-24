@@ -107,7 +107,7 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 	ScanTimes[0] = 0 // 0 s
 
 	// Save Keithley values
-	Make/O/N=(scanlines+1, 3) SMUCurrents = NaN
+	Make/O/N=(scanlines+1, 6) SMUCurrents = NaN
 	
 	variable SlowScanDelta
 	variable FastscanDelta
@@ -447,6 +447,13 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 						
 		endif
 		
+		if (SaveKeithley == 1)
+			SMURead()
+			SMUCurrents[i+1][2] = DataValues[0] //voltage
+			SMUCurrents[i+1][1] = DataValues[1]		// current	
+			SMUCurrents[i+1][0] =  (StopMSTimer(-2) -starttime2)*1e-6 + SMUCurrents[i][0] // time for this line + previous line
+		endif
+		
 		// these are the actual 1D drive waves for the tip movement
 		Xdownwave[] = XYupdownwave[p][LineNum][0]
 		Xupwave[] = XYupdownwave[p][LineNum][1]
@@ -496,11 +503,12 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 
 		Sleep/S .05
 		
+		
 		if (SaveKeithley == 1)
 			SMURead()
-			SMUCurrents[i+1][2] = DataValues[0] //voltage
-			SMUCurrents[i+1][1] = DataValues[1]		// current	
-			SMUCurrents[i+1][0] =  (StopMSTimer(-2) -starttime2)*1e-6 + SMUCurrents[i][0] // time for this line + previous line
+			SMUCurrents[i+1][3] = DataValues[0] //voltage
+			SMUCurrents[i+1][4] = DataValues[1]		// current	
+			SMUCurrents[i+1][5] =  (StopMSTimer(-2) -starttime2)*1e-6 + SMUCurrents[i][0] // time for this line + previous line
 		endif
 		
 		//ReadWaveZback is the drive wave for the z piezo		
