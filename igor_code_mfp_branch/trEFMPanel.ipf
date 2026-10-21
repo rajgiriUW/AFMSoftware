@@ -1657,21 +1657,30 @@ EndMacro
 
 Window SKPMPanel() : Panel
 	PauseUpdate; Silent 1		// building window...
-	NewPanel /W=(2006,639,2461,904)
+	NewPanel /W=(1938,614,2566,934)
 	ShowTools/A
 	SetDrawLayer UserBack
 	SetDrawEnv fillfgc= (56576,56576,56576)
-	DrawRect 4,5,454,288
+	DrawRect 4,5,625,311
 	SetDrawEnv fstyle= 1
 	DrawText 11,26,"Function Generator"
 	SetDrawEnv fstyle= 1
 	DrawText 11,104,"External LIA"
 	SetDrawEnv fstyle= 1
-	DrawText 142,26,"Image Scan"
+	DrawText 7,213,"Image Scan"
 	SetDrawEnv fstyle= 1
-	DrawText 140,87,"Pointscan"
+	DrawText 162,51,"Pointscan"
 	SetDrawEnv fstyle= 1
-	DrawText 11,168,"IMSKPM"
+	DrawText 168,180,"IMSKPM"
+	SetDrawEnv fillfgc= (60928,60928,60928)
+	DrawRRect 288,9,621,279
+	SetDrawEnv fstyle= 1
+	DrawText 324,27,"Keithley SMU Setup"
+	DrawLine 297,72,450,72
+	SetDrawEnv fstyle= 2
+	DrawText 162,33,"Legacy Functions"
+	SetDrawEnv fstyle= 1
+	DrawText 324,249,"Keithley Power Supply (not SMU)"
 	SetVariable setvar0,pos={11,108},size={115,16},title="Time Constant (ms)"
 	SetVariable setvar0,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:LockinTimeConstant
 	SetVariable setvar1,pos={11,128},size={100,16},title="Sensitivity"
@@ -1680,47 +1689,58 @@ Window SKPMPanel() : Panel
 	SetVariable setvar2,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:ACFrequency
 	SetVariable setvar3,pos={11,49},size={81,16},title="Voltage (V)"
 	SetVariable setvar3,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:ACVoltage
-	SetVariable setvar4,pos={141,30},size={126,16},title="Time Per Point (ms)"
+	SetVariable setvar4,pos={6,217},size={126,16},title="Time Per Point (ms)"
 	SetVariable setvar4,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:TimePerPoint
-	Button button0,pos={140,110},size={100,20},proc=SKPMPointScanButton,title="Regular Point Scan"
-	Button button1,pos={141,49},size={100,20},proc=SKPMImageScanButton,title="Image Scan"
+	Button button0,pos={162,74},size={100,20},proc=SKPMPointScanButton,title="Regular Point Scan"
+	Button button1,pos={27,263},size={117,43},proc=SKPMImageScanButton,title="Image Scan"
+	Button button1,fSize=16,fStyle=1
 	SetVariable setvar5,pos={11,69},size={99,16},title="Device address"
 	SetVariable setvar5,limits={-inf,inf,0},value= root:packages:trEFM:gWGDeviceAddress
-	SetVariable setvar6,pos={141,92},size={81,16},title="Dwell time (s)"
+	SetVariable setvar6,pos={163,56},size={81,16},title="Dwell time (s)"
 	SetVariable setvar6,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:DwellTime
-	Button button2,pos={140,135},size={100,20},proc=SKPMPointScanButtonPulsedBias,title="With Pulsed Bias"
-	SetVariable setvar7,pos={143,160},size={81,16},title="Bias (V)"
+	Button button2,pos={162,99},size={100,20},proc=SKPMPointScanButtonPulsedBias,title="With Pulsed Bias"
+	SetVariable setvar7,pos={165,124},size={81,16},title="Bias (V)"
 	SetVariable setvar7,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:AppliedBias
-	SetVariable setvar8,pos={142,179},size={81,16},title="Freq. (Hz)"
+	SetVariable setvar8,pos={164,143},size={81,16},title="Freq. (Hz)"
 	SetVariable setvar8,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:BiasFreq
-	SetVariable setvar9,pos={9,173},size={108,16},title="Device address 2"
+	SetVariable setvar9,pos={166,180},size={108,16},title="Device address 2"
 	SetVariable setvar9,limits={-inf,inf,0},value= root:packages:trEFM:gWGDeviceAddress2
-	CheckBox singleline,pos={288,9},size={142,14},proc=UseLineNumforVoltage,title="Change Voltage Mid-Scan"
+	CheckBox singleline,pos={300,81},size={143,14},proc=UseLineNumforVoltage,title="Change Keithley Mid-Scan"
 	CheckBox singleline,variable= root:packages:trEFM:PointScan:SKPM:UseLineNumforVoltage
-	SetVariable setvar03,pos={296,27},size={136,16},title="Line # for V or I 1"
-	SetVariable setvar03,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:LineNumforVoltage
-	SetVariable setvar04,pos={296,47},size={136,16},title="Source Value 1"
-	SetVariable setvar04,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:VoltageatLine
-	SetVariable setvar05,pos={296,72},size={136,16},title="Line # for V or I 2 "
-	SetVariable setvar05,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:LineNumforVoltage2
-	SetVariable setvar06,pos={296,92},size={136,16},title="Source Value 2"
-	SetVariable setvar06,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:VoltageatLine2
-	Button button3,pos={332,115},size={100,20},proc=PSON_button,title="Turn on PS"
-	Button button4,pos={332,142},size={100,20},proc=PSOff_button,title="Turn off PS"
-	CheckBox UseAMMode,pos={333,180},size={69,14},title="AM mode?"
+	SetVariable setvar03,pos={297,99},size={136,16},title="Line # for V or I 1"
+	SetVariable setvar03,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:LineNumforVoltage_1
+	SetVariable setvar04,pos={297,119},size={136,16},title="Source Value 1"
+	SetVariable setvar04,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:VoltageatLine_1
+	SetVariable setvar05,pos={297,162},size={136,16},title="Line # for V or I 2 "
+	SetVariable setvar05,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:LineNumforVoltage_2
+	SetVariable setvar06,pos={297,182},size={136,16},title="Source Value 2"
+	SetVariable setvar06,limits={-inf,inf,0},value= root:packages:trEFM:PointScan:SKPM:VoltageatLine_2
+	Button button3,pos={305,252},size={100,20},proc=PSON_button,title="Turn on PS"
+	Button button4,pos={431,250},size={100,20},proc=PSOff_button,title="Turn off PS"
+	CheckBox UseAMMode,pos={18,238},size={69,14},title="AM mode?"
 	CheckBox UseAMMode,variable= root:packages:trEFM:PointScan:SKPM:UseAM
-	SetVariable CPDVMin,pos={8,198},size={136,16},title="CPD Vmin (V)"
+	SetVariable CPDVMin,pos={8,153},size={136,16},title="CPD Vmin (V)"
 	SetVariable CPDVMin,limits={-10,0,0},value= root:packages:trEFM:PointScan:SKPM:CPDVmin
-	SetVariable CPDVMin1,pos={8,216},size={136,16},title="CPD Vmax (V)"
+	SetVariable CPDVMin1,pos={8,171},size={136,16},title="CPD Vmax (V)"
 	SetVariable CPDVMin1,limits={0,10,0},value= root:packages:trEFM:PointScan:SKPM:CPDVmax
-	CheckBox SaveKeithley,pos={153,207},size={120,14},title="Save Keithley Current"
+	CheckBox SaveKeithley,pos={297,30},size={120,14},title="Save Keithley Current"
 	CheckBox SaveKeithley,variable= root:packages:trEFM:PointScan:SKPM:SaveKeithley
-	SetVariable SMUVoltage,pos={152,225},size={118,16},title="SMU Source"
-	SetVariable SMUVoltage,limits={-22,22,0},value= root:packages:trEFM:PointScan:SKPM:SMUVoltage
-	SetVariable SMUCurrentLimit,pos={287,225},size={153,16},title="SMU Compliance"
-	SetVariable SMUCurrentLimit,limits={0,30,0},value= root:packages:trEFM:PointScan:SKPM:SMUCurrentComp
-	CheckBox KeithleyVorI,pos={279,207},size={170,14},title="Vsource (unchecked) or Isource"
-	CheckBox KeithleyVorI,variable= root:packages:trEFM:PointScan:SKPM:VorI
+	SetVariable SMUVoltage,pos={297,47},size={118,16},title="SMU Source"
+	SetVariable SMUVoltage,limits={-22,22,0},value= root:packages:trEFM:PointScan:SKPM:SMUVoltage_0
+	SetVariable SMUCurrentLimit,pos={431,47},size={153,16},title="SMU Compliance"
+	SetVariable SMUCurrentLimit,limits={0,30,0},value= root:packages:trEFM:PointScan:SKPM:SMUCurrentComp_0
+	CheckBox KeithleyVorI,pos={441,30},size={170,14},title="Vsource (unchecked) or Isource"
+	CheckBox KeithleyVorI,variable= root:packages:trEFM:PointScan:SKPM:VorI_0
+	CheckBox KeithleyVorI2,pos={442,171},size={170,14},title="Vsource (unchecked) or Isource"
+	CheckBox KeithleyVorI2,variable= root:packages:trEFM:PointScan:SKPM:VorI_2
+	CheckBox KeithleyVorI1,pos={442,108},size={170,14},title="Vsource (unchecked) or Isource"
+	CheckBox KeithleyVorI1,variable= root:packages:trEFM:PointScan:SKPM:VorI_1
+	SetVariable SMUCurrentLimit1,pos={296,137},size={153,16},title="SMU Compliance 1"
+	SetVariable SMUCurrentLimit1,limits={0,30,0},value= root:packages:trEFM:PointScan:SKPM:SMUCurrentComp_1
+	SetVariable SMUCurrentLimit2,pos={296,200},size={153,16},title="SMU Compliance 2"
+	SetVariable SMUCurrentLimit2,limits={0,30,0},value= root:packages:trEFM:PointScan:SKPM:SMUCurrentComp_2
+	Button savebuttonT,pos={162,270},size={102,34},proc=SaveImageButton,title="Save"
+	Button savebuttonT,help={"Save a previously acquired Image Scan."}
 	ToolsGrid snap=1,visible=1
 EndMacro
 
