@@ -56,10 +56,9 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 	NVAR CPDVMin = CPDVMin
 	NVAR CPDVMax = CPDVMax
 	
-	NVAR SaveKeithley = SaveKeithley
-	NVAR SMUVoltage = SMUVoltage
-	NVAR SMUCurrentComp = SMUCurrentComp 
-	NVAR VorI = VorI // 0 = voltage source, 1 = current source
+	NVAR SaveKeithley, SMUVoltage_0, SMUVoltage_1, SMUVoltage_2
+	NVAR SMUCurrentComp_0, SMUCurrentComp_1, SMUCurrentComp_2
+	NVAR VorI_0, VorI_1, VorI_2
 
 	SetDataFolder root:Packages:trEFM:ImageScan:SKPM
 
@@ -88,10 +87,10 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 	
 	// single line stuff
 	NVAR UseLineNumforVoltage = root:packages:trEFM:PointScan:SKPM:UseLineNumforVoltage
-	NVAR LineNumforVoltage = root:packages:trEFM:PointScan:SKPM:LineNumforVoltage
-	NVAR VoltageatLine = root:packages:trEFM:PointScan:SKPM:VoltageatLine
-	NVAR LineNumforVoltage2 = root:packages:trEFM:PointScan:SKPM:LineNumforVoltage2
-	NVAR VoltageatLine2 = root:packages:trEFM:PointScan:SKPM:VoltageatLine2
+	NVAR LineNumforVoltage_1 = root:packages:trEFM:PointScan:SKPM:LineNumforVoltage_1
+	NVAR VoltageatLine_1 = root:packages:trEFM:PointScan:SKPM:VoltageatLine_1
+	NVAR LineNumforVoltage_2 = root:packages:trEFM:PointScan:SKPM:LineNumforVoltage_2
+	NVAR VoltageatLine_2 = root:packages:trEFM:PointScan:SKPM:VoltageatLine_2
 	
 	//Variable FreqOffsetNorm = 500
 	
@@ -197,26 +196,27 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 	endif
 	
 	
-	Make/O/N = (scanpoints, scanlines) Topography, CPDImage, TopographyRaw
+	Make/O/N = (scanpoints, scanlines) Topography, CPDImage, TopographyRaw, Phase
 	Topography = NaN
 	TopographyRaw = NaN
+	Phase = NaN
 	CPDImage = NaN
 
 	if (XFastEFM == 1 && YFastEFM == 0)
-		SetScale/I x, ScanFrameWork[0][0], ScanFramework[0][2], "um", Topography, CPDImage, TopographyRaw
+		SetScale/I x, ScanFrameWork[0][0], ScanFramework[0][2], "um", Topography, CPDImage, TopographyRaw, Phase
 		if(scanlines==1)
-			SetScale/I y, ypos, ypos, Topography, CPDImage, TopographyRaw
+			SetScale/I y, ypos, ypos, Topography, CPDImage, TopographyRaw, Phase
 		else
-			SetScale/I y, ScanFrameWork[0][1], ScanFramework[scanlines-1][1], Topography, CPDImage, TopographyRaw
+			SetScale/I y, ScanFrameWork[0][1], ScanFramework[scanlines-1][1], Topography, CPDImage, TopographyRaw, Phase
 		endif
 	
 
 	elseif (XFastEFM == 0 && YFastEFM == 1)
-		SetScale/I x, ScanFrameWork[0][2], ScanFramework[0][0], "um", Topography, CPDImage, TopographyRaw
+		SetScale/I x, ScanFrameWork[0][2], ScanFramework[0][0], "um", Topography, CPDImage, TopographyRaw, Phase
 		if(scanlines==1)
-			SetScale/I y, ypos, ypos, Topography, CPDImage, TopographyRaw
+			SetScale/I y, ypos, ypos, Topography, CPDImage, TopographyRaw, Phase
 		else
-			SetScale/I y, ScanFrameWork[0][1], ScanFramework[scanlines-1][1], Topography, CPDImage, TopographyRaw
+			SetScale/I y, ScanFrameWork[0][1], ScanFramework[scanlines-1][1], Topography, CPDImage, TopographyRaw, Phase
 		endif
 	
 	endif
@@ -225,7 +225,7 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 		abort "Scan Points must be divisible by 32"
 	endif
 	
-	Make/O/N = (scanpoints) ReadWaveZ, ReadWaveZback, Xdownwave, Ydownwave, Xupwave, Yupwave
+	Make/O/N = (scanpoints) ReadWaveZ, ReadWaveZback, Xdownwave, Ydownwave, Xupwave, Yupwave, ReadPhase
 	Make/O/N = (scanpoints, scanlines, 4) XYupdownwave
 	ReadWaveZ = NaN
 
@@ -256,7 +256,7 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 	GPIBsetup()
 	
 	if (SaveKeithley == 1)
-		SMUSetup(sourceval = SMUVoltage, complianceval = SMUCurrentComp, VorI = VorI)
+		SMUSetup(sourceval = SMUVoltage_0, complianceval = SMUCurrentComp_0, VorI = VorI_0)
 		Wave DataValues = root:packages:trEFM:ImageScan:dataValues
 		SMURead()
 		SMUCurrents[0][0] = 0 // 0 s
@@ -289,9 +289,9 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 	endif
 	
 	Make/O/N=(scanpoints) CPDTrace, CPDTraceBefore
-	
-	SetScale/I x, 0, ScanSizeX * 1e-6, "m", CPDTrace
-	SetScale/I x, 0, ScanSizeX * 1e-6, "m", CPDTraceBefore
+	Make/O/N=(scanpoints) TopoTrace, TopoTraceBefore
+	SetScale/I x, 0, ScanSizeX * 1e-6, "m", CPDTrace, CPDTraceBefore, TopoTrace, TopoTraceBefore
+
 	Variable pointsPerPixel = timeperpoint * samplerate * 1e-3
 	Variable pointsPerLine = pointsPerPixel * scanpoints
 	make/o/n=(pointsPerPixel) CPDWaveTemp
@@ -337,15 +337,37 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 		ColorScale/C/N=text0/A=RC/X=5.00/Y=5.00/E=2 "um"
 		ColorScale/C/N=text0/X=5.00/Y=5.00/E image=Topography
 	endif	
+
+	dowindow/f PhaseImage
+	if (V_flag==0)
+		Display/K=1/n=PhaseImage;Appendimage Phase
+		SetAxis/A bottom
+		SetAxis/A left
+		Label bottom "Fast Scan(um)"
+		Label left "Slow Scan (um)"
+		ModifyGraph wbRGB=(65000,60000,48600),expand=.7	
+		ColorScale/C/N=text0/E/F=0/A=MC image=Phase
+		ColorScale/C/N=text0/A=RC/X=5.00/Y=5.00/E=2 "degrees"
+		ColorScale/C/N=text0/X=5.00/Y=5.00/E image=Phase
+	endif	
+
 	
 	ModifyGraph/W=TopgraphyImage height = {Aspect, scansizeY/scansizeX}
 	ModifyGraph/W=CPD height = {Aspect, scansizeY/scansizeX}
+	ModifyGraph/W=PhaseImage height = {Aspect, scansizeY/scansizeX}
 	dowindow/f CPDTraceWindow
 	
 	if (V_flag==0)
 		Display/K=1/n=CPDTraceWindow CPDTrace
 		appendtograph CPDTraceBefore
 		ModifyGraph rgb(CPDTraceBefore)=(0,0,0)
+	endif
+	
+	DoWindow/F TopoTraceWindow
+	if (V_flag == 0)
+		Display/K=1/n=TopoTraceWindow TopoTrace
+		appendtograph TopoTraceBefore
+		ModifyGraph rgb(TopoTraceBefore) = (0,0,0)
 	endif
 	
 	if (SaveKeithley == 1)
@@ -472,13 +494,13 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 		
 		if (UseLineNumForVoltage != 0)
 		
-			if (i == LineNumforVoltage)
-				SMUSetup(sourceval = VoltageatLine, complianceval = SMUCurrentComp, VorI = VorI)
+			if (i == LineNumforVoltage_1)
+				SMUSetup(sourceval = VoltageatLine_1, complianceval = SMUCurrentComp_1, VorI = VorI_1)
 //				PsSetting(VoltageatLine, current=0.7)
 			endif
 			
-			if (i == LineNumforVoltage2)
-				SMUSetup(sourceval = VoltageatLine2, complianceval = SMUCurrentComp, VorI = VorI)
+			if (i == LineNumforVoltage_2)
+				SMUSetup(sourceval = VoltageatLine_2, complianceval = SMUCurrentComp_2, VorI = VorI_2)
 //				PsSetting(VoltageatLine2, current=0.7)
 			endif
 						
@@ -503,7 +525,8 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 		td_StopInWaveBank(-1)
 		td_StopOutWaveBank(-1)
 		
-		error+= td_xSetInWave(0,"Event.0", "ZSensor", ReadWaveZ,"", Downinterpolation)// used during Trace to record height data		
+//		error+= td_xSetInWave(0,"Event.0", "ZSensor", ReadWaveZ,"", Downinterpolation)// used during Trace to record height data		
+		error+= td_xSetInWavePair(0,"Event.0", "ZSensor", ReadWaveZ,"Phase", ReadPhase, "", Downinterpolation)// used during Trace to record height data		
 			if (error != 0)
 				print i, "error1", error
 			endif
@@ -540,7 +563,6 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 
 		Sleep/S .05
 		
-		
 		if (SaveKeithley == 1)
 			SMURead()
 			SMUCurrents[i+1][3] = DataValues[0] //voltage
@@ -550,10 +572,17 @@ Function ImageScanSKPM(xpos, ypos, liftheight, scansizeX,scansizeY, scanlines, s
 		
 		//ReadWaveZback is the drive wave for the z piezo		
 		ReadWaveZback[] = ReadwaveZ[scanpoints-1-p] - liftheight * 1e-9 / GV("ZLVDTSens")
-		ReadWaveZmean = Mean(ReadwaveZ) * ZLVDTSens
+		ReadWaveZmean = Mean(ReadwaveZback) * ZLVDTSens
 		Topography[][i] = -(ReadwaveZ[p] * ZLVDTSens-ReadWaveZmean)
 		TopographyRaw[][i] = -(ReadwaveZ[p] * ZLVDTSens)
+		Phase[][i] = ReadPhase[p]
 		DoUpdate
+		
+		if(i>0)
+			TopoTraceBefore=TopoTrace
+		endif
+		TopoTrace = TopographyRaw[p][i]
+		
 	
 		//****************************************************************************
 		//*** SET DATA COLLECTION STUFF.
@@ -869,9 +898,8 @@ Function PointScanSKPM(xpos, ypos, liftheight,dwelltime)
 		Setvf(0, ACFrequency,"WG")
 	else
 		TurnOffAWG()
-	
 	endif
-	
+
 	SetCrosspoint ("Ground","In1","ACDefl","Ground","Ground","Ground","Off","Off","Off","Ground","OutA","OutC","OutB","Ground","In0","DDS")
 	
 	// Keep x pos of tip constant for SKPM

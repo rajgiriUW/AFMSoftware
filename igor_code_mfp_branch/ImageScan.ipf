@@ -772,11 +772,11 @@ Function SaveImageScan(name,type)
 		Layers = 4
 	elseif(type == 2)
 		SetDataFolder root:Packages:trEFM:ImageScan:SKPM
-		Layers = 2
+		Layers = 3
 	endif
 		
 
-	Wave Topography, ChargingRate, FrequencyOffset, Chi2Image, CPDImage
+	Wave Topography, ChargingRate, FrequencyOffset, Chi2Image, CPDImage, Phase
 	Wave ScanFrameWork
 
 	SetDataFolder root:Packages:trEFM:ImageScan
@@ -817,9 +817,10 @@ Function SaveImageScan(name,type)
 		ImageWave[][][3] = FrequencyOffset[p][q]
 
 	elseif(type == 2)
-		DataTypeList = "HeightTrace;UserIn0ReTrace"
+		DataTypeList = "HeightTrace;UserIn0ReTrace;PhaseTrace"
 		ImageWave[][][0] = Topography[p][q]
 		ImageWave[][][1] = CPDImage[p][q]
+		ImageWave[][][2] = Phase[p][q]
 		
 		Wave ScanTimes = root:Packages:trEFM:ImageScan:SKPM:ScanTimes
 		

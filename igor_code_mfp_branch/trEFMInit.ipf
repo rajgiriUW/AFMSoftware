@@ -18,7 +18,7 @@ End
 Function trEFMInit()
 // Function to initalize required data folders and variables for trEFM methods.
 
-	hideprocedures
+	//hideprocedures
 
 	NewDataFolder/O/S root:Packages
 	NewDataFolder/O/S root:Packages:trEFM
@@ -214,10 +214,26 @@ Function trEFMInit()
 	Variable/G CPDVmax = 9
 	
 	// SMU Variables -- see KeithleySMU ipf
-	Variable/G SMUVoltage = 0
-	Variable/G SMUCurrentComp = 0.05 // A
 	Variable/G SaveKeithley = 0
-	Variable/G VorI = 1 // 1 = default to current sourcing
+	Variable/G SMUVoltage_0 = 0
+	Variable/G SMUVoltage_1 = 0.001
+	Variable/G SMUVoltage_2 = 0
+//	Variable/G SMUCurrentComp = 0.05 // A
+	Variable/G VorI_0 = 0 // 1 = default to current sourcing
+	Variable/G VorI_1 = 1 // 1 = default to current sourcing
+	Variable/G VorI_2 = 0 // 1 = default to current sourcing
+	Variable/G SMUCurrentComp_0 = 25e-3 // A
+	Variable/G SMUCurrentComp_1 = 10 // V
+	Variable/G SMUCurrentComp_2 = 25e-3 // A
+
+	// Single line stuff
+	Variable/G UseLineNumforVoltage = 0
+	Variable/G LineNumforVoltage_1 = 0
+	Variable/G VoltageatLine_1 = 0
+	Variable/G LineNumforVoltage_2 = 0
+	Variable/G VoltageatLine_2 = 0
+
+	Variable/G UseAM = 0 
 
 	// IM-SKPM variables
 	Variable/G numavg = 0 
@@ -229,16 +245,6 @@ Function trEFMInit()
 	Variable/G Intensityoffset = 0
 	Variable/G Intensity1 = 10
 	Variable/G do_toff_IMSKPM = 0
-	
-	// Single line stuff
-	Variable/G LineNumforVoltage = 0
-	Variable/G VoltageatLine = 0
-	Variable/G UseLineNumforVoltage = 0
-	Variable/G LineNumforVoltage2 = 0
-	Variable/G VoltageatLine2 = 0
-
-	
-	Variable/G UseAM = 0 
 	
 	SetDataFolder root:Packages:trEFM:ForceCal
 	
